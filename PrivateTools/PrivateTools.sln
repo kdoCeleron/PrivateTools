@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SameFileRemove", "SameFileRemove\SameFileRemove.csproj", "{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanFileMaintenance", "ScanFileMaintenance\ScanFileMaintenance.csproj", "{59169440-CDA7-436B-9D98-1478F4BE1590}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59169440-CDA7-436B-9D98-1478F4BE1590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59169440-CDA7-436B-9D98-1478F4BE1590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59169440-CDA7-436B-9D98-1478F4BE1590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59169440-CDA7-436B-9D98-1478F4BE1590}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
