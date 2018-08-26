@@ -21,7 +21,7 @@ namespace SameFileRemove
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var rootDir = this.textBox1.Text;
+            var rootDir = this.txtDirRemoveSameFile.Text;
             if(Directory.Exists(rootDir) == false)
             {
                 MessageBox.Show("ディレクトリがありません");
@@ -55,7 +55,7 @@ namespace SameFileRemove
                             newFileItem.Data.Add(b);
                         }
 
-                        var isExist = loaded.Any(x => x.Equals(newFileItem));
+                        var isExist = loaded.Any(x => x.IsEquals(newFileItem));
                         if (isExist)
                         {
                             var fileName = Path.GetFileName(file);
@@ -94,7 +94,7 @@ namespace SameFileRemove
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var directory = this.textBox2.Text;
+            var directory = this.txtDirRename.Text;
             if (Directory.Exists(directory) == false)
             {
                 MessageBox.Show("ディレクトリがありません");
@@ -130,45 +130,11 @@ namespace SameFileRemove
                 }
                 catch (Exception ex)
                 {
-                    // do noting
                     MessageBox.Show(ex.ToString());
                 }
             }
 
             MessageBox.Show("処理が完了しました。");
-        }
-    }
-
-    public class FileData
-    {
-        public List<byte> Data { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            var item = obj as FileData;
-            if (item == null)
-            {
-                return false;
-            }
-
-            if (Data.Count() != item.Data.Count)
-            {
-                return false;
-            }
-
-            var index = 0;
-            foreach (var itemDat in item.Data)
-            {
-                if (this.Data[index] == itemDat)
-                {
-                    index++;
-                    continue;
-                }
-
-                return false;
-            }
-
-            return true;
         }
     }
 }
