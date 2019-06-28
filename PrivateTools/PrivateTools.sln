@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SameFileRemove", "SameFileRemove\SameFileRemove.csproj", "{77C8B92C-9F33-4F17-BDD0-250EDCB7044E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanFileMaintenance", "ScanFileMaintenance\ScanFileMaintenance.csproj", "{59169440-CDA7-436B-9D98-1478F4BE1590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFSBindRemover", "TFSBindRemover\TFSBindRemover.csproj", "{56575FDB-D378-4049-A6EF-9A7FE116C68A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrushFIieExporter", "TrushFileExporter\TrushFIieExporter.csproj", "{02FFB428-0551-46E1-8249-F918913889E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7B9950D8-CC39-47C5-8AEA-059F19A243C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTools.Tests", "Tests\MyTools.Tests\MyTools.Tests.csproj", "{69D37AA0-0685-4C6E-947F-DF61B81E9C6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +29,23 @@ Global
 		{59169440-CDA7-436B-9D98-1478F4BE1590}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59169440-CDA7-436B-9D98-1478F4BE1590}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59169440-CDA7-436B-9D98-1478F4BE1590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56575FDB-D378-4049-A6EF-9A7FE116C68A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56575FDB-D378-4049-A6EF-9A7FE116C68A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56575FDB-D378-4049-A6EF-9A7FE116C68A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56575FDB-D378-4049-A6EF-9A7FE116C68A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02FFB428-0551-46E1-8249-F918913889E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FFB428-0551-46E1-8249-F918913889E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02FFB428-0551-46E1-8249-F918913889E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02FFB428-0551-46E1-8249-F918913889E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D37AA0-0685-4C6E-947F-DF61B81E9C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D37AA0-0685-4C6E-947F-DF61B81E9C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D37AA0-0685-4C6E-947F-DF61B81E9C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D37AA0-0685-4C6E-947F-DF61B81E9C6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{69D37AA0-0685-4C6E-947F-DF61B81E9C6C} = {7B9950D8-CC39-47C5-8AEA-059F19A243C0}
 	EndGlobalSection
 EndGlobal
