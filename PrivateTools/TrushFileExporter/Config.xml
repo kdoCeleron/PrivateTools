@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <!-- 削除対象外拡張子(. 不要、大文字/小文字問わず)-->
+  <IgnoreExtensionList>
+    <Extension>c</Extension>
+    <Extension>h</Extension>
+    <Extension>so</Extension>
+    <Extension>sh</Extension>
+  </IgnoreExtensionList>
+</Config>

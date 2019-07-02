@@ -21,16 +21,6 @@
     public partial class Form1 : Form
     {
         /// <summary>
-        /// 出力文字(ディレクトリ)
-        /// </summary>
-        private static string outputNameIsDirectory = "Directory";
-
-        /// <summary>
-        /// 出力文字(ファイル)
-        /// </summary>
-        private static string outputNameIsFile = "File";
-
-        /// <summary>
         /// TFS連携
         /// </summary>
         private TfsClient tfsClient = new TfsClient();
@@ -44,6 +34,26 @@
             this.InitializeComponent();
 
             this.txtUrl.Text = @"http://172.17.0.50:8080/tfs";
+
+            this.Load += this.OnLoad;
+        }
+
+        /// <summary>
+        /// 画面ロード時処理
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            try
+            {
+                Config.ReadConfig();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(string.Format("初期化処理中にエラーが発生しました。{0}", exception));
+                Environment.Exit(0);
+            }
         }
 
         /// <summary>
@@ -72,12 +82,11 @@
             var items = new List<string>();
             foreach (var pathInfo in result)
             {
-                var kind = pathInfo.IsDirectory ? outputNameIsDirectory : outputNameIsFile;
                 var path = pathInfo.Path;
 
                 var name = this.GetName(path);
 
-                var row = kind + "\t" + path + "\t" + name;
+                var row = path + "\t" + name;
                 items.Add(row);
             }
 
@@ -121,61 +130,59 @@
 
             var read = File.ReadAllLines(filePath);
 
-            // Item1:ディレクトリかどうか、Item2:パス
-            var items = new List<Tuple<bool, string>>();
-
+            var items = new List<string>();
             foreach (var str in read)
             {
                 var splitted = str.Split('\t');
-                if (splitted.Length < 2)
+                if (splitted.Length < 1)
                 {
                     continue;
                 }
 
-                var kind = splitted[0];
-                var path = splitted[1];
-
-                var item = Tuple.Create(kind == outputNameIsDirectory, path);
-                items.Add(item);
+                var path = splitted[0];
+                items.Add(path);
             }
 
-            foreach (var item in items.OrderBy(x => x.Item1))
+            foreach (var item in items)
             {
-                var path = item.Item2;
-                if (item.Item1)
+                var path = item;
+
+                // ファイル/フォルダ、いずれかで存在している場合のみ
+                var isExists = Directory.Exists(path) || File.Exists(path);
+                if (!isExists)
                 {
-                    if (Directory.Exists(path))
+                    continue;
+                }
+
+                var isDir = File.GetAttributes(path).HasFlag(FileAttributes.Directory);
+                if (isDir)
+                {
+                    if (isUseTfs)
                     {
-                        if (isUseTfs)
-                        {
-                            var ret = this.tfsClient.Delete(path, path);
-                            if (ret == -1)
-                            {
-                                this.DeleteFolder(path);
-                            }
-                        }
-                        else
+                        var ret = this.tfsClient.Delete(path, path);
+                        if (ret == -1)
                         {
                             this.DeleteFolder(path);
                         }
                     }
+                    else
+                    {
+                        this.DeleteFolder(path);
+                    }
                 }
                 else
                 {
-                    if (File.Exists(path))
+                    if (isUseTfs)
                     {
-                        if (isUseTfs)
-                        {
-                            var ret = this.tfsClient.Delete(path, path);
-                            if (ret == -1)
-                            {
-                                this.DeleteFile(path);
-                            }
-                        }
-                        else
+                        var ret = this.tfsClient.Delete(path, path);
+                        if (ret == -1)
                         {
                             this.DeleteFile(path);
                         }
+                    }
+                    else
+                    {
+                        this.DeleteFile(path);
                     }
                 }
             }
@@ -264,13 +271,14 @@
             }
 
             var extension = splitted.Last().ToLower();
-            var knownExtensions = new List<string>()
-            {
-                "c",
-                "h",
-                "so",
-                "sh",
-            };
+            var knownExtensions = Config.Instance.IgnoreExtensions;
+            //var knownExtensions = new List<string>()
+            //{
+            //    "c",
+            //    "h",
+            //    "so",
+            //    "sh",
+            //};
 
             if (!knownExtensions.Contains(extension))
             {
@@ -297,12 +305,12 @@
 
             foreach (var fileInfo in dirInfo.GetFiles())
             {
-                this.UnsetDirectoryReadOnly(fileInfo);
+                this.RemoveReadonlyAttributeFile(fileInfo);
             }
 
             foreach (var subDirInfo in dirInfo.GetDirectories())
             {
-                this.UnsetReadonlyAttributeDirectory(subDirInfo);
+                this.RemoveReadonlyAttributeDirectory(subDirInfo);
             }
 
             dirInfo.Delete(true);
@@ -315,7 +323,7 @@
         private void DeleteFile(string path)
         {
             var fileInfo = new FileInfo(path);
-            this.UnsetDirectoryReadOnly(fileInfo);
+            this.RemoveReadonlyAttributeFile(fileInfo);
 
             fileInfo.Delete();
         }
@@ -324,11 +332,11 @@
         /// ファイルの読み取り専用属性を外す.
         /// </summary>
         /// <param name="fileInfo">ファイル情報</param>
-        private void UnsetDirectoryReadOnly(FileInfo fileInfo)
+        private void RemoveReadonlyAttributeFile(FileInfo fileInfo)
         {
-            if ((fileInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+            if ((fileInfo.Attributes & FileAttributes.ReadOnly) > 0)
             {
-                fileInfo.Attributes = FileAttributes.Normal;
+                fileInfo.Attributes &= ~FileAttributes.ReadOnly;
             }
         }
 
@@ -336,21 +344,21 @@
         /// フォルダの読み取り専用属性を外す.
         /// </summary>
         /// <param name="dirInfo">フォルダ情報</param>
-        private void UnsetReadonlyAttributeDirectory(DirectoryInfo dirInfo)
+        private void RemoveReadonlyAttributeDirectory(DirectoryInfo dirInfo)
         {
-            if ((dirInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+            if ((dirInfo.Attributes & FileAttributes.ReadOnly) > 0)
             {
-                dirInfo.Attributes = FileAttributes.Normal;
+                dirInfo.Attributes &= ~FileAttributes.ReadOnly;
             }
 
             foreach (var fileInfo in dirInfo.GetFiles())
             {
-                this.UnsetDirectoryReadOnly(fileInfo);
+                this.RemoveReadonlyAttributeFile(fileInfo);
             }
 
             foreach (var subDirInfo in dirInfo.GetDirectories())
             {
-                this.UnsetReadonlyAttributeDirectory(subDirInfo);
+                this.RemoveReadonlyAttributeDirectory(subDirInfo);
             }
         }
     }
