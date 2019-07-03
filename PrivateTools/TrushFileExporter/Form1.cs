@@ -13,6 +13,8 @@
 
     using System.Diagnostics.CodeAnalysis;
 
+    using MyTools.Common;
+
     /// <summary>
     /// メインフォーム
     /// </summary>
@@ -51,7 +53,7 @@
             }
             catch (Exception exception)
             {
-                MessageBox.Show(string.Format("初期化処理中にエラーが発生しました。{0}", exception));
+                MessageBox.Show(StringTable.ErrWindowInit + " {0}".Fmt(exception));
                 Environment.Exit(0);
             }
         }
@@ -272,13 +274,6 @@
 
             var extension = splitted.Last().ToLower();
             var knownExtensions = Config.Instance.IgnoreExtensions;
-            //var knownExtensions = new List<string>()
-            //{
-            //    "c",
-            //    "h",
-            //    "so",
-            //    "sh",
-            //};
 
             if (!knownExtensions.Contains(extension))
             {
