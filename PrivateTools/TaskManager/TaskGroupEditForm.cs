@@ -34,6 +34,8 @@ namespace TaskManager
         {
             this.isAdd = isAddOperation;
 
+            this.CmbParentGroup.Items.Add(TaskGroupInfo.GetRootGroup());
+
             foreach (var item in ResourceManager.Instance.TaskGroupList)
             {
                 this.CmbParentGroup.Items.Add(item);
@@ -78,8 +80,8 @@ namespace TaskManager
             TaskGroupInfo parent;
             if (string.IsNullOrEmpty(this.CmbParentGroup.Text))
             {
-                // 親なし
-                parent = null;
+                // トップの親
+                parent = TaskGroupInfo.GetRootGroup();
             }
             else
             {

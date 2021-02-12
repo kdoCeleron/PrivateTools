@@ -120,7 +120,7 @@ namespace TaskManager
 
             this.LsvGroup.Items.Clear();
 
-            var topTasks = ResourceManager.Instance.TaskGroupList.Where(x => x.ParentGroup == null).ToList();
+            var topTasks = ResourceManager.Instance.TaskGroupList.Where(x => x.ParentGroup == TaskGroupInfo.GetRootGroup()).ToList();
             foreach (var taskGroupInfo in topTasks)
             {
                 var taskName = taskGroupInfo.Name;
@@ -169,18 +169,21 @@ namespace TaskManager
 
         private void BtnAddGroup_Click(object sender, EventArgs e)
         {
+            var parent = TaskGroupInfo.GetRootGroup();
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
                 var selected = this.LsvGroup.SelectedItems[0].Tag as TaskGroupInfo;
                 if (selected != null)
                 {
-                    var win = new TaskGroupEditForm();
-                    win.Initialize(null, true, selected);
-                    win.ShowDialog();
-
-                    RefleshTaskGroupIchiran();
+                    parent = selected;
                 }
             }
+
+            var win = new TaskGroupEditForm();
+            win.Initialize(null, true, parent);
+            win.ShowDialog();
+
+            RefleshTaskGroupIchiran();
         }
 
         private void BtnRemoveGroup_Click(object sender, EventArgs e)

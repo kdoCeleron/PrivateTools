@@ -33,18 +33,22 @@
             // 
             // TxtInfo
             // 
+            this.TxtInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TxtInfo.Location = new System.Drawing.Point(12, 12);
+            this.TxtInfo.Margin = new System.Windows.Forms.Padding(30);
             this.TxtInfo.Multiline = true;
             this.TxtInfo.Name = "TxtInfo";
             this.TxtInfo.ReadOnly = true;
-            this.TxtInfo.Size = new System.Drawing.Size(282, 416);
+            this.TxtInfo.Size = new System.Drawing.Size(368, 416);
             this.TxtInfo.TabIndex = 0;
             // 
             // InfoViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 450);
+            this.ClientSize = new System.Drawing.Size(392, 450);
             this.Controls.Add(this.TxtInfo);
             this.Name = "InfoViewForm";
             this.Text = "情報一覧";

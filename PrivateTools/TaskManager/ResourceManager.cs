@@ -48,7 +48,7 @@ namespace TaskManager
             return true;
         }
 
-        public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent = null)
+        public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)
         {
             var group = new TaskGroupInfo();
             group.Name = name;

@@ -19,6 +19,7 @@ namespace TaskManager.Data
         }
 
         private static TaskGroupInfo _defaultGroup;
+        private static TaskGroupInfo _rootGroup;
 
         [JsonProperty("Name")]
         public string Name { get; set; }
@@ -39,9 +40,26 @@ namespace TaskManager.Data
                 _defaultGroup = new TaskGroupInfo();
                 _defaultGroup.Name = "未分類";
                 _defaultGroup.ChildTaskItems = new List<TaskItem>();
+                _defaultGroup.ChildGroups = new List<TaskGroupInfo>();
+                _defaultGroup.ParentGroup = GetRootGroup();
             }
 
             return _defaultGroup;
+        }
+
+        public static TaskGroupInfo GetRootGroup()
+        {
+            if (_rootGroup == null)
+            {
+                _rootGroup = new TaskGroupInfo();
+                _rootGroup.Name = string.Empty;
+                _rootGroup.ChildTaskItems = new List<TaskItem>();
+
+                _rootGroup.ChildGroups = new List<TaskGroupInfo>();
+                _rootGroup.ChildGroups.Add(GetDefaultGroup());
+            }
+
+            return _rootGroup;
         }
     }
 }

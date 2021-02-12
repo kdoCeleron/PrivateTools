@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configration\Config.cs" />
     <Compile Include="Controls\TaskIchiranView.cs">
       <SubType>Component</SubType>
     </Compile>
