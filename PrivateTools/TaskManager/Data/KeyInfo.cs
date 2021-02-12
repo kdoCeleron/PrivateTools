@@ -8,41 +8,138 @@ namespace TaskManager.Data
 {
     public class KeyInfo
     {
-        private static List<string> groupKeys;
+        private static HashSet<string> groupAllKeys;
 
-        private static List<string> taskKeys;
+        private static Dictionary<string, HashSet<string>> taskAllKeys;
+        
+        private KeyType keyType;
 
-        public string Key { get; private set; }
-
-        public static void Initialize()
+        private enum KeyType
         {
-            groupKeys = new List<string>();
-            taskKeys = new List<string>();
+            None,
 
-            var maxKeyNum = 500;
+            Group,
 
+            Task
         }
 
-        public static string GenerateKey(object src)
+        private KeyInfo()
         {
-            if (src == null)
+            this.keyType = KeyType.None;
+            this.KeyTask = string.Empty;
+            this.KeyGroup = string.Empty;
+        }
+
+        public string KeyGroup { get; set; }
+
+        public string KeyTask { get; set; }
+        
+        public string Key
+        {
+            get
             {
-                return string.Empty;
+                return this.KeyGroup + "_" + this.KeyTask;
+            }
+        }
+
+        public static void Initialize(List<string> groupKeys = null, List<string> taskKeys = null)
+        {
+            groupAllKeys = new HashSet<string>();
+            taskAllKeys = new Dictionary<string, HashSet<string>>();
+
+            var maxKeyNum = 100;
+
+            for (int i = 0; i < maxKeyNum; i++)
+            {
+                var groupKey = string.Format("Group_{0:D5}", i);
+                groupAllKeys.Add(groupKey);
+                taskAllKeys.Add(groupKey, new HashSet<string>());
+                for (int j = 0; j < maxKeyNum; j++)
+                {
+                    var taskKey = string.Format("Task_{0:D5}", j);
+                    taskAllKeys[groupKey].Add(taskKey);
+                }
             }
 
-            var prefix = "Other_";
-            var hashCode = src.GetHashCode().ToString();
-            if (src is TaskGroupInfo)
+            if (groupKeys != null)
             {
-                prefix = "Group_";
+                foreach (var groupKey in groupKeys)
+                {
+                    groupAllKeys.Remove(groupKey);
+                }
             }
 
-            if (src is TaskItem)
+            if (taskKeys != null)
             {
-                prefix = "Task_";
+                foreach (var taskKey in taskKeys)
+                {
+                    taskAllKeys.Remove(taskKey);
+                }
+            }
+        }
+
+        public static KeyInfo CreateKeyInfoGroup()
+        {
+            if (groupAllKeys.Any())
+            {
+                var info = new KeyInfo();
+                info.keyType = KeyType.Group;
+
+                var key = groupAllKeys.First();
+
+                info.KeyGroup = key;
+
+                groupAllKeys.Remove(key);
+
+                return info;
             }
 
-            return prefix + hashCode;
+            // TODO:key枯渇
+
+            return null;
+        }
+
+        public static KeyInfo CreateKeyInfoTask(KeyInfo parentGroupKey)
+        {
+            if (parentGroupKey != null)
+            {
+                var parentKey = parentGroupKey.KeyGroup;
+                if (taskAllKeys[parentKey].Any())
+                {
+                    var info = new KeyInfo();
+                    info.keyType = KeyType.Task;
+
+                    var key = taskAllKeys[parentKey].First();
+
+                    info.KeyGroup = parentKey;
+                    info.KeyTask = key;
+
+                    taskAllKeys[parentKey].Remove(key);
+
+                    return info;
+                }
+            } 
+            
+            // TODO:key枯渇
+            return null;
+        }
+
+        public static void DeleteKeyInfo(KeyInfo keyInfo)
+        {
+            if (keyInfo == null)
+            {
+                return;
+            }
+
+            // キーを再利用
+            if (keyInfo.keyType == KeyType.Group)
+            {
+                groupAllKeys.Add(keyInfo.KeyGroup);
+            }
+            else if (keyInfo.keyType == KeyType.Task)
+            {
+                taskAllKeys[keyInfo.KeyGroup].Add(keyInfo.KeyTask);
+            }
         }
     }
 }
