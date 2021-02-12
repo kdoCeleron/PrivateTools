@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using TaskManager.Data;
 
 namespace TaskManager
@@ -22,11 +24,23 @@ namespace TaskManager
             }
         }
 
-        public List<TaskGroupInfo> TaskGroupList;
+        public TaskInfoRoot TaskInfoRoot;
+
+        public List<TaskGroupInfo> TaskGroupList
+        {
+            get
+            {
+                return instance.TaskInfoRoot.TaskGroupInfos;
+            }
+        }
 
         public bool Initialize()
         {
-            this.TaskGroupList = new List<TaskGroupInfo>();
+            this.TaskInfoRoot = new TaskInfoRoot();
+
+            //var text = File.ReadAllText(".\tasks.txt");
+            //var jsonObj = JsonConvert.DeserializeObject<List<TaskGroupInfo>>(text);
+            //this.TaskGroupList.AddRange(jsonObj);
             this.TaskGroupList.Add(TaskGroupInfo.GetDefaultGroup());
 
             this.isInitialized = true;
@@ -116,6 +130,18 @@ namespace TaskManager
             if (group != null)
             {
                 group.ChildTaskItems.Add(taskItem);
+            }
+        }
+
+        public void RemoveTaskItem(TaskItem taskItem)
+        {
+            var group = instance.TaskGroupList.FirstOrDefault(x => x == taskItem.Group);
+            if (group != null)
+            {
+                if (group.ChildTaskItems.Contains(taskItem))
+                {
+                    group.ChildTaskItems.Remove(taskItem);
+                }
             }
 
         }

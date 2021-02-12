@@ -35,32 +35,33 @@ namespace TaskManager
             this.LabelDateTime = new System.Windows.Forms.Label();
             this.PanelTop = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelRecentTasks = new System.Windows.Forms.Label();
             this.PanelRight = new System.Windows.Forms.Panel();
+            this.BtnReNameGroup = new System.Windows.Forms.Button();
             this.BtnRemoveGroup = new System.Windows.Forms.Button();
             this.BtnAddGroup = new System.Windows.Forms.Button();
             this.LabelGroupView = new System.Windows.Forms.Label();
             this.LsvGroup = new System.Windows.Forms.ListView();
             this.ColumnGroups = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.PanelLeft = new System.Windows.Forms.Panel();
-            this.LabelTaskView = new System.Windows.Forms.Label();
-            this.PanelButtom = new System.Windows.Forms.Panel();
-            this.BtnReNameGroup = new System.Windows.Forms.Button();
             this.ColumnTaskNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
-            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
-            this.label1 = new System.Windows.Forms.Label();
+            this.PanelLeft = new System.Windows.Forms.Panel();
             this.LblDisplayGroup = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.LabelTaskView = new System.Windows.Forms.Label();
+            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
+            this.PanelButtom = new System.Windows.Forms.Panel();
+            this.BtnInfos = new System.Windows.Forms.Button();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
             this.panel1.SuspendLayout();
             this.PanelRight.SuspendLayout();
             this.PanelLeft.SuspendLayout();
-            this.PanelButtom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
+            this.PanelButtom.SuspendLayout();
             this.SuspendLayout();
             // 
             // PanelHeader
@@ -93,12 +94,22 @@ namespace TaskManager
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.BtnInfos);
             this.panel2.Controls.Add(this.DgvRecentTasks);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 25);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1043, 145);
             this.panel2.TabIndex = 3;
+            // 
+            // DgvRecentTasks
+            // 
+            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvRecentTasks.Location = new System.Drawing.Point(12, 6);
+            this.DgvRecentTasks.Name = "DgvRecentTasks";
+            this.DgvRecentTasks.RowTemplate.Height = 21;
+            this.DgvRecentTasks.Size = new System.Drawing.Size(754, 130);
+            this.DgvRecentTasks.TabIndex = 0;
             // 
             // panel1
             // 
@@ -130,6 +141,16 @@ namespace TaskManager
             this.PanelRight.Name = "PanelRight";
             this.PanelRight.Size = new System.Drawing.Size(265, 376);
             this.PanelRight.TabIndex = 2;
+            // 
+            // BtnReNameGroup
+            // 
+            this.BtnReNameGroup.Location = new System.Drawing.Point(198, 9);
+            this.BtnReNameGroup.Name = "BtnReNameGroup";
+            this.BtnReNameGroup.Size = new System.Drawing.Size(54, 23);
+            this.BtnReNameGroup.TabIndex = 4;
+            this.BtnReNameGroup.Text = "変更";
+            this.BtnReNameGroup.UseVisualStyleBackColor = true;
+            this.BtnReNameGroup.Click += new System.EventHandler(this.BtnReNameGroup_Click);
             // 
             // BtnRemoveGroup
             // 
@@ -177,6 +198,12 @@ namespace TaskManager
             this.ColumnGroups.Text = "グループ";
             this.ColumnGroups.Width = 165;
             // 
+            // ColumnTaskNum
+            // 
+            this.ColumnTaskNum.Text = "";
+            this.ColumnTaskNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ColumnTaskNum.Width = 50;
+            // 
             // PanelLeft
             // 
             this.PanelLeft.Controls.Add(this.LblDisplayGroup);
@@ -189,6 +216,24 @@ namespace TaskManager
             this.PanelLeft.Size = new System.Drawing.Size(772, 376);
             this.PanelLeft.TabIndex = 3;
             // 
+            // LblDisplayGroup
+            // 
+            this.LblDisplayGroup.AutoSize = true;
+            this.LblDisplayGroup.Location = new System.Drawing.Point(231, 14);
+            this.LblDisplayGroup.Name = "LblDisplayGroup";
+            this.LblDisplayGroup.Size = new System.Drawing.Size(35, 12);
+            this.LblDisplayGroup.TabIndex = 4;
+            this.LblDisplayGroup.Text = "label2";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(146, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(79, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "表示中グループ";
+            // 
             // LabelTaskView
             // 
             this.LabelTaskView.AutoSize = true;
@@ -197,6 +242,15 @@ namespace TaskManager
             this.LabelTaskView.Size = new System.Drawing.Size(54, 12);
             this.LabelTaskView.TabIndex = 2;
             this.LabelTaskView.Text = "タスク一覧";
+            // 
+            // DgvAllTasks
+            // 
+            this.DgvAllTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvAllTasks.Location = new System.Drawing.Point(9, 44);
+            this.DgvAllTasks.Name = "DgvAllTasks";
+            this.DgvAllTasks.RowTemplate.Height = 21;
+            this.DgvAllTasks.Size = new System.Drawing.Size(754, 320);
+            this.DgvAllTasks.TabIndex = 1;
             // 
             // PanelButtom
             // 
@@ -208,57 +262,15 @@ namespace TaskManager
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
             // 
-            // BtnReNameGroup
+            // BtnInfos
             // 
-            this.BtnReNameGroup.Location = new System.Drawing.Point(198, 9);
-            this.BtnReNameGroup.Name = "BtnReNameGroup";
-            this.BtnReNameGroup.Size = new System.Drawing.Size(54, 23);
-            this.BtnReNameGroup.TabIndex = 4;
-            this.BtnReNameGroup.Text = "変更";
-            this.BtnReNameGroup.UseVisualStyleBackColor = true;
-            this.BtnReNameGroup.Click += new System.EventHandler(this.BtnReNameGroup_Click);
-            // 
-            // ColumnTaskNum
-            // 
-            this.ColumnTaskNum.Text = "";
-            this.ColumnTaskNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ColumnTaskNum.Width = 50;
-            // 
-            // DgvAllTasks
-            // 
-            this.DgvAllTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvAllTasks.Location = new System.Drawing.Point(9, 44);
-            this.DgvAllTasks.Name = "DgvAllTasks";
-            this.DgvAllTasks.RowTemplate.Height = 21;
-            this.DgvAllTasks.Size = new System.Drawing.Size(754, 320);
-            this.DgvAllTasks.TabIndex = 1;
-            // 
-            // DgvRecentTasks
-            // 
-            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvRecentTasks.Location = new System.Drawing.Point(12, 6);
-            this.DgvRecentTasks.Name = "DgvRecentTasks";
-            this.DgvRecentTasks.RowTemplate.Height = 21;
-            this.DgvRecentTasks.Size = new System.Drawing.Size(754, 130);
-            this.DgvRecentTasks.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(146, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "表示中グループ";
-            // 
-            // LblDisplayGroup
-            // 
-            this.LblDisplayGroup.AutoSize = true;
-            this.LblDisplayGroup.Location = new System.Drawing.Point(231, 14);
-            this.LblDisplayGroup.Name = "LblDisplayGroup";
-            this.LblDisplayGroup.Size = new System.Drawing.Size(35, 12);
-            this.LblDisplayGroup.TabIndex = 4;
-            this.LblDisplayGroup.Text = "label2";
+            this.BtnInfos.Location = new System.Drawing.Point(956, 3);
+            this.BtnInfos.Name = "BtnInfos";
+            this.BtnInfos.Size = new System.Drawing.Size(75, 23);
+            this.BtnInfos.TabIndex = 1;
+            this.BtnInfos.Text = "情報";
+            this.BtnInfos.UseVisualStyleBackColor = true;
+            this.BtnInfos.Click += new System.EventHandler(this.BtnInfos_Click);
             // 
             // MainForm
             // 
@@ -275,15 +287,15 @@ namespace TaskManager
             this.PanelHeader.PerformLayout();
             this.PanelTop.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.PanelRight.ResumeLayout(false);
             this.PanelRight.PerformLayout();
             this.PanelLeft.ResumeLayout(false);
             this.PanelLeft.PerformLayout();
-            this.PanelButtom.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
+            this.PanelButtom.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -311,6 +323,7 @@ namespace TaskManager
         private System.Windows.Forms.ColumnHeader ColumnTaskNum;
         private System.Windows.Forms.Label LblDisplayGroup;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button BtnInfos;
     }
 }
 

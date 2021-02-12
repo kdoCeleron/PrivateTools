@@ -29,6 +29,9 @@ namespace TaskManager
             this.DtpLimit.CustomFormat = "yyyy年 MM月 dd日 HH:mm:ss";
             this.CmbGroup.DisplayMember = "Name";
             this.CmbGroup.ValueMember = "Name";
+
+            this.TxtTitle.ImeMode = ImeMode.Hiragana;
+            this.TxtMemo.ImeMode = ImeMode.Hiragana;
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -162,7 +165,7 @@ namespace TaskManager
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            var groupEdited = this.target.Group.Name != this.CmbGroup.Text;
+            var groupEdited = this.target.Group != this.CmbGroup.SelectedItem;
             var titleEdited = this.target.Title != this.TxtTitle.Text;
             var limitEdited = this.DtpLimit.Value.ToString() != this.target.DateTimeLimit.ToString();
             var memoEdited = this.target.Memo != this.TxtMemo.Text;

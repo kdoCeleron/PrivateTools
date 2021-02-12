@@ -41,7 +41,7 @@ namespace TaskManager.Controls
             this.columnInfoMap.Add(index, item4);
 
             index++;
-            var item5 = new DataGridColumnInfo(index, DataGridColumnType.Label, DataGridViewContentAlignment.MiddleLeft, 200, "メモ", string.Empty);
+            var item5 = new DataGridColumnInfo(index, DataGridColumnType.Label, DataGridViewContentAlignment.MiddleLeft, 250, "メモ", string.Empty);
             this.columnInfoMap.Add(index, item5);
 
             index++;
@@ -53,12 +53,8 @@ namespace TaskManager.Controls
             this.columnInfoMap.Add(index, item7);
 
             index++;
-            var item8 = new DataGridColumnInfo(index, DataGridColumnType.Button, DataGridViewContentAlignment.MiddleCenter, 50, string.Empty, "リスケ");
+            var item8 = new DataGridColumnInfo(index, DataGridColumnType.Button, DataGridViewContentAlignment.MiddleCenter, 50, string.Empty, "複製");
             this.columnInfoMap.Add(index, item8);
-
-            index++;
-            var item9 = new DataGridColumnInfo(index, DataGridColumnType.Button, DataGridViewContentAlignment.MiddleCenter, 50, string.Empty, "複製");
-            this.columnInfoMap.Add(index, item9);
         }
 
         public void Initialize(bool canAddTask)
@@ -194,8 +190,18 @@ namespace TaskManager.Controls
                     }
 
                     var isButton = info.ColumnType == DataGridColumnType.Button;
-                    var isEdit = fixedCell.Value.ToString() == "編集";
-                    if (isButton && (isShowEditForm || isEdit))
+                    if (!isButton)
+                    {
+                        return;
+                    }
+
+                    var contentName = fixedCell.Value.ToString();
+                    var isEdit = contentName == "編集";
+                    var isDelete = contentName == "削除";
+                    var isCopy = contentName == "複製";
+                    var isComplete = contentName == "完了";
+                    var isTorikeshi = contentName == "取消";
+                    if (isShowEditForm || isEdit)
                     {
                         var row = this.Rows[e.RowIndex];
                         var item = row.Tag as TaskItem;
@@ -207,6 +213,59 @@ namespace TaskManager.Controls
                             win.ShowDialog();
                         }
                     }
+                    else if (isDelete)
+                    {
+                        var message = "タスクを削除します。";
+                        var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
+                        if (msgRet == DialogResult.Yes)
+                        {
+                            var row = this.Rows[e.RowIndex];
+                            var item = row.Tag as TaskItem;
+                            if (item != null)
+                            {
+                                this.Rows.Remove(row);
+                                ResourceManager.Instance.RemoveTaskItem(item);
+
+                                this.RefleshTaskItems(this.showingGroup.ChildTaskItems, this.showingGroup);
+                            }
+                        }
+                    }
+                    else if (isCopy)
+                    {
+                        var row = this.Rows[e.RowIndex];
+                        var item = row.Tag as TaskItem;
+                        if (item != null)
+                        {
+                            var newItem = new TaskItem();
+
+                            newItem.Group = item.Group;
+                            newItem.Title = item.Title;
+                            newItem.Memo = item.Memo;
+                            newItem.DateTimeLimit = item.DateTimeLimit;
+
+                            this.AddTaskItem(newItem);
+                        }
+                    }
+                    else if (isComplete)
+                    {
+                        var row = this.Rows[e.RowIndex];
+                        var item = row.Tag as TaskItem;
+                        if (item != null)
+                        {
+                            item.IsComeplate = true;
+                        }
+                    }
+                    else if (isTorikeshi)
+                    {
+                        var row = this.Rows[e.RowIndex];
+                        var item = row.Tag as TaskItem;
+                        if (item != null)
+                        {
+                            item.IsComeplate = false;
+                        }
+                    }
+
+                    this.UpdateCellStatus();
                 }
             }
         }
@@ -329,6 +388,51 @@ namespace TaskManager.Controls
             {
                 var row = this.Rows[index];
                 this.CellReadOnly(index, row);
+
+                var grpData = row.Tag as TaskItem;
+                if (grpData != null)
+                {
+                    var isEnable = false;
+                    var kanryoCell = row.Cells[0] as DataGridViewButtonCell;
+                    if (kanryoCell != null)
+                    {
+                        if (grpData.IsComeplate)
+                        {
+                            kanryoCell.Value = "取消";
+                            for (int i = 0; i < row.Cells.Count; i++)
+                            {
+                                row.Cells[i].Style.BackColor = Color.Gray;
+                            }
+                        }
+                        else
+                        {
+                            kanryoCell.Value = "完了";
+                            for (int i = 0; i < row.Cells.Count; i++)
+                            {
+                                row.Cells[i].Style.BackColor = Color.White;
+                            }
+
+                            isEnable = true;
+                        }
+                    }
+
+                    if (isEnable)
+                    {
+                        var tmp = DateTime.Now;
+                        var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                        var date = grpData.DateTimeLimit;
+
+                        var cell = row.Cells[3] as DataGridViewCell;
+                        if (now <= (date.AddDays(1)))
+                        {
+                            cell.Style.BackColor = Color.Red;
+                        }
+                        else if (now <= (date.AddDays(3)))
+                        {
+                            cell.Style.BackColor = Color.Yellow;
+                        }
+                    }
+                }
 
                 if (this.isVisibleAddTask)
                 {

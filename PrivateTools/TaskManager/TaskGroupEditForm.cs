@@ -26,6 +26,8 @@ namespace TaskManager
             this.Load += OnLoad;
             this.CmbParentGroup.DisplayMember = "Name";
             this.CmbParentGroup.ValueMember = "Name";
+
+            this.TxtGroupName.ImeMode = ImeMode.Hiragana;
         }
 
         public void Initialize(TaskGroupInfo group, bool isAddOperation, TaskGroupInfo parent)

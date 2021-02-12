@@ -4,9 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TaskManager.Data
 {
+    [JsonObject]
     public class TaskGroupInfo
     {
         public TaskGroupInfo()
@@ -18,12 +20,16 @@ namespace TaskManager.Data
 
         private static TaskGroupInfo _defaultGroup;
 
+        [JsonProperty("Name")]
         public string Name { get; set; }
 
+        [JsonProperty("ParentGroup")]
         public TaskGroupInfo ParentGroup { get; set; }
 
+        [JsonProperty("ChildGroups")]
         public List<TaskGroupInfo> ChildGroups { get; set; }
 
+        [JsonProperty("ChildTaskItems")]
         public List<TaskItem> ChildTaskItems { get; set; }
 
         public static TaskGroupInfo GetDefaultGroup()

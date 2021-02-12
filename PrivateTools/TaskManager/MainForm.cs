@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Newtonsoft.Json;
 using TaskManager.Data;
 using Timer = System.Threading.Timer;
 
@@ -22,6 +24,13 @@ namespace TaskManager
             InitializeComponent();
 
             this.Load += OnLoad;
+            this.Closing += OnClosing;
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            //var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.None);
+            //File.WriteAllText(@".\tasks.txt", jsonStr);
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -50,6 +59,22 @@ namespace TaskManager
         private void DgvAllTasksOnUpdateEvent(object sender, TaskItem e)
         {
             // TODO:直近のタスク一覧の更新処理
+            // タスク一覧との処理の調整があるため、後回し
+            //var allGroup = ResourceManager.Instance.TaskGroupList;
+            //var list = new List<TaskItem>();
+            //foreach (var info in allGroup)
+            //{
+            //    list.AddRange(info.ChildTaskItems);
+
+            //    // TODO:再帰
+            //    foreach (var infoChildGroup in info.ChildGroups)
+            //    {
+            //        list.AddRange(infoChildGroup.ChildTaskItems);
+            //    }
+            //}
+
+            // TODO:更新したときにグループの件数も再描画する。
+            //this.DgvRecentTasks.RefleshTaskItems(list, null);
         }
 
         private void InitializeGroupList()
@@ -65,12 +90,6 @@ namespace TaskManager
             this.LsvGroup.SelectedIndexChanged += LsvGroupOnSelectedIndexChanged;
             //this.LsvGroup.DoubleClick += this.SymbolListView_OnDoubleClick;
             this.LsvGroup.ShowItemToolTips = true;
-
-            // TODO:仮処理
-            for (int i = 0; i < 10; i++)
-            {
-                var group = ResourceManager.Instance.AddTaskGroup("グループ" + string.Format("{0:D}", i));
-            }
 
             RefleshTaskGroupIchiran();
         }
@@ -191,6 +210,12 @@ namespace TaskManager
                     RefleshTaskGroupIchiran();
                 }
             }
+        }
+
+        private void BtnInfos_Click(object sender, EventArgs e)
+        {
+            var win = new InfoViewForm();
+            win.ShowDialog();
         }
     }
 }
