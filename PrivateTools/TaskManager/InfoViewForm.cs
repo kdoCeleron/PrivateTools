@@ -30,6 +30,7 @@ namespace TaskManager
             msgList.Add("・グループ選択時、サブグループに存在するタスクも表示する。");
             msgList.Add("・直近のタスク一覧に3日(黄色)以内のタスクを表示する。");
             msgList.Add("・サブ画面はescキーで閉じたい。");
+            msgList.Add("・全体的に処理を共通化");
 
             var txt = string.Empty;
             foreach (var msg in msgList)

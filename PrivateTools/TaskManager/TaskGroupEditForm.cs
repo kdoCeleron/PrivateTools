@@ -36,7 +36,7 @@ namespace TaskManager
 
             this.CmbParentGroup.Items.Add(TaskGroupInfo.GetRootGroup());
 
-            foreach (var item in ResourceManager.Instance.TaskGroupList)
+            foreach (var item in ResourceManager.Instance.TaskInfoRoot.TaskGroupList.Values)
             {
                 this.CmbParentGroup.Items.Add(item);
             }
@@ -108,11 +108,11 @@ namespace TaskManager
             {
                 if (this.isAdd)
                 {
-                    ResourceManager.Instance.AddTaskGroup(this.TxtGroupName.Text, parent);
+                    ResourceManager.Instance.TaskInfoRoot.AddTaskGroup(this.TxtGroupName.Text, parent);
                 }
                 else
                 {
-                    ResourceManager.Instance.EditTaskGroup(this.target, this.TxtGroupName.Text, parent);
+                    ResourceManager.Instance.TaskInfoRoot.EditTaskGroup(this.target, this.TxtGroupName.Text, parent);
                 }
 
                 this.Close();

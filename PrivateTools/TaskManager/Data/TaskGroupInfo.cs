@@ -14,24 +14,27 @@ namespace TaskManager.Data
         public TaskGroupInfo()
         {
             this.Name = string.Empty;
-            this.ChildGroups = new List<TaskGroupInfo>();
-            this.ChildTaskItems = new List<TaskItem>();
+            this.ChildGroups = new HashSet<KeyInfo>();
+            this.ChildTaskItems = new HashSet<TaskItem>();
         }
 
         private static TaskGroupInfo _defaultGroup;
         private static TaskGroupInfo _rootGroup;
 
+        [JsonProperty("Key")]
+        public KeyInfo Key { get; set; }
+
         [JsonProperty("Name")]
         public string Name { get; set; }
 
         [JsonProperty("ParentGroup")]
-        public TaskGroupInfo ParentGroup { get; set; }
+        public KeyInfo ParentGroup { get; set; }
 
         [JsonProperty("ChildGroups")]
-        public List<TaskGroupInfo> ChildGroups { get; set; }
+        public HashSet<KeyInfo> ChildGroups { get; set; }
 
         [JsonProperty("ChildTaskItems")]
-        public List<TaskItem> ChildTaskItems { get; set; }
+        public HashSet<TaskItem> ChildTaskItems { get; set; }
 
         public static TaskGroupInfo GetDefaultGroup()
         {
@@ -39,9 +42,10 @@ namespace TaskManager.Data
             {
                 _defaultGroup = new TaskGroupInfo();
                 _defaultGroup.Name = "未分類";
-                _defaultGroup.ChildTaskItems = new List<TaskItem>();
-                _defaultGroup.ChildGroups = new List<TaskGroupInfo>();
-                _defaultGroup.ParentGroup = GetRootGroup();
+                _defaultGroup.ChildTaskItems = new HashSet<TaskItem>();
+                _defaultGroup.ChildGroups = new HashSet<KeyInfo>();
+                _defaultGroup.ParentGroup = GetRootGroup().Key;
+                _defaultGroup.Key = KeyInfo.CreateKeyInfoGroup();
             }
 
             return _defaultGroup;
@@ -53,10 +57,10 @@ namespace TaskManager.Data
             {
                 _rootGroup = new TaskGroupInfo();
                 _rootGroup.Name = string.Empty;
-                _rootGroup.ChildTaskItems = new List<TaskItem>();
-
-                _rootGroup.ChildGroups = new List<TaskGroupInfo>();
-                _rootGroup.ChildGroups.Add(GetDefaultGroup());
+                _rootGroup.ChildTaskItems = new HashSet<TaskItem>();
+                _rootGroup.ChildGroups = new HashSet<KeyInfo>();
+                _rootGroup.ChildGroups.Add(GetDefaultGroup().Key);
+                _rootGroup.Key = KeyInfo.CreateKeyInfoGroup();
             }
 
             return _rootGroup;

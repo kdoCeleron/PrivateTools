@@ -60,7 +60,7 @@ namespace TaskManager
 
         public bool Initialize(TaskGroupInfo groupInfo, TaskItem taskItem)
         {
-            var list = ResourceManager.Instance.TaskGroupList.ToArray();
+            var list = ResourceManager.Instance.TaskInfoRoot.TaskGroupList.Select(x => x.Value).ToArray();
             foreach (var item in list)
             {
                 this.CmbGroup.Items.Add(item);
@@ -69,10 +69,10 @@ namespace TaskManager
             if (taskItem.Group == null)
             {
                 // 新規の場合は、表示中グループにする
-                taskItem.Group = groupInfo;
+                taskItem.Group = groupInfo.Key;
             }
 
-            this.CmbGroup.SelectedItem = taskItem.Group;
+            this.CmbGroup.SelectedItem = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[taskItem.Group];
             this.TxtTitle.Text = taskItem.Title;
             this.DtpLimit.Value = taskItem.DateTimeLimit;
             this.TxtMemo.Text = taskItem.Memo;
@@ -151,13 +151,13 @@ namespace TaskManager
 
             if (canUpdate)
             {
-                if (string.IsNullOrEmpty(this.CmbGroup.Text))
+                if (string.IsNullOrEmpty(this.CmbGroup.Text) || this.CmbGroup.SelectedItem == null)
                 {
-                    this.target.Group = TaskGroupInfo.GetDefaultGroup();
+                    this.target.Group = TaskGroupInfo.GetDefaultGroup().Key;
                 }
                 else
                 {
-                    this.target.Group = this.CmbGroup.SelectedItem as TaskGroupInfo;
+                    this.target.Group = ((TaskGroupInfo)this.CmbGroup.SelectedItem).Key;
                 }
 
                 this.target.Title = this.TxtTitle.Text;

@@ -98,18 +98,20 @@ namespace TaskManager
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
-                var selected = this.LsvGroup.SelectedItems[0].Tag as TaskGroupInfo;
+                var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
                     this.DgvAllTasks.ClearAllTaskItems();
 
+                    var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+
                     var tasks = new List<TaskItem>();
-                    this.DgvAllTasks.RefleshTaskItems(selected.ChildTaskItems, selected);
+                    this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
 
                     // TODO:サブグループのタスクも
 
 
-                    this.LblDisplayGroup.Text = string.Format("[{0}]", selected.Name);
+                    this.LblDisplayGroup.Text = string.Format("[{0}]", group.Name);
                 }
             }
         }
@@ -120,20 +122,22 @@ namespace TaskManager
 
             this.LsvGroup.Items.Clear();
 
-            var topTasks = ResourceManager.Instance.TaskGroupList.Where(x => x.ParentGroup == TaskGroupInfo.GetRootGroup()).ToList();
+            var topTasks = ResourceManager.Instance.TaskInfoRoot.TaskGroupList
+                .Where(x => x.Value.ParentGroup.Equals(TaskGroupInfo.GetRootGroup().Key)).ToList();
             foreach (var taskGroupInfo in topTasks)
             {
-                var taskName = taskGroupInfo.Name;
-                var taskNum = taskGroupInfo.ChildTaskItems.Count;
+                var taskName = taskGroupInfo.Value.Name;
+                var taskNum = taskGroupInfo.Value.ChildTaskItems.Count;
                 var lvItem = this.LsvGroup.Items.Add(taskName);
                 lvItem.SubItems.Add(string.Format("{0:D}件", taskNum));
-                lvItem.Tag = taskGroupInfo;
+                lvItem.Tag = taskGroupInfo.Key;
 
                 // TODO:再帰
-                foreach (var childGroup in taskGroupInfo.ChildGroups)
+                foreach (var childGroup in taskGroupInfo.Value.ChildGroups)
                 {
-                    var childTaskName = childGroup.Name;
-                    var childTaskNum = childGroup.ChildTaskItems.Count;
+                    var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[childGroup];
+                    var childTaskName = group.Name;
+                    var childTaskNum = group.ChildTaskItems.Count;
                     var childLvItem = this.LsvGroup.Items.Add("  |-- " + childTaskName);
                     childLvItem.SubItems.Add(string.Format("{0:D}件", childTaskNum));
                     childLvItem.Tag = childGroup;
@@ -172,10 +176,11 @@ namespace TaskManager
             var parent = TaskGroupInfo.GetRootGroup();
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
-                var selected = this.LsvGroup.SelectedItems[0].Tag as TaskGroupInfo;
+                var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    parent = selected;
+                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    parent = item;
                 }
             }
 
@@ -190,10 +195,11 @@ namespace TaskManager
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
-                var selected = this.LsvGroup.SelectedItems[0].Tag as TaskGroupInfo;
+                var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    ResourceManager.Instance.RemoveTaskGroup(selected);
+                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskGroup(item);
                     RefleshTaskGroupIchiran();
                 }
             }
@@ -203,11 +209,13 @@ namespace TaskManager
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
-                var selected = this.LsvGroup.SelectedItems[0].Tag as TaskGroupInfo;
+                var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
+                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+
                     var win = new TaskGroupEditForm();
-                    win.Initialize(selected, false, selected.ParentGroup);
+                    win.Initialize(item, false, ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.ParentGroup]);
                     win.ShowDialog();
 
                     RefleshTaskGroupIchiran();

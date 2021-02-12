@@ -224,9 +224,9 @@ namespace TaskManager.Controls
                             if (item != null)
                             {
                                 this.Rows.Remove(row);
-                                ResourceManager.Instance.RemoveTaskItem(item);
+                                ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
 
-                                this.RefleshTaskItems(this.showingGroup.ChildTaskItems, this.showingGroup);
+                                this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
                             }
                         }
                     }
@@ -278,7 +278,7 @@ namespace TaskManager.Controls
                 var item = row.Tag as TaskItem;
                 if (item != null && item == e)
                 {
-                    ResourceManager.Instance.AddTaskItem(e);
+                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(e.Group, e);
                     SetTaskItemToRow(item, row);
                 }
             }
@@ -296,7 +296,7 @@ namespace TaskManager.Controls
                     string setValue = string.Empty;
                     if (columnIndex == 1)
                     {
-                        setValue = item.Group.Name;
+                        setValue = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.Group].Name;
                     }
                     else if (columnIndex == 2)
                     {

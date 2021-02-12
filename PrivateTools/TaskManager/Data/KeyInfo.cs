@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TaskManager.Data
 {
+    [JsonObject]
     public class KeyInfo
     {
         private static HashSet<string> groupAllKeys;
@@ -30,8 +32,10 @@ namespace TaskManager.Data
             this.KeyGroup = string.Empty;
         }
 
+        [JsonProperty("KeyGroup")]
         public string KeyGroup { get; set; }
 
+        [JsonProperty("KeyTask")]
         public string KeyTask { get; set; }
         
         public string Key
@@ -140,6 +144,21 @@ namespace TaskManager.Data
             {
                 taskAllKeys[keyInfo.KeyGroup].Add(keyInfo.KeyTask);
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Key.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is KeyInfo)
+            {
+                return this.Key == ((KeyInfo)obj).Key;
+            }
+
+            return false;
         }
     }
 }

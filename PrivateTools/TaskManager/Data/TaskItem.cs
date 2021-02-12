@@ -23,8 +23,11 @@ namespace TaskManager.Data
             this.AttachFile = new List<string>();
         }
 
+        [JsonProperty("Key")]
+        public KeyInfo Key { get; set; }
+        
         [JsonProperty("Group")]
-        public TaskGroupInfo Group { get; set; }
+        public KeyInfo Group { get; set; }
 
         public bool IsComeplate { get; set; }
 
@@ -47,5 +50,10 @@ namespace TaskManager.Data
         //public TaskItem ParentTask { get; set; }
 
         //public List<TaskItem> ChildTasks { get; set; }
+
+        public TaskGroupInfo GetGroup()
+        {
+            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group];
+        }
     }
 }
