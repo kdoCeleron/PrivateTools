@@ -50,9 +50,9 @@ namespace TaskManager
             this.DgvRecentTasks.Initialize(false);
 
             this.DgvAllTasks.UpdateEvent += DgvAllTasksOnUpdateEvent;
-            
-            // TODO:デフォルトは全タスクを表示
-            this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
+
+            this.InitializeTaskList();
+            this.DgvAllTasksOnUpdateEvent(null, null);
 
             this.InitializeGroupList();
         }
@@ -76,6 +76,37 @@ namespace TaskManager
 
             // TODO:更新したときにグループの件数も再描画する。
             //this.DgvRecentTasks.RefleshTaskItems(list, null);
+
+            this.tmpTaskList.Clear();
+
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, TaskAction);
+
+            var tmp = DateTime.Now;
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
+            var thres = now.AddDays(3);
+
+            // 超過、1日前、2日前、3日前
+            var filtered = tmpTaskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
+            this.DgvRecentTasks.ClearAllTaskItems();
+            this.DgvRecentTasks.RefleshTaskItems(filtered, null);
+        }
+
+        private List<TaskItem> tmpTaskList = new List<TaskItem>();
+
+        private void InitializeTaskList()
+        {
+            // TODO:デフォルトは全タスクを表示
+            this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
+            this.tmpTaskList.Clear();
+
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, TaskAction);
+
+            this.DgvAllTasks.RefleshTaskItems(this.tmpTaskList, null);
+        }
+
+        private void TaskAction(TaskItem obj)
+        {
+            this.tmpTaskList.Add(obj);
         }
 
         private void InitializeGroupList()
@@ -105,8 +136,7 @@ namespace TaskManager
                     this.DgvAllTasks.ClearAllTaskItems();
 
                     var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
-
-                    var tasks = new List<TaskItem>();
+                    
                     this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
 
                     // TODO:サブグループのタスクも

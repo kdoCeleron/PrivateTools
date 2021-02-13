@@ -101,5 +101,27 @@ namespace TaskManager
         {
             instance.TaskInfoRoot.RemoveTaskItem(taskItem);
         }
+        
+        public void ExecInnerGroupAndTasks(TaskGroupInfo rootGroup, Action<TaskGroupInfo> groupAction, Action<TaskItem> taskAction)
+        {
+            if (rootGroup == null)
+            {
+                return;
+            }
+
+            foreach (var taskItem in rootGroup.ChildTaskItems)
+            {
+                if (taskAction != null)
+                {
+                    taskAction(taskItem);
+                }
+            }
+
+            foreach (var childGroup in rootGroup.ChildGroups)
+            {
+                var group = instance.TaskInfoRoot.TaskGroupList[childGroup];
+                this.ExecInnerGroupAndTasks(group, groupAction, taskAction);
+            }
+        }
     }
 }

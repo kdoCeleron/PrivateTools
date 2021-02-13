@@ -453,6 +453,11 @@ namespace TaskManager.Controls
                     }
                 }
             }
+
+            if (this.UpdateEvent != null)
+            {
+                this.UpdateEvent(this, null);
+            }
         }
 
         private TaskItem GetTaskItemInRow(DataGridViewRow row)
