@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TaskManager.Controls;
 
 namespace TaskManager
 {
-    public partial class InfoViewForm : Form
+    public partial class InfoViewForm : SubWindowBase
     {
         public InfoViewForm()
         {

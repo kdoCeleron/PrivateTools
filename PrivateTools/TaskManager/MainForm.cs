@@ -29,8 +29,8 @@ namespace TaskManager
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            //var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.None);
-            //File.WriteAllText(@".\tasks.txt", jsonStr);
+            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.None);
+            File.WriteAllText(@".\tasks.txt", jsonStr);
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -122,18 +122,17 @@ namespace TaskManager
 
             this.LsvGroup.Items.Clear();
 
-            var topTasks = ResourceManager.Instance.TaskInfoRoot.TaskGroupList
-                .Where(x => x.Value.ParentGroup.Equals(TaskGroupInfo.GetRootGroup().Key)).ToList();
+            var topTasks = ResourceManager.Instance.GetRootGroups();
             foreach (var taskGroupInfo in topTasks)
             {
-                var taskName = taskGroupInfo.Value.Name;
-                var taskNum = taskGroupInfo.Value.ChildTaskItems.Count;
+                var taskName = taskGroupInfo.Name;
+                var taskNum = taskGroupInfo.ChildTaskItems.Count;
                 var lvItem = this.LsvGroup.Items.Add(taskName);
                 lvItem.SubItems.Add(string.Format("{0:D}件", taskNum));
                 lvItem.Tag = taskGroupInfo.Key;
 
                 // TODO:再帰
-                foreach (var childGroup in taskGroupInfo.Value.ChildGroups)
+                foreach (var childGroup in taskGroupInfo.ChildGroups)
                 {
                     var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[childGroup];
                     var childTaskName = group.Name;
@@ -223,7 +222,7 @@ namespace TaskManager
             }
         }
 
-        private void BtnInfos_Click(object sender, EventArgs e)
+        private async void BtnInfos_Click(object sender, EventArgs e)
         {
             var win = new InfoViewForm();
             win.ShowDialog();

@@ -9,11 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using TaskManager.Controls;
 using TaskManager.Data;
 
 namespace TaskManager
 {
-    public partial class TaskGroupEditForm : Form
+    public partial class TaskGroupEditForm : SubWindowBase
     {
         private TaskGroupInfo target;
 

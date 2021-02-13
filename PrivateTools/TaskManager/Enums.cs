@@ -14,4 +14,11 @@ namespace TaskManager
 
         TextBox
     }
+
+    public enum SubWindowResult
+    {
+        Submit,
+
+        Cancel
+    }
 }

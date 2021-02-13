@@ -9,11 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using TaskManager.Controls;
 using TaskManager.Data;
 
 namespace TaskManager
 {
-    public partial class TaskEditForm : Form
+    public partial class TaskEditForm : SubWindowBase
     {
         private TaskItem target;
 
@@ -38,24 +39,6 @@ namespace TaskManager
         {
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
-
-            var win = this.Owner;
-            if (win != null)
-            {
-                var winPos = win.Location;
-                var winWidth = this.Owner.Width;
-                var winHeight = this.Owner.Height;
-                var winCenterPosX = winPos.X + (winWidth / 2);
-                var winCenterPosY = winPos.Y + (winHeight / 2);
-
-                var width = this.Width;
-                var height = this.Height;
-
-                var posX = winCenterPosX - (width / 2);
-                var posY = winCenterPosY - (height / 2);
-
-                this.Location = new Point(posX, posY);
-            }
         }
 
         public bool Initialize(TaskGroupInfo groupInfo, TaskItem taskItem)

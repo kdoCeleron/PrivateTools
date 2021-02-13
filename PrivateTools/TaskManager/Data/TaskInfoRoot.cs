@@ -18,6 +18,11 @@ namespace TaskManager.Data
         [JsonProperty("TaskGroupInfos")]
         public Dictionary<KeyInfo, TaskGroupInfo> TaskGroupList { get; set; }
 
+        public void AddTaskGroup(TaskGroupInfo groupInfo)
+        {
+            this.TaskGroupList.Add(groupInfo.Key, groupInfo);
+        }
+
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)
         {
             var group = new TaskGroupInfo();
@@ -91,6 +96,8 @@ namespace TaskManager.Data
             foreach (var childGroup in taskGroupInfo.ChildGroups)
             {
                 KeyInfo.DeleteKeyInfo(childGroup);
+
+                // TODO:さらに下位も
             }
 
             foreach (var childTaskItem in taskGroupInfo.ChildTaskItems)
@@ -110,6 +117,28 @@ namespace TaskManager.Data
             if (taskItems.Contains(taskItem))
             {
                 taskItems.Remove(taskItem);
+            }
+        }
+
+        public void ExecInnerGroupAndTasks(TaskGroupInfo rootGroup, Action<TaskGroupInfo> groupAction, Action<TaskItem> taskAction)
+        {
+            if (rootGroup == null)
+            {
+                return;
+            }
+            
+            foreach (var taskItem in rootGroup.ChildTaskItems)
+            {
+                if (taskAction != null)
+                {
+                    taskAction(taskItem);
+                }
+            }
+
+            foreach (var childGroup in rootGroup.ChildGroups)
+            {
+                var group = this.TaskGroupList[childGroup];
+                this.ExecInnerGroupAndTasks(group, groupAction, taskAction);
             }
         }
     }

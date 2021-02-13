@@ -18,6 +18,24 @@ namespace TaskManager.Data
             this.ChildTaskItems = new HashSet<TaskItem>();
         }
 
+        static TaskGroupInfo()
+        {
+            _rootGroup = new TaskGroupInfo();
+            _rootGroup.Name = string.Empty;
+            _rootGroup.ChildTaskItems = new HashSet<TaskItem>();
+            _rootGroup.ChildGroups = new HashSet<KeyInfo>();
+            _rootGroup.Key = KeyInfo.CreateKeyInfoGroup();
+
+            _defaultGroup = new TaskGroupInfo();
+            _defaultGroup.Name = "未分類";
+            _defaultGroup.ChildTaskItems = new HashSet<TaskItem>();
+            _defaultGroup.ChildGroups = new HashSet<KeyInfo>();
+            _defaultGroup.Key = KeyInfo.CreateKeyInfoGroup();
+
+            _rootGroup.ChildGroups.Add(_defaultGroup.Key);
+            _defaultGroup.ParentGroup = _rootGroup.Key;
+        }
+
         private static TaskGroupInfo _defaultGroup;
         private static TaskGroupInfo _rootGroup;
 
@@ -38,31 +56,13 @@ namespace TaskManager.Data
 
         public static TaskGroupInfo GetDefaultGroup()
         {
-            if (_defaultGroup == null)
-            {
-                _defaultGroup = new TaskGroupInfo();
-                _defaultGroup.Name = "未分類";
-                _defaultGroup.ChildTaskItems = new HashSet<TaskItem>();
-                _defaultGroup.ChildGroups = new HashSet<KeyInfo>();
-                _defaultGroup.ParentGroup = GetRootGroup().Key;
-                _defaultGroup.Key = KeyInfo.CreateKeyInfoGroup();
-            }
+
 
             return _defaultGroup;
         }
 
         public static TaskGroupInfo GetRootGroup()
         {
-            if (_rootGroup == null)
-            {
-                _rootGroup = new TaskGroupInfo();
-                _rootGroup.Name = string.Empty;
-                _rootGroup.ChildTaskItems = new HashSet<TaskItem>();
-                _rootGroup.ChildGroups = new HashSet<KeyInfo>();
-                _rootGroup.ChildGroups.Add(GetDefaultGroup().Key);
-                _rootGroup.Key = KeyInfo.CreateKeyInfoGroup();
-            }
-
             return _rootGroup;
         }
     }
