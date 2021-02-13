@@ -24,6 +24,8 @@ namespace TaskManager
             }
         }
 
+        public Form MainForm { get; set; }
+
         public TaskInfoRoot TaskInfoRoot;
 
         public bool Initialize()

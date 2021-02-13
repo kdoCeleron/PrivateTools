@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -155,7 +156,7 @@ namespace TaskManager.Controls
             this.Rows.Add(dgvRow);
         }
 
-        private void OnCellContentClick(object sender, DataGridViewCellEventArgs e)
+        private async void OnCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridColumnInfo info;
             if (this.columnInfoMap.TryGetValue(e.ColumnIndex, out info))
@@ -195,6 +196,8 @@ namespace TaskManager.Controls
                         return;
                     }
 
+                    var row = this.Rows[e.RowIndex];
+
                     var contentName = fixedCell.Value.ToString();
                     var isEdit = contentName == "編集";
                     var isDelete = contentName == "削除";
@@ -203,14 +206,17 @@ namespace TaskManager.Controls
                     var isTorikeshi = contentName == "取消";
                     if (isShowEditForm || isEdit)
                     {
-                        var row = this.Rows[e.RowIndex];
-                        var item = row.Tag as TaskItem;
+                        var item = this.GetTaskItemInRow(row);
                         if (item != null)
                         {
                             var win = new TaskEditForm();
                             win.Initialize(this.showingGroup, item);
-                            win.UpdateEvent += TaskEditForm;
-                            win.ShowDialog();
+                            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+                            if (ret == SubWindowResult.Submit)
+                            {
+                                ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                                SetTaskItemToRow(item, row);
+                            }
                         }
                     }
                     else if (isDelete)
@@ -219,8 +225,7 @@ namespace TaskManager.Controls
                         var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
                         if (msgRet == DialogResult.Yes)
                         {
-                            var row = this.Rows[e.RowIndex];
-                            var item = row.Tag as TaskItem;
+                            var item = this.GetTaskItemInRow(row);
                             if (item != null)
                             {
                                 this.Rows.Remove(row);
@@ -232,8 +237,7 @@ namespace TaskManager.Controls
                     }
                     else if (isCopy)
                     {
-                        var row = this.Rows[e.RowIndex];
-                        var item = row.Tag as TaskItem;
+                        var item = this.GetTaskItemInRow(row);
                         if (item != null)
                         {
                             var newItem = new TaskItem();
@@ -242,14 +246,14 @@ namespace TaskManager.Controls
                             newItem.Title = item.Title;
                             newItem.Memo = item.Memo;
                             newItem.DateTimeLimit = item.DateTimeLimit;
+                            newItem.Key = KeyInfo.CreateKeyInfoTask(item.Group);
 
                             this.AddTaskItem(newItem);
                         }
                     }
                     else if (isComplete)
                     {
-                        var row = this.Rows[e.RowIndex];
-                        var item = row.Tag as TaskItem;
+                        var item = this.GetTaskItemInRow(row);
                         if (item != null)
                         {
                             item.IsComeplate = true;
@@ -257,8 +261,7 @@ namespace TaskManager.Controls
                     }
                     else if (isTorikeshi)
                     {
-                        var row = this.Rows[e.RowIndex];
-                        var item = row.Tag as TaskItem;
+                        var item = this.GetTaskItemInRow(row);
                         if (item != null)
                         {
                             item.IsComeplate = false;
@@ -266,20 +269,6 @@ namespace TaskManager.Controls
                     }
 
                     this.UpdateCellStatus();
-                }
-            }
-        }
-
-        private void TaskEditForm(object sender, TaskItem e)
-        {
-            for (int i = 0; i < this.Rows.Count; i++)
-            {
-                var row = this.Rows[i];
-                var item = row.Tag as TaskItem;
-                if (item != null && item == e)
-                {
-                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(e.Group, e);
-                    SetTaskItemToRow(item, row);
                 }
             }
         }
@@ -448,15 +437,25 @@ namespace TaskManager.Controls
             }
         }
 
+        private TaskItem GetTaskItemInRow(DataGridViewRow row)
+        {
+            if (row != null)
+            {
+                var item = row.Tag as TaskItem;
+                if (item != null)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// ユーザ入力によって行追加が行われた際のイベントです
         /// </summary>
         /// <param name="sender">イベント送信オブジェクト</param>
         /// <param name="e">イベント引数</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         private void OnUserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
             this.CellReadOnly(e.Row.Index, e.Row);

@@ -38,6 +38,7 @@ namespace TaskManager
             UiContext.Initialize();
 
             ResourceManager.Instance.Initialize();
+            ResourceManager.Instance.MainForm = this;
 
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
