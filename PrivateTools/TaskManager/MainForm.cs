@@ -171,7 +171,7 @@ namespace TaskManager
             });
         }
 
-        private void BtnAddGroup_Click(object sender, EventArgs e)
+        private async void BtnAddGroup_Click(object sender, EventArgs e)
         {
             var parent = TaskGroupInfo.GetRootGroup();
             if (this.LsvGroup.SelectedItems.Count > 0)
@@ -186,7 +186,7 @@ namespace TaskManager
 
             var win = new TaskGroupEditForm();
             win.Initialize(null, true, parent);
-            win.ShowDialog();
+            var ret = await win.ShowWindow(this);
 
             RefleshTaskGroupIchiran();
         }
@@ -205,7 +205,7 @@ namespace TaskManager
             }
         }
 
-        private void BtnReNameGroup_Click(object sender, EventArgs e)
+        private async void BtnReNameGroup_Click(object sender, EventArgs e)
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
@@ -216,7 +216,7 @@ namespace TaskManager
 
                     var win = new TaskGroupEditForm();
                     win.Initialize(item, false, ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.ParentGroup]);
-                    win.ShowDialog();
+                    var ret = await win.ShowWindow(this);
 
                     RefleshTaskGroupIchiran();
                 }

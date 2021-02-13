@@ -44,7 +44,7 @@ namespace TaskManager.Controls
 
             this.Closing += OnClosing;
 
-            this.Owner.Enabled = false;
+            //this.Owner.Enabled = false;
 
             this.Show();
 
@@ -55,7 +55,7 @@ namespace TaskManager.Controls
         {
             this._tcs.TrySetResult(SubWindowResult.None);
 
-            this.Owner.Enabled = true;
+            //this.Owner.Enabled = true;
         }
 
         protected void CloseWindow(SubWindowResult result)

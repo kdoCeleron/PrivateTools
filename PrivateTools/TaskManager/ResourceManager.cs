@@ -34,13 +34,23 @@ namespace TaskManager
 
             KeyInfo.Initialize();
 
-            // var text = File.ReadAllText(@".\tasks.txt");
-            // var jsonObj = JsonConvert.DeserializeObject<TaskInfoRoot>(text);
-            //this.TaskGroupList.AddRange(jsonObj);
-            this.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup());
-            this.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup());
+            var path = @".\tasks.txt";
+            if (File.Exists(path))
+            {
+                var text = File.ReadAllText(@".\tasks.txt");
+                var jsonObj = JsonConvert.DeserializeObject<TaskInfoRoot>(text);
+                foreach (var info in jsonObj.TaskGroupListJsonObj)
+                {
+                    jsonObj.TaskGroupList.Add(info.Key, info);
+                }
 
-            //TaskInfoRoot = jsonObj;
+                instance.TaskInfoRoot = jsonObj;
+            }
+            else
+            {
+                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup());
+                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup());
+            }
 
             this.isInitialized = true;
 

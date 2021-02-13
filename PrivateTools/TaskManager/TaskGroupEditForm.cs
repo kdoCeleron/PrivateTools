@@ -116,13 +116,13 @@ namespace TaskManager
                     ResourceManager.Instance.TaskInfoRoot.EditTaskGroup(this.target, this.TxtGroupName.Text, parent);
                 }
 
-                this.Close();
+                this.CloseWindow(SubWindowResult.Submit);
             }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.CloseWindow(SubWindowResult.Cancel);
         }
     }
 }

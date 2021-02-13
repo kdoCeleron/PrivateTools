@@ -167,7 +167,7 @@ namespace TaskManager
                     this.UpdateEvent(this, this.target);
                 }
 
-                this.Close();
+                this.CloseWindow(SubWindowResult.Submit);
             }
         }
 
@@ -188,7 +188,7 @@ namespace TaskManager
                 }
             }
 
-            this.Close();
+            this.CloseWindow(SubWindowResult.Cancel);
         }
     }
 }

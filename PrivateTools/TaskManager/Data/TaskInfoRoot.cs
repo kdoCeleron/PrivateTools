@@ -13,14 +13,19 @@ namespace TaskManager.Data
         public TaskInfoRoot()
         {
             this.TaskGroupList = new Dictionary<KeyInfo, TaskGroupInfo>();
+            this.TaskGroupListJsonObj = new List<TaskGroupInfo>();
         }
 
         [JsonProperty("TaskGroupInfos")]
+        public List<TaskGroupInfo> TaskGroupListJsonObj { get; set; }
+
+        [JsonIgnore]
         public Dictionary<KeyInfo, TaskGroupInfo> TaskGroupList { get; set; }
 
         public void AddTaskGroup(TaskGroupInfo groupInfo)
         {
             this.TaskGroupList.Add(groupInfo.Key, groupInfo);
+            this.TaskGroupListJsonObj.Add(groupInfo);
         }
 
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)
@@ -30,6 +35,7 @@ namespace TaskManager.Data
 
             group.Key = KeyInfo.CreateKeyInfoGroup();
             this.TaskGroupList.Add(group.Key, group);
+            this.TaskGroupListJsonObj.Add(group);
             if (parent != null)
             {
                 group.ParentGroup = parent.Key;
@@ -62,6 +68,11 @@ namespace TaskManager.Data
 
                     // 新しい親に設定
                     editParent.ChildGroups.Add(original.Key);
+
+                    if (this.TaskGroupListJsonObj.Contains(original))
+                    {
+                        this.TaskGroupListJsonObj.Remove(original);
+                    }
                 }
             }
 
@@ -73,6 +84,11 @@ namespace TaskManager.Data
             if (this.TaskGroupList.ContainsKey(taskGroupInfo.Key))
             {
                 this.TaskGroupList.Remove(taskGroupInfo.Key);
+            }
+
+            if (this.TaskGroupListJsonObj.Contains(taskGroupInfo))
+            {
+                this.TaskGroupListJsonObj.Remove(taskGroupInfo);
             }
 
             // ほかの参照も除去

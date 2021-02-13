@@ -176,20 +176,6 @@ namespace TaskManager.Controls
                         return;
                     }
 
-                    var isShowEditForm = false;
-                    if (cell.Value.ToString() == "追加")
-                    {
-                        this.AddRow();
-                        isShowEditForm = true;
-                    }
-
-                    // Addrow でe.RowIndexの値が変更されるので取り直し。
-                    var fixedCell = this.Rows[orgRowIndex].Cells[orgColumnIndex];
-                    if (fixedCell.Value == null)
-                    {
-                        return;
-                    }
-
                     var isButton = info.ColumnType == DataGridColumnType.Button;
                     if (!isButton)
                     {
@@ -198,13 +184,38 @@ namespace TaskManager.Controls
 
                     var row = this.Rows[e.RowIndex];
 
-                    var contentName = fixedCell.Value.ToString();
+                    var contentName = cell.Value.ToString();
+                    var isAdd = contentName == "追加";
                     var isEdit = contentName == "編集";
                     var isDelete = contentName == "削除";
                     var isCopy = contentName == "複製";
                     var isComplete = contentName == "完了";
                     var isTorikeshi = contentName == "取消";
-                    if (isShowEditForm || isEdit)
+
+                    if (isAdd)
+                    {
+                        var item = new TaskItem();
+                        KeyInfo groupKey = null;
+                        if (this.showingGroup != null)
+                        {
+                            groupKey = this.showingGroup.Key;
+                        }
+
+                        item.Key = KeyInfo.CreateKeyInfoTask(groupKey);
+
+                        var win = new TaskEditForm();
+                        win.Initialize(this.showingGroup, item);
+                        var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+                        if (ret == SubWindowResult.Submit)
+                        {
+                            this.AddRow(item);
+
+                            var targetRow = this.Rows[orgRowIndex];
+                            ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                            SetTaskItemToRow(item, targetRow);
+                        }
+                    }
+                    else if (isEdit)
                     {
                         var item = this.GetTaskItemInRow(row);
                         if (item != null)
@@ -305,7 +316,7 @@ namespace TaskManager.Controls
             }
         }
 
-        private void AddRow()
+        private void AddRow(TaskItem item)
         {
             var dgvRow = new DataGridViewRow();
             dgvRow.CreateCells(this);
@@ -319,7 +330,7 @@ namespace TaskManager.Controls
                 }
             }
 
-            dgvRow.Tag = new TaskItem();
+            dgvRow.Tag = item;
 
             this.Rows.Add(dgvRow);
         }
@@ -409,16 +420,23 @@ namespace TaskManager.Controls
                     {
                         var tmp = DateTime.Now;
                         var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
-                        var date = grpData.DateTimeLimit;
+                        var date = new DateTime(grpData.DateTimeLimit.Year, grpData.DateTimeLimit.Month, grpData.DateTimeLimit.Day);
 
                         var cell = row.Cells[3] as DataGridViewCell;
-                        if (now <= (date.AddDays(1)))
+
+                        var yellowZone = now.AddDays(-3);
+                        var normalZone = now.AddDays(-5);
+                        if (now >= date && yellowZone < date)
                         {
                             cell.Style.BackColor = Color.Red;
                         }
-                        else if (now <= (date.AddDays(3)))
+                        else if (yellowZone >= date && normalZone < date)
                         {
                             cell.Style.BackColor = Color.Yellow;
+                        }
+                        else
+                        {
+                            cell.Style.BackColor = Color.White;
                         }
                     }
                 }
