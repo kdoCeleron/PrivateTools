@@ -17,6 +17,8 @@ namespace TaskManager
 
     public enum SubWindowResult
     {
+        None,
+
         Submit,
 
         Cancel

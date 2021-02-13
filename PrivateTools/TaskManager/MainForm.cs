@@ -225,7 +225,7 @@ namespace TaskManager
         private async void BtnInfos_Click(object sender, EventArgs e)
         {
             var win = new InfoViewForm();
-            win.ShowDialog();
+            var ret = await win.ShowWindow(this);
         }
     }
 }

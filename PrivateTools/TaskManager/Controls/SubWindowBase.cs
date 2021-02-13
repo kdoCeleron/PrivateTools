@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.SymbolStore;
 using System.Drawing;
 using System.Linq;
@@ -15,13 +16,12 @@ namespace TaskManager.Controls
         ///     タスク処理の結果
         /// </summary>
         private TaskCompletionSource<SubWindowResult> _tcs;
-
-        protected SubWindowResult windowResult;
-
+        
         public Task<SubWindowResult> ShowWindow(Form parent)
         {
             this._tcs = new TaskCompletionSource<SubWindowResult>();
 
+            this.StartPosition = FormStartPosition.Manual;
             this.Owner = parent;
 
             var win = this.Owner;
@@ -42,9 +42,26 @@ namespace TaskManager.Controls
                 this.Location = new Point(posX, posY);
             }
 
+            this.Closing += OnClosing;
+
+            this.Owner.Enabled = false;
+
             this.Show();
-            
+
             return this._tcs.Task;
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            this._tcs.TrySetResult(SubWindowResult.None);
+
+            this.Owner.Enabled = true;
+        }
+
+        protected void CloseWindow(SubWindowResult result)
+        {
+            this._tcs.SetResult(result);
+            this.Close();
         }
     }
 }

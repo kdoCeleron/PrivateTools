@@ -51,8 +51,15 @@ namespace TaskManager
 
             if (taskItem.Group == null)
             {
-                // 新規の場合は、表示中グループにする
-                taskItem.Group = groupInfo.Key;
+                if (groupInfo != null)
+                {
+                    // 新規の場合は、表示中グループにする
+                    taskItem.Group = groupInfo.Key;
+                }
+                else
+                {
+                    taskItem.Group = TaskGroupInfo.GetDefaultGroup().Key;
+                }
             }
 
             this.CmbGroup.SelectedItem = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[taskItem.Group];

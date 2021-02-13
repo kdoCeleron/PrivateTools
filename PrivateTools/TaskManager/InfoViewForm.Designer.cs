@@ -51,6 +51,7 @@
             this.ClientSize = new System.Drawing.Size(392, 450);
             this.Controls.Add(this.TxtInfo);
             this.Name = "InfoViewForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "情報一覧";
             this.ResumeLayout(false);
             this.PerformLayout();
