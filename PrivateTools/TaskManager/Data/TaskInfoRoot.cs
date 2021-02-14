@@ -22,10 +22,16 @@ namespace TaskManager.Data
         [JsonIgnore]
         public Dictionary<KeyInfo, TaskGroupInfo> TaskGroupList { get; set; }
 
-        public void AddTaskGroup(TaskGroupInfo groupInfo)
+        public void AddTaskGroup(TaskGroupInfo groupInfo, TaskGroupInfo parent)
         {
             this.TaskGroupList.Add(groupInfo.Key, groupInfo);
             this.TaskGroupListJsonObj.Add(groupInfo);
+
+            if (parent != null)
+            {
+                groupInfo.ParentGroup = parent.Key;
+                parent.ChildGroups.Add(groupInfo.Key);
+            }
         }
 
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)

@@ -127,6 +127,11 @@ namespace TaskManager.Controls
             this.UpdateCellStatus();
         }
 
+        public void RefleshTaskItems()
+        {
+            this.UpdateCellStatus();
+        }
+
         public void ClearAllTaskItems()
         {
             this.showingGroup = null;
@@ -426,11 +431,15 @@ namespace TaskManager.Controls
 
                         var yellowZone = now.AddDays(-3);
                         var normalZone = now.AddDays(-5);
-                        if (now >= date && yellowZone < date)
+                        if (date > now)
+                        {
+                            cell.Style.BackColor = Color.White;
+                        }
+                        else if (now >= date || yellowZone < date)
                         {
                             cell.Style.BackColor = Color.Red;
                         }
-                        else if (yellowZone >= date && normalZone < date)
+                        else if (yellowZone >= date || normalZone < date)
                         {
                             cell.Style.BackColor = Color.Yellow;
                         }

@@ -63,5 +63,16 @@ namespace TaskManager.Controls
             this._tcs.SetResult(result);
             this.Close();
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                this.CloseWindow(SubWindowResult.Cancel);
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }

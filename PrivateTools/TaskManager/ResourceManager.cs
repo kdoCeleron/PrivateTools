@@ -48,8 +48,8 @@ namespace TaskManager
             }
             else
             {
-                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup());
-                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup());
+                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup(), null);
+                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup(), TaskGroupInfo.GetRootGroup());
             }
 
             this.isInitialized = true;
@@ -121,6 +121,11 @@ namespace TaskManager
             {
                 var group = instance.TaskInfoRoot.TaskGroupList[childGroup];
                 this.ExecInnerGroupAndTasks(group, groupAction, taskAction);
+
+                if (groupAction != null)
+                {
+                    groupAction(group);
+                }
             }
         }
     }

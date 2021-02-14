@@ -34,9 +34,7 @@ namespace TaskManager
         public void Initialize(TaskGroupInfo group, bool isAddOperation, TaskGroupInfo parent)
         {
             this.isAdd = isAddOperation;
-
-            this.CmbParentGroup.Items.Add(TaskGroupInfo.GetRootGroup());
-
+            
             foreach (var item in ResourceManager.Instance.TaskInfoRoot.TaskGroupList.Values)
             {
                 this.CmbParentGroup.Items.Add(item);

@@ -29,7 +29,7 @@ namespace TaskManager
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.None);
+            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.Indented);
             File.WriteAllText(@".\tasks.txt", jsonStr);
         }
 
@@ -50,6 +50,7 @@ namespace TaskManager
             this.DgvRecentTasks.Initialize(false);
 
             this.DgvAllTasks.UpdateEvent += DgvAllTasksOnUpdateEvent;
+            this.DgvRecentTasks.UpdateEvent += DgvRecentTasksOnUpdateEvent;
 
             this.InitializeTaskList();
             this.DgvAllTasksOnUpdateEvent(null, null);
@@ -57,38 +58,56 @@ namespace TaskManager
             this.InitializeGroupList();
         }
 
+        private bool isUpdatingTaskIchiran = false;
+
+        private void DgvRecentTasksOnUpdateEvent(object sender, TaskItem e)
+        {
+            if (isUpdatingTaskIchiran)
+            {
+                return;
+            }
+
+            isUpdatingTaskIchiran = true;
+
+            // TODO:
+            //this.tmpTaskList.Clear();
+
+            //ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, CollectTaskItem);
+            
+            //this.DgvAllTasks.ClearAllTaskItems();
+
+            //this.RefleshTaskGroupIchiran();
+            this.DgvAllTasks.RefleshTaskItems();
+
+            this.isUpdatingTaskIchiran = false;
+        }
+
         private void DgvAllTasksOnUpdateEvent(object sender, TaskItem e)
         {
-            // TODO:直近のタスク一覧の更新処理
-            // タスク一覧との処理の調整があるため、後回し
-            //var allGroup = ResourceManager.Instance.TaskGroupList;
-            //var list = new List<TaskItem>();
-            //foreach (var info in allGroup)
-            //{
-            //    list.AddRange(info.ChildTaskItems);
+            if (isUpdatingTaskIchiran)
+            {
+                return;
+            }
 
-            //    // TODO:再帰
-            //    foreach (var infoChildGroup in info.ChildGroups)
-            //    {
-            //        list.AddRange(infoChildGroup.ChildTaskItems);
-            //    }
-            //}
-
-            // TODO:更新したときにグループの件数も再描画する。
-            //this.DgvRecentTasks.RefleshTaskItems(list, null);
+            isUpdatingTaskIchiran = true;
 
             this.tmpTaskList.Clear();
 
-            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, TaskAction);
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, CollectTaskItem);
 
             var tmp = DateTime.Now;
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
             var thres = now.AddDays(3);
 
+            //now >= date
             // 超過、1日前、2日前、3日前
             var filtered = tmpTaskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
             this.DgvRecentTasks.ClearAllTaskItems();
             this.DgvRecentTasks.RefleshTaskItems(filtered, null);
+
+            this.RefleshTaskGroupIchiran();
+
+            this.isUpdatingTaskIchiran = false;
         }
 
         private List<TaskItem> tmpTaskList = new List<TaskItem>();
@@ -99,12 +118,12 @@ namespace TaskManager
             this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
             this.tmpTaskList.Clear();
 
-            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, TaskAction);
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, CollectTaskItem);
 
             this.DgvAllTasks.RefleshTaskItems(this.tmpTaskList, null);
         }
 
-        private void TaskAction(TaskItem obj)
+        private void CollectTaskItem(TaskItem obj)
         {
             this.tmpTaskList.Add(obj);
         }

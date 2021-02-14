@@ -26,12 +26,14 @@ namespace TaskManager
         {
             var msgList = new List<string>();
             msgList.Add("★実装予定★");
-            msgList.Add("・追加のキャンセル時、列が追加されてしまう");
-            msgList.Add("・初期表示時はグループによらない全タスクを表示する。");
+            msgList.Add("・タスク編集画面で添付ファイルの機能実装");
             msgList.Add("・グループ選択時、サブグループに存在するタスクも表示する。");
-            msgList.Add("・直近のタスク一覧に3日(黄色)以内のタスクを表示する。");
-            msgList.Add("・サブ画面はescキーで閉じたい。");
+            msgList.Add("・サブ画面表示中は、本体画面を触れない様にする。");
+            msgList.Add("==========================");
+            msgList.Add("★内部予定★");
+            msgList.Add("・各種定数をConfig化");
             msgList.Add("・全体的に処理を共通化");
+            msgList.Add("==========================");
 
             var txt = string.Empty;
             foreach (var msg in msgList)

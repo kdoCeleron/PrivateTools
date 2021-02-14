@@ -35,6 +35,7 @@ namespace TaskManager
             this.LabelDateTime = new System.Windows.Forms.Label();
             this.PanelTop = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.BtnInfos = new System.Windows.Forms.Button();
             this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelRecentTasks = new System.Windows.Forms.Label();
@@ -52,7 +53,6 @@ namespace TaskManager
             this.LabelTaskView = new System.Windows.Forms.Label();
             this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
-            this.BtnInfos = new System.Windows.Forms.Button();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -101,6 +101,16 @@ namespace TaskManager
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1043, 145);
             this.panel2.TabIndex = 3;
+            // 
+            // BtnInfos
+            // 
+            this.BtnInfos.Location = new System.Drawing.Point(956, 3);
+            this.BtnInfos.Name = "BtnInfos";
+            this.BtnInfos.Size = new System.Drawing.Size(75, 23);
+            this.BtnInfos.TabIndex = 1;
+            this.BtnInfos.Text = "情報";
+            this.BtnInfos.UseVisualStyleBackColor = true;
+            this.BtnInfos.Click += new System.EventHandler(this.BtnInfos_Click);
             // 
             // DgvRecentTasks
             // 
@@ -186,8 +196,10 @@ namespace TaskManager
             this.LsvGroup.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnGroups,
             this.ColumnTaskNum});
+            this.LsvGroup.FullRowSelect = true;
             this.LsvGroup.HideSelection = false;
             this.LsvGroup.Location = new System.Drawing.Point(12, 44);
+            this.LsvGroup.MultiSelect = false;
             this.LsvGroup.Name = "LsvGroup";
             this.LsvGroup.Size = new System.Drawing.Size(240, 320);
             this.LsvGroup.TabIndex = 0;
@@ -261,16 +273,6 @@ namespace TaskManager
             this.PanelButtom.Name = "PanelButtom";
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
-            // 
-            // BtnInfos
-            // 
-            this.BtnInfos.Location = new System.Drawing.Point(956, 3);
-            this.BtnInfos.Name = "BtnInfos";
-            this.BtnInfos.Size = new System.Drawing.Size(75, 23);
-            this.BtnInfos.TabIndex = 1;
-            this.BtnInfos.Text = "情報";
-            this.BtnInfos.UseVisualStyleBackColor = true;
-            this.BtnInfos.Click += new System.EventHandler(this.BtnInfos_Click);
             // 
             // MainForm
             // 

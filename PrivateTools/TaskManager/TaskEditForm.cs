@@ -66,11 +66,14 @@ namespace TaskManager
             this.TxtTitle.Text = taskItem.Title;
             this.DtpLimit.Value = taskItem.DateTimeLimit;
             this.TxtMemo.Text = taskItem.Memo;
-            foreach (var file in taskItem.AttachFile)
-            {
-                var fileName = Path.GetFileName(file);
-                this.CmbAttachFiles.Items.Add(fileName);
-            }
+
+            this.CmbAttachFiles.Enabled = false;
+            // TODO:実装
+            //foreach (var file in taskItem.AttachFile)
+            //{
+            //    var fileName = Path.GetFileName(file);
+            //    this.CmbAttachFiles.Items.Add(fileName);
+            //}
 
             this.target = taskItem;
 
