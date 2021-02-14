@@ -43,7 +43,8 @@ namespace TaskManager
 
         public bool Initialize(TaskGroupInfo groupInfo, TaskItem taskItem)
         {
-            var list = ResourceManager.Instance.TaskInfoRoot.TaskGroupList.Select(x => x.Value).ToArray();
+            var list = ResourceManager.Instance.TaskInfoRoot.TaskGroupList
+                .Where(x => !x.Key.Equals(TaskGroupInfo.GetRootGroup().Key)).Select(x => x.Value).ToArray();
             foreach (var item in list)
             {
                 this.CmbGroup.Items.Add(item);
@@ -143,14 +144,26 @@ namespace TaskManager
             }
 
             if (canUpdate)
-            {
-                if (string.IsNullOrEmpty(this.CmbGroup.Text) || this.CmbGroup.SelectedItem == null)
+            {   
+                if(!this.target.Group.Equals(this.CmbGroup.SelectedItem))
                 {
-                    this.target.Group = TaskGroupInfo.GetDefaultGroup().Key;
-                }
-                else
-                {
-                    this.target.Group = ((TaskGroupInfo)this.CmbGroup.SelectedItem).Key;
+                    var prevParent = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.target.Group];
+                    if (prevParent != null)
+                    {
+                        if (prevParent.ChildTaskItems.Contains(this.target))
+                        {
+                            prevParent.ChildTaskItems.Remove(this.target);
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(this.CmbGroup.Text) || this.CmbGroup.SelectedItem == null)
+                    {
+                        this.target.Group = TaskGroupInfo.GetDefaultGroup().Key;
+                    }
+                    else
+                    {
+                        this.target.Group = ((TaskGroupInfo)this.CmbGroup.SelectedItem).Key;
+                    }
                 }
 
                 this.target.Title = this.TxtTitle.Text;
@@ -176,7 +189,7 @@ namespace TaskManager
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            var groupEdited = this.target.Group != this.CmbGroup.SelectedItem;
+            var groupEdited = this.target.Group.Equals(this.CmbGroup.SelectedItem);
             var titleEdited = this.target.Title != this.TxtTitle.Text;
             var limitEdited = this.DtpLimit.Value.ToString() != this.target.DateTimeLimit.ToString();
             var memoEdited = this.target.Memo != this.TxtMemo.Text;

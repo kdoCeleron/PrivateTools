@@ -45,6 +45,10 @@ namespace TaskManager
                 this.CmbParentGroup.SelectedItem = parent;
             }
 
+            // TODO: update can change parentGroup
+            this.CmbParentGroup.Enabled = false;
+            this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
+
             if (group != null)
             {
                 this.target = group;

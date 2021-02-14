@@ -54,10 +54,18 @@ namespace TaskManager.Data
         [JsonProperty("ChildTaskItems")]
         public HashSet<TaskItem> ChildTaskItems { get; set; }
 
+        public static void SetDefaultGroup(TaskGroupInfo value)
+        {
+            _defaultGroup = value;
+        }
+
+        public static void SetRootGroup(TaskGroupInfo value)
+        {
+            _rootGroup = value;
+        }
+
         public static TaskGroupInfo GetDefaultGroup()
         {
-
-
             return _defaultGroup;
         }
 

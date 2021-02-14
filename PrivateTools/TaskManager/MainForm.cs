@@ -149,6 +149,7 @@ namespace TaskManager
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
             {
+                var selectedItemIndex = this.LsvGroup.SelectedItems[0].Index;
                 var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
@@ -159,15 +160,26 @@ namespace TaskManager
                     this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
 
                     // TODO:サブグループのタスクも
-
-
+                    
                     this.LblDisplayGroup.Text = string.Format("[{0}]", group.Name);
+
+                    this.isSuspentGroupListView = true;
+                    this.LsvGroup.Items[selectedItemIndex].Focused = true;
+                    this.LsvGroup.Items[selectedItemIndex].Selected = true;
+                    this.isSuspentGroupListView = false;
                 }
             }
         }
 
+        private bool isSuspentGroupListView = false;
+
         private void RefleshTaskGroupIchiran()
         {
+            if (this.isSuspentGroupListView)
+            {
+                return;
+            }
+
             this.LsvGroup.BeginUpdate();
 
             this.LsvGroup.Items.Clear();
@@ -216,7 +228,9 @@ namespace TaskManager
             UiContext.Post(() =>
             {
                 var now = DateTime.Now;
-                this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm:ss");
+                this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm");
+
+                // TODO:recenttask update
             });
         }
 
@@ -262,12 +276,14 @@ namespace TaskManager
                 if (selected != null)
                 {
                     var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    if (!selected.Equals(TaskGroupInfo.GetRootGroup().Key) && !selected.Equals(TaskGroupInfo.GetDefaultGroup().Key))
+                    {
+                        var win = new TaskGroupEditForm();
+                        win.Initialize(item, false, ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.ParentGroup]);
+                        var ret = await win.ShowWindow(this);
 
-                    var win = new TaskGroupEditForm();
-                    win.Initialize(item, false, ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.ParentGroup]);
-                    var ret = await win.ShowWindow(this);
-
-                    RefleshTaskGroupIchiran();
+                        RefleshTaskGroupIchiran();
+                    }
                 }
             }
         }

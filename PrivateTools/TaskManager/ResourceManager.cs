@@ -37,7 +37,7 @@ namespace TaskManager
             var path = @".\tasks.txt";
             if (File.Exists(path))
             {
-                var text = File.ReadAllText(@".\tasks.txt");
+                var text = File.ReadAllText(path);
                 var jsonObj = JsonConvert.DeserializeObject<TaskInfoRoot>(text);
                 foreach (var info in jsonObj.TaskGroupListJsonObj)
                 {
@@ -45,6 +45,18 @@ namespace TaskManager
                 }
 
                 instance.TaskInfoRoot = jsonObj;
+
+                var rootGroupKey = TaskGroupInfo.GetRootGroup().Key;
+                if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(rootGroupKey))
+                {
+                    TaskGroupInfo.SetRootGroup(instance.TaskInfoRoot.TaskGroupList[rootGroupKey]);
+                }
+
+                var defaultGroupKey = TaskGroupInfo.GetDefaultGroup().Key;
+                if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(defaultGroupKey))
+                {
+                    TaskGroupInfo.SetDefaultGroup(instance.TaskInfoRoot.TaskGroupList[defaultGroupKey]);
+                }
             }
             else
             {
