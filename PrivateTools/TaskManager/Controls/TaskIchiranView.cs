@@ -213,11 +213,17 @@ namespace TaskManager.Controls
                         var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
                         if (ret == SubWindowResult.Submit)
                         {
-                            this.AddRow(item);
+                            if (groupKey != null)
+                            {
+                                if (item.Group.Equals(groupKey))
+                                {
+                                    this.AddRow(item);
 
-                            var targetRow = this.Rows[orgRowIndex];
-                            ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                            SetTaskItemToRow(item, targetRow);
+                                    var targetRow = this.Rows[orgRowIndex];
+                                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                                    SetTaskItemToRow(item, targetRow);
+                                }
+                            }
                         }
                     }
                     else if (isEdit)

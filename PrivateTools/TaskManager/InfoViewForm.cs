@@ -26,8 +26,8 @@ namespace TaskManager
         {
             var msgList = new List<string>();
             msgList.Add("★実装予定★");
-            msgList.Add("・タスク編集画面で添付ファイルの機能実装");
-            msgList.Add("・グループ選択時、サブグループに存在するタスクも表示する。");
+            msgList.Add("・タスク編集画面で添付ファイルの機能を実装する。");
+            msgList.Add("・グループを作成可能にする。");
             msgList.Add("・サブ画面表示中は、本体画面を触れない様にする。");
             msgList.Add("==========================");
             msgList.Add("★内部予定★");

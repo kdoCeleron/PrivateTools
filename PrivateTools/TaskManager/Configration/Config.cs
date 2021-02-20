@@ -12,7 +12,7 @@ namespace TaskManager.Configration
         /// <summary>
         /// ファイルパス
         /// </summary>
-        public const string ConfigFilePath = @".\Config.xml";
+        public const string ConfigFilePath = @".\Configs\Config.xml";
 
         /// <summary>
         /// シングルトンインスタンス

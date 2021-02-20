@@ -114,7 +114,6 @@ namespace TaskManager
 
         private void InitializeTaskList()
         {
-            // TODO:デフォルトは全タスクを表示
             this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
             this.tmpTaskList.Clear();
 

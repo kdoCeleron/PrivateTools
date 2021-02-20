@@ -128,5 +128,10 @@
   <ItemGroup>
     <Folder Include="ConfigrationData\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configs\Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
