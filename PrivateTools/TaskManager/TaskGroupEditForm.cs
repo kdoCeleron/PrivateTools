@@ -47,7 +47,7 @@ namespace TaskManager
 
             // TODO: update can change parentGroup
             this.CmbParentGroup.Enabled = false;
-            this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
+            // this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
 
             if (group != null)
             {
@@ -111,11 +111,11 @@ namespace TaskManager
             {
                 if (this.isAdd)
                 {
-                    ResourceManager.Instance.TaskInfoRoot.AddTaskGroup(this.TxtGroupName.Text, parent);
+                    ResourceManager.Instance.AddTaskGroup(this.TxtGroupName.Text, parent);
                 }
                 else
                 {
-                    ResourceManager.Instance.TaskInfoRoot.EditTaskGroup(this.target, this.TxtGroupName.Text, parent);
+                    ResourceManager.Instance.EditTaskGroup(this.target, this.TxtGroupName.Text, parent);
                 }
 
                 this.CloseWindow(SubWindowResult.Submit);

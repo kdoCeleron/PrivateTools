@@ -103,6 +103,28 @@ namespace TaskManager.Data
             return null;
         }
 
+        public static bool IsCreatedKeyGroup(KeyInfo keyInfo)
+        {
+            return !groupAllKeys.Contains(keyInfo.Key);
+        }
+
+        public static bool IsCreatedKeyTask(KeyInfo group, KeyInfo task)
+        {
+            if(groupAllKeys.Contains(group.Key))
+            {
+                if (taskAllKeys.ContainsKey(group.Key))
+                {
+                    if (taskAllKeys[group.Key].Contains(task.Key))
+                    {
+                        // 未生成のキー
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public static KeyInfo CreateKeyInfoTask(KeyInfo parentGroupKey)
         {
             if (parentGroupKey != null)

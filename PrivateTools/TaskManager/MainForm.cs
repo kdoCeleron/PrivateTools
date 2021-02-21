@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using Newtonsoft.Json;
+using TaskManager.Configration;
 using TaskManager.Data;
 using Timer = System.Threading.Timer;
 
@@ -29,8 +30,8 @@ namespace TaskManager
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.Indented);
-            File.WriteAllText(@".\tasks.txt", jsonStr);
+            ResourceManager.Instance.SaveTaskList();
+            Config.Instance.WriteConfig();
         }
 
         private void OnLoad(object sender, EventArgs e)
