@@ -196,13 +196,19 @@ namespace TaskManager.Controls
                     var isCopy = contentName == "複製";
                     var isComplete = contentName == "完了";
                     var isTorikeshi = contentName == "取消";
-                    
-                    if (isTorikeshi)
+
+                    var curItem = this.GetTaskItemInRow(row);
+                    var isCopmleted = curItem != null ? curItem.IsComeplate : false;
+
+                    if (isCopmleted)
                     {
-                        var item = this.GetTaskItemInRow(row);
-                        if (item != null)
+                        if (isTorikeshi)
                         {
-                            item.IsComeplate = false;
+                            var item = this.GetTaskItemInRow(row);
+                            if (item != null)
+                            {
+                                item.IsComeplate = false;
+                            }
                         }
                     }
                     else
