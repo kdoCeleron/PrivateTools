@@ -62,6 +62,7 @@ namespace TaskManager
                     TaskGroupInfo.SetDefaultGroup(item);
                 }
 
+                // 全グループに対してキーの再生成
                 foreach (var taskGroupInfo in instance.TaskInfoRoot.TaskGroupListJsonObj)
                 {
                     if (!KeyInfo.IsCreatedKeyGroup(taskGroupInfo.Key))
@@ -71,14 +72,14 @@ namespace TaskManager
                         taskGroupInfo.ChildGroups.Clear();
                         var filetered =
                             instance.TaskInfoRoot.TaskGroupListJsonObj.Where(x =>
-                                x.ParentGroup.Equals(taskGroupInfo.Key)).ToList();
+                                x.ParentGroup != null && x.ParentGroup.Equals(taskGroupInfo.Key)).ToList();
                         if (filetered.Any())
                         {
                             foreach (var groupInfo in filetered)
                             {
-                                if (!KeyInfo.IsCreatedKeyGroup(taskGroupInfo.Key))
+                                if (!KeyInfo.IsCreatedKeyGroup(groupInfo.Key))
                                 {
-                                    var keyGroupChildGroup = KeyInfo.CreateKeyInfoTask(keyGroup);
+                                    var keyGroupChildGroup = KeyInfo.CreateKeyInfoGroup();
                                     groupInfo.Key = keyGroupChildGroup;
                                 }
 
@@ -89,8 +90,7 @@ namespace TaskManager
 
                         taskGroupInfo.Key = keyGroup;
                     }
-
-                    // TODO:サブグループのタスクも
+                    
                     foreach (var childTaskItem in taskGroupInfo.ChildTaskItems)
                     {
                         if (!KeyInfo.IsCreatedKeyTask(taskGroupInfo.Key, childTaskItem.Key))
@@ -121,6 +121,23 @@ namespace TaskManager
 
         public void SaveTaskList()
         {
+            foreach (var taskGroupInfo in instance.TaskInfoRoot.TaskGroupListJsonObj)
+            {
+                var removeTasks = new List<TaskItem>();
+                foreach (var childTaskItem in taskGroupInfo.ChildTaskItems)
+                {
+                    if (childTaskItem.IsComeplate)
+                    {
+                        removeTasks.Add(childTaskItem);
+                    }
+                }
+
+                foreach (var removeTask in removeTasks)
+                {
+                    taskGroupInfo.ChildTaskItems.Remove(removeTask);
+                }
+            }
+
             var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.Indented);
             File.WriteAllText(taskListSavePath, jsonStr);
         }

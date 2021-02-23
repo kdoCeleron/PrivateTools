@@ -196,92 +196,8 @@ namespace TaskManager.Controls
                     var isCopy = contentName == "複製";
                     var isComplete = contentName == "完了";
                     var isTorikeshi = contentName == "取消";
-
-                    if (isAdd)
-                    {
-                        var item = new TaskItem();
-                        KeyInfo groupKey = null;
-                        if (this.showingGroup != null)
-                        {
-                            groupKey = this.showingGroup.Key;
-                        }
-
-                        item.Key = KeyInfo.CreateKeyInfoTask(groupKey);
-
-                        var win = new TaskEditForm();
-                        win.Initialize(this.showingGroup, item);
-                        var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
-                        if (ret == SubWindowResult.Submit)
-                        {
-                            if (groupKey != null)
-                            {
-                                if (item.Group.Equals(groupKey))
-                                {
-                                    this.AddRow(item);
-
-                                    var targetRow = this.Rows[orgRowIndex];
-                                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                                    SetTaskItemToRow(item, targetRow);
-                                }
-                            }
-                        }
-                    }
-                    else if (isEdit)
-                    {
-                        var item = this.GetTaskItemInRow(row);
-                        if (item != null)
-                        {
-                            var win = new TaskEditForm();
-                            win.Initialize(this.showingGroup, item);
-                            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
-                            if (ret == SubWindowResult.Submit)
-                            {
-                                ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                                SetTaskItemToRow(item, row);
-                            }
-                        }
-                    }
-                    else if (isDelete)
-                    {
-                        var message = "タスクを削除します。";
-                        var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
-                        if (msgRet == DialogResult.Yes)
-                        {
-                            var item = this.GetTaskItemInRow(row);
-                            if (item != null)
-                            {
-                                this.Rows.Remove(row);
-                                ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
-
-                                this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
-                            }
-                        }
-                    }
-                    else if (isCopy)
-                    {
-                        var item = this.GetTaskItemInRow(row);
-                        if (item != null)
-                        {
-                            var newItem = new TaskItem();
-
-                            newItem.Group = item.Group;
-                            newItem.Title = item.Title;
-                            newItem.Memo = item.Memo;
-                            newItem.DateTimeLimit = item.DateTimeLimit;
-                            newItem.Key = KeyInfo.CreateKeyInfoTask(item.Group);
-
-                            this.AddTaskItem(newItem);
-                        }
-                    }
-                    else if (isComplete)
-                    {
-                        var item = this.GetTaskItemInRow(row);
-                        if (item != null)
-                        {
-                            item.IsComeplate = true;
-                        }
-                    }
-                    else if (isTorikeshi)
+                    
+                    if (isTorikeshi)
                     {
                         var item = this.GetTaskItemInRow(row);
                         if (item != null)
@@ -289,7 +205,94 @@ namespace TaskManager.Controls
                             item.IsComeplate = false;
                         }
                     }
+                    else
+                    {
+                        if (isAdd)
+                        {
+                            var item = new TaskItem();
+                            KeyInfo groupKey = null;
+                            if (this.showingGroup != null)
+                            {
+                                groupKey = this.showingGroup.Key;
+                            }
 
+                            item.Key = KeyInfo.CreateKeyInfoTask(groupKey);
+
+                            var win = new TaskEditForm();
+                            win.Initialize(this.showingGroup, item);
+                            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+                            if (ret == SubWindowResult.Submit)
+                            {
+                                if (groupKey != null)
+                                {
+                                    if (item.Group.Equals(groupKey))
+                                    {
+                                        this.AddRow(item);
+
+                                        var targetRow = this.Rows[orgRowIndex];
+                                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                                        SetTaskItemToRow(item, targetRow);
+                                    }
+                                }
+                            }
+                        }
+                        else if (isEdit)
+                        {
+                            var item = this.GetTaskItemInRow(row);
+                            if (item != null)
+                            {
+                                var win = new TaskEditForm();
+                                win.Initialize(this.showingGroup, item);
+                                var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+                                if (ret == SubWindowResult.Submit)
+                                {
+                                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                                    SetTaskItemToRow(item, row);
+                                }
+                            }
+                        }
+                        else if (isDelete)
+                        {
+                            var message = "タスクを削除します。";
+                            var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
+                            if (msgRet == DialogResult.Yes)
+                            {
+                                var item = this.GetTaskItemInRow(row);
+                                if (item != null)
+                                {
+                                    this.Rows.Remove(row);
+                                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
+
+                                    this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                }
+                            }
+                        }
+                        else if (isCopy)
+                        {
+                            var item = this.GetTaskItemInRow(row);
+                            if (item != null)
+                            {
+                                var newItem = new TaskItem();
+
+                                newItem.Group = item.Group;
+                                newItem.Title = item.Title;
+                                newItem.Memo = item.Memo;
+                                newItem.DateTimeLimit = item.DateTimeLimit;
+                                newItem.Key = KeyInfo.CreateKeyInfoTask(item.Group);
+
+                                this.AddTaskItem(newItem);
+                            }
+                        }
+                        else if (isComplete)
+                        {
+                            var item = this.GetTaskItemInRow(row);
+                            if (item != null)
+                            {
+                                item.IsComeplate = true;
+                            }
+                        }
+                    }
+                    
                     this.UpdateCellStatus();
                 }
             }

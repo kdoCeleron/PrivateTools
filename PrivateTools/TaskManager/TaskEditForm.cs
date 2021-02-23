@@ -164,6 +164,9 @@ namespace TaskManager
                     {
                         this.target.Group = ((TaskGroupInfo)this.CmbGroup.SelectedItem).Key;
                     }
+
+                    var parent = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.target.Group];
+                    parent.ChildTaskItems.Add(this.target);
                 }
 
                 this.target.Title = this.TxtTitle.Text;
