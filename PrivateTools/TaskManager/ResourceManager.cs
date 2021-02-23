@@ -49,16 +49,16 @@ namespace TaskManager
                 instance.TaskInfoRoot = jsonObj;
 
                 var rootGroupKey = TaskGroupInfo.GetRootGroup().Key;
-                if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(rootGroupKey))
+                if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(rootGroupKey)))
                 {
-                    var item = instance.TaskInfoRoot.TaskGroupList[rootGroupKey];
+                    var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(rootGroupKey));
                     TaskGroupInfo.SetRootGroup(item);
                 }
 
                 var defaultGroupKey = TaskGroupInfo.GetDefaultGroup().Key;
-                if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(defaultGroupKey))
+                if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(defaultGroupKey)))
                 {
-                    var item = instance.TaskInfoRoot.TaskGroupList[defaultGroupKey];
+                    var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(defaultGroupKey));
                     TaskGroupInfo.SetDefaultGroup(item);
                 }
 
@@ -67,6 +67,26 @@ namespace TaskManager
                     if (!KeyInfo.IsCreatedKeyGroup(taskGroupInfo.Key))
                     {
                         var keyGroup = KeyInfo.CreateKeyInfoGroup();
+
+                        taskGroupInfo.ChildGroups.Clear();
+                        var filetered =
+                            instance.TaskInfoRoot.TaskGroupListJsonObj.Where(x =>
+                                x.ParentGroup.Equals(taskGroupInfo.Key)).ToList();
+                        if (filetered.Any())
+                        {
+                            foreach (var groupInfo in filetered)
+                            {
+                                if (!KeyInfo.IsCreatedKeyGroup(taskGroupInfo.Key))
+                                {
+                                    var keyGroupChildGroup = KeyInfo.CreateKeyInfoTask(keyGroup);
+                                    groupInfo.Key = keyGroupChildGroup;
+                                }
+
+                                groupInfo.ParentGroup = keyGroup;
+                                taskGroupInfo.ChildGroups.Add(groupInfo.Key);
+                            }
+                        }
+
                         taskGroupInfo.Key = keyGroup;
                     }
 
@@ -78,6 +98,8 @@ namespace TaskManager
                             var keyGroup = KeyInfo.CreateKeyInfoTask(taskGroupInfo.Key);
                             childTaskItem.Key = keyGroup;
                         }
+
+                        childTaskItem.Group = taskGroupInfo.Key;
                     }
 
                     if (!instance.TaskInfoRoot.TaskGroupList.ContainsKey(taskGroupInfo.Key))

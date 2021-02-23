@@ -28,7 +28,6 @@ namespace TaskManager
             msgList.Add("★実装予定★");
             msgList.Add("・タスク編集画面で添付ファイルの機能を実装する。");
             msgList.Add("・グループを作成可能にする。");
-            msgList.Add("・サブ画面表示中は、本体画面を触れない様にする。");
             msgList.Add("==========================");
             msgList.Add("★内部予定★");
             msgList.Add("・各種定数をConfig化");
