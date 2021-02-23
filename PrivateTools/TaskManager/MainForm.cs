@@ -78,7 +78,15 @@ namespace TaskManager
             //this.DgvAllTasks.ClearAllTaskItems();
 
             //this.RefleshTaskGroupIchiran();
-            this.DgvAllTasks.RefleshTaskItems();
+            this.DgvAllTasks.ClearAllTaskItems();
+            if (this.DgvAllTasks.showingGroup != null)
+            {
+                this.DgvAllTasks.RefleshTaskItems(this.DgvAllTasks.showingGroup.ChildTaskItems.ToList(), this.DgvAllTasks.showingGroup);
+            }
+            else
+            {
+                InitializeTaskList();
+            }
 
             this.isUpdatingTaskIchiran = false;
         }

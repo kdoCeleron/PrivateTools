@@ -19,7 +19,7 @@ namespace TaskManager.Controls
 
         private bool isVisibleAddTask;
 
-        private TaskGroupInfo showingGroup;
+        public TaskGroupInfo showingGroup { get; private set; }
 
         public TaskIchiranView() : base()
         {
@@ -269,7 +269,10 @@ namespace TaskManager.Controls
                                     this.Rows.Remove(row);
                                     ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
 
-                                    this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                    if (this.showingGroup != null)
+                                    {
+                                        this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                    }
                                 }
                             }
                         }
