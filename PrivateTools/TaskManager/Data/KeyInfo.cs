@@ -7,15 +7,30 @@ using Newtonsoft.Json;
 
 namespace TaskManager.Data
 {
+    /// <summary>
+    /// タスクおよびグループを特定するキー情報
+    /// </summary>
     [JsonObject]
     public class KeyInfo
     {
+        /// <summary>
+        /// 未使用の全キー情報(グループ)
+        /// </summary>
         private static HashSet<string> groupAllKeys;
 
+        /// <summary>
+        /// 未使用の全キー情報(タスク)
+        /// </summary>
         private static Dictionary<string, HashSet<string>> taskAllKeys;
         
+        /// <summary>
+        /// キーの種別
+        /// </summary>
         private KeyType keyType;
 
+        /// <summary>
+        /// キーの種別
+        /// </summary>
         private enum KeyType
         {
             None,
@@ -25,6 +40,9 @@ namespace TaskManager.Data
             Task
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         private KeyInfo()
         {
             this.keyType = KeyType.None;
@@ -32,12 +50,21 @@ namespace TaskManager.Data
             this.KeyGroup = string.Empty;
         }
 
+        /// <summary>
+        /// グループのキー
+        /// </summary>
         [JsonProperty("KeyGroup")]
         public string KeyGroup { get; set; }
 
+        /// <summary>
+        /// タスクのキー
+        /// </summary>
         [JsonProperty("KeyTask")]
         public string KeyTask { get; set; }
         
+        /// <summary>
+        /// グループとタスクを統合したキー
+        /// </summary>
         public string Key
         {
             get
@@ -46,7 +73,12 @@ namespace TaskManager.Data
             }
         }
 
-        public static void Initialize(List<string> groupKeys = null, List<string> taskKeys = null)
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <param name="groupKeys">生成済みとするするグループのキー</param>
+        /// <param name="taskKeys">生成済みとするタスクのキー</param>
+        public static void Initialize(List<KeyInfo> groupKeys = null, List<KeyInfo> taskKeys = null)
         {
             groupAllKeys = new HashSet<string>();
             taskAllKeys = new Dictionary<string, HashSet<string>>();
@@ -69,7 +101,10 @@ namespace TaskManager.Data
             {
                 foreach (var groupKey in groupKeys)
                 {
-                    groupAllKeys.Remove(groupKey);
+                    if (groupAllKeys.Contains(groupKey.KeyGroup))
+                    {
+                        groupAllKeys.Remove(groupKey.KeyGroup);
+                    }
                 }
             }
 
@@ -77,11 +112,21 @@ namespace TaskManager.Data
             {
                 foreach (var taskKey in taskKeys)
                 {
-                    taskAllKeys.Remove(taskKey);
+                    if (taskAllKeys.ContainsKey(taskKey.KeyGroup))
+                    {
+                        if (taskAllKeys[taskKey.KeyGroup].Contains(taskKey.KeyTask))
+                        {
+                            taskAllKeys[taskKey.KeyGroup].Remove(taskKey.KeyTask);
+                        }
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// グループのキー情報を生成する。
+        /// </summary>
+        /// <returns>生成結果</returns>
         public static KeyInfo CreateKeyInfoGroup()
         {
             if (groupAllKeys.Any())
@@ -103,11 +148,22 @@ namespace TaskManager.Data
             return null;
         }
 
+        /// <summary>
+        /// グループのキー情報を生成済みかチェックする。
+        /// </summary>
+        /// <param name="keyInfo">キー情報</param>
+        /// <returns>true: 生成済み/false: 未生成</returns>
         public static bool IsCreatedKeyGroup(KeyInfo keyInfo)
         {
             return !groupAllKeys.Contains(keyInfo.KeyGroup);
         }
 
+        /// <summary>
+        /// タスクのキー情報を生成済みかチェックする。
+        /// </summary>
+        /// <param name="group">グループのキー情報</param>
+        /// <param name="task">タスクのキー情報</param>
+        /// <returns>true: 生成済み/false: 未生成</returns>
         public static bool IsCreatedKeyTask(KeyInfo group, KeyInfo task)
         {
             if(groupAllKeys.Contains(group.KeyGroup))
@@ -125,6 +181,11 @@ namespace TaskManager.Data
             return true;
         }
 
+        /// <summary>
+        /// タスクのキーを生成する。
+        /// </summary>
+        /// <param name="parentGroupKey">親グループのキー情報</param>
+        /// <returns>生成結果</returns>
         public static KeyInfo CreateKeyInfoTask(KeyInfo parentGroupKey)
         {
             if (parentGroupKey != null)
@@ -150,6 +211,10 @@ namespace TaskManager.Data
             return null;
         }
 
+        /// <summary>
+        /// キー情報を削除します。
+        /// </summary>
+        /// <param name="keyInfo">キー情報</param>
         public static void DeleteKeyInfo(KeyInfo keyInfo)
         {
             if (keyInfo == null)
@@ -168,11 +233,20 @@ namespace TaskManager.Data
             }
         }
 
+        /// <summary>
+        /// ハッシュコードを取得します。
+        /// </summary>
+        /// <returns>ハッシュコード</returns>
         public override int GetHashCode()
         {
             return this.Key.GetHashCode();
         }
 
+        /// <summary>
+        /// オブジェクトの同一性検証
+        /// </summary>
+        /// <param name="obj">検証対象</param>
+        /// <returns>true:同一/ false:異なる</returns>
         public override bool Equals(object obj)
         {
             if (obj is KeyInfo)

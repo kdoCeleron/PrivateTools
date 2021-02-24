@@ -11,8 +11,14 @@ using TaskManager.Controls;
 
 namespace TaskManager
 {
+    /// <summary>
+    /// 情報参照画面
+    /// </summary>
     public partial class InfoViewForm : SubWindowBase
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public InfoViewForm()
         {
             InitializeComponent();
@@ -22,6 +28,11 @@ namespace TaskManager
             this.Load += OnLoad;
         }
 
+        /// <summary>
+        /// ロード時イベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private void OnLoad(object sender, EventArgs e)
         {
             var msgList = new List<string>();

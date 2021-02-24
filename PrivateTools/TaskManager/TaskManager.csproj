@@ -94,6 +94,7 @@
     <Compile Include="TaskGroupEditForm.Designer.cs">
       <DependentUpon>TaskGroupEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TaskIchiranEventArgs.cs" />
     <Compile Include="UiContext.cs" />
     <EmbeddedResource Include="InfoViewForm.resx">
       <DependentUpon>InfoViewForm.cs</DependentUpon>

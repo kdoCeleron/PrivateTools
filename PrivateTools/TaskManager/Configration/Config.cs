@@ -5,6 +5,9 @@ namespace TaskManager.Configration
     using System.IO;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// 設定ファイル管理クラス
+    /// </summary>
     public class Config
     {
         #region フィールド

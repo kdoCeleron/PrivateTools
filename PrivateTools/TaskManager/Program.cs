@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace TaskManager
 {
+    /// <summary>
+    /// エントリポイント
+    /// </summary>
     static class Program
     {
         #region フィールド
@@ -121,10 +124,6 @@ namespace TaskManager
         /// 未処理例外の処理
         /// </summary>
         /// <param name="e">例外情報</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         private static void ReportUnhandledException(Exception e)
         {
             // 例外情報をエラーログに出力する
@@ -133,6 +132,10 @@ namespace TaskManager
             MessageBox.Show(unKnownMessage, "エラー");
         }
 
+        /// <summary>
+        /// 2重起動チェック
+        /// </summary>
+        /// <returns></returns>
         private static bool IsDuplicate()
         {
             try

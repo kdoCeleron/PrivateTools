@@ -8,9 +8,15 @@ using Newtonsoft.Json;
 
 namespace TaskManager.Data
 {
+    /// <summary>
+    /// タスク情報の管理クラス
+    /// </summary>
     [JsonObject]
     public class TaskItem
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TaskItem()
         {
             // this.Group = TaskGroupInfo.GetDefaultGroup();
@@ -23,26 +29,50 @@ namespace TaskManager.Data
             this.AttachFile = new List<string>();
         }
 
+        /// <summary>
+        /// キー情報
+        /// </summary>
         [JsonProperty("Key")]
         public KeyInfo Key { get; set; }
         
+        /// <summary>
+        /// 親グループ情報
+        /// </summary>
         [JsonProperty("Group")]
         public KeyInfo Group { get; set; }
 
+        /// <summary>
+        /// 完了済みタスクかどうか
+        /// </summary>
         public bool IsComeplate { get; set; }
 
+        /// <summary>
+        /// タイトル
+        /// </summary>
         [JsonProperty("Title")]
         public string Title { get; set; }
 
+        /// <summary>
+        /// 期限
+        /// </summary>
         [JsonProperty("DateTimeLimit")]
         public DateTime DateTimeLimit { get; set; }
 
+        /// <summary>
+        /// メモ
+        /// </summary>
         [JsonProperty("Memo")]
         public string Memo { get; set; }
 
+        /// <summary>
+        /// 添付ファイル(元ファイルパス)
+        /// </summary>
         [JsonProperty("AttachFileOrg")]
         public List<string> AttachFileOrg { get; set; }
 
+        /// <summary>
+        /// 添付ファイル
+        /// </summary>
         [JsonProperty("AttachFile")]
         public List<string> AttachFile { get; set; }
 
@@ -51,11 +81,21 @@ namespace TaskManager.Data
 
         //public List<TaskItem> ChildTasks { get; set; }
 
+        /// <summary>
+        /// 親グループの情報を取得する。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public TaskGroupInfo GetGroup()
         {
+            // TODO:別の箇所に共通関数化
             return ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group];
         }
 
+        /// <summary>
+        /// タスクの情報を示すテキストを取得します。
+        /// </summary>
+        /// <param name="delimiter">項目ごとのセパレータ</param>
+        /// <returns>取得結果</returns>
         public string GetInfoText(string delimiter = "\t")
         {
             var ret = string.Empty;

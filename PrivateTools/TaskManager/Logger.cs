@@ -9,6 +9,9 @@ using log4net;
 
 namespace TaskManager
 {
+    /// <summary>
+    /// ログ出力クラス
+    /// </summary>
     public class Logger
     {
         #region フィールド
@@ -22,11 +25,18 @@ namespace TaskManager
         /// Errorロガー
         /// </summary>
         private static readonly ILog ErrorLog = LogManager.GetLogger("ErrorLog");
-        
+
         #endregion
 
         #region メソッド
-        
+
+        /// <summary>
+        /// デバッグログを出力します。
+        /// </summary>
+        /// <param name="message">メッセージ</param>
+        /// <param name="filePath">ファイルパス(指定しないこと)</param>
+        /// <param name="line">行番号(指定しないこと)</param>
+        /// <param name="methodName">メソッド名(指定しないこと)</param>
         public static void WriteDebugLog(
             string message, 
             [CallerFilePath] string filePath = "",
@@ -36,6 +46,13 @@ namespace TaskManager
             AppLog.Debug(CreateMessage(message, filePath, line, methodName));
         }
 
+        /// <summary>
+        /// アプリログを出力します。
+        /// </summary>
+        /// <param name="message">メッセージ</param>
+        /// <param name="filePath">ファイルパス(指定しないこと)</param>
+        /// <param name="line">行番号(指定しないこと)</param>
+        /// <param name="methodName">メソッド名(指定しないこと)</param>
         public static void WriteAppLog(
             string message, 
             [CallerFilePath] string filePath = "",
@@ -45,6 +62,14 @@ namespace TaskManager
             AppLog.Info(CreateMessage(message, filePath, line, methodName));
         }
         
+        /// <summary>
+        /// エラーログを出力します。
+        /// </summary>
+        /// <param name="message">メッセージ</param>
+        /// <param name="ex">例外情報</param>
+        /// <param name="filePath">ファイルパス(指定しないこと)</param>
+        /// <param name="line">行番号(指定しないこと)</param>
+        /// <param name="methodName">メソッド名(指定しないこと)</param>
         public static void WriteErrorLog(
             string message, 
             Exception ex = null,
@@ -66,6 +91,10 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// 設定ファイルの読み込みを行います。
+        /// </summary>
+        /// <param name="configFilePath">ファイルパス</param>
         public static void LoadConfig(string configFilePath)
         {
             if (File.Exists(configFilePath))
@@ -75,6 +104,14 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// 出力文言を生成します
+        /// </summary>
+        /// <param name="message">メッセージ</param>
+        /// <param name="filePath">ファイルパス</param>
+        /// <param name="line">行番号</param>
+        /// <param name="methodName">メソッド名</param>
+        /// <returns>生成結果</returns>
         private static string CreateMessage(string message, string filePath, int line, string methodName)
         {
             return string.Format("{0}[{1}][{2}][{3}]", message, filePath, line, methodName);

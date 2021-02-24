@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TaskManager
 {
+    /// <summary>
+    /// UIコンテキスト
+    /// </summary>
     public class UiContext
     {
         /// <summary>
@@ -17,10 +20,6 @@ namespace TaskManager
         /// <summary>
         /// 内部に<see cref="SynchronizationContext"/>をキャプチャします。
         /// </summary>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         public static void Initialize()
         {
             _context = SynchronizationContext.Current;
@@ -30,10 +29,6 @@ namespace TaskManager
         /// 指定されたアクションをUIスレッド上で非同期実行します。
         /// </summary>
         /// <param name="action">アクション</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         public static void Post(Action action)
         {
             if (_context == null)
@@ -49,10 +44,6 @@ namespace TaskManager
         /// </summary>
         /// <param name="action">アクション</param>
         /// <param name="parameter">パラメータ</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         public static void Post(Action<object> action, object parameter)
         {
             if (_context == null)
@@ -67,10 +58,6 @@ namespace TaskManager
         /// 指定されたアクションをUIスレッド上で同期実行します。
         /// </summary>
         /// <param name="action">アクション</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         public static void Send(Action action)
         {
             if (_context == null)
@@ -86,10 +73,6 @@ namespace TaskManager
         /// </summary>
         /// <param name="action">アクション</param>
         /// <param name="parameter">パラメータ</param>
-        /// <remarks>
-        /// <para>CREATE 2020-10-01 アルファテクノロジー 近藤 匠 </para>
-        /// <para>UPDATE </para>
-        /// </remarks>
         public static void Send(Action<object> action, object parameter)
         {
             if (_context == null)

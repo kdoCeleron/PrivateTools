@@ -11,16 +11,29 @@ using TaskManager.Data;
 
 namespace TaskManager.Controls
 {
+    /// <summary>
+    /// タスク一覧コントロール
+    /// </summary>
     public class TaskIchiranView : DataGridView
     {
-        public event EventHandler<TaskItem> UpdateEvent;
+        /// <summary>
+        /// 一覧更新時イベント
+        /// </summary>
+        public event EventHandler<TaskIchiranEventArgs> UpdateEvent;
 
+        /// <summary>
+        /// 列情報のマッピング
+        /// </summary>
         private Dictionary<int, DataGridColumnInfo> columnInfoMap;
 
+        /// <summary>
+        /// 「追加」ボタンを表示するかどうか
+        /// </summary>
         private bool isVisibleAddTask;
 
-        public TaskGroupInfo showingGroup { get; private set; }
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TaskIchiranView() : base()
         {
             this.columnInfoMap = new Dictionary<int, DataGridColumnInfo>();
@@ -58,6 +71,16 @@ namespace TaskManager.Controls
             this.columnInfoMap.Add(index, item8);
         }
 
+        /// <summary>
+        /// 表示中のタスクグループ
+        /// </summary>
+        public TaskGroupInfo ShowingGroup { get; private set; }
+
+
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="canAddTask">タスク追加機能を有効にするか</param>
         public void Initialize(bool canAddTask)
         {
             this.isVisibleAddTask = canAddTask;
@@ -117,69 +140,58 @@ namespace TaskManager.Controls
             this.SetShowScrollBar();
         }
 
+        /// <summary>
+        /// セルのダブルクリックイベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var rowIndex = e.RowIndex;
             if (rowIndex > 0)
             {
                 var row = this.Rows[rowIndex];
-
-                // TODO: 以下、編集時と同じ処理のため共通化する
-                var item = this.GetTaskItemInRow(row);
-                if (item != null)
+                var task = this.GetTaskItemInRow(row);
+                if (task != null)
                 {
-                    var win = new TaskEditForm();
-                    win.Initialize(this.showingGroup, item);
-                    var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
-                    if (ret == SubWindowResult.Submit)
-                    {
-                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                        this.ClearAllTaskItems();
-                        if (this.showingGroup != null)
-                        {
-                            this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
-                        }
-                        else
-                        {
-                            var list = new List<TaskItem>();
-                            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
-                                (task) =>
-                                {
-                                    list.Add(task);
-                                });
-                            this.RefleshTaskItems(list, null);
-                        }
-                    }
+                    var ret = await ExecuteEdit(task);
                 }
             }
         }
 
+        /// <summary>
+        /// /タスク一覧の内容を指定のデータでリフレッシュします。
+        /// </summary>
+        /// <param name="taskItems">表示対象のタスク</param>
+        /// <param name="showingTaskGroup">表示対象のグループ</param>
         public void RefleshTaskItems(List<TaskItem> taskItems, TaskGroupInfo showingTaskGroup)
         {
-            this.showingGroup = showingTaskGroup;
+            this.ClearAllTaskItems();
+
+            this.ShowingGroup = showingTaskGroup;
 
             foreach (var taskItem in taskItems)
             {
-                this.AddTaskItem(taskItem);
+                this.AddRow(taskItem);
             }
 
             this.UpdateCellStatus();
         }
 
-        public void RefleshTaskItems()
+        /// <summary>
+        ///一覧中の全てのタスクをクリアします。
+        /// </summary>
+        private void ClearAllTaskItems()
         {
-            this.UpdateCellStatus();
-        }
-
-        public void ClearAllTaskItems()
-        {
-            // this.showingGroup = null;
-
             this.Rows.Clear();
             this.UpdateCellStatus();
         }
 
-        private void AddTaskItem(TaskItem taskItem)
+        /// <summary>
+        /// タスクを一覧に追加します。
+        /// </summary>
+        /// <param name="item">タスク</param>
+        private void AddRow(TaskItem item)
         {
             var dgvRow = new DataGridViewRow();
             dgvRow.CreateCells(this);
@@ -193,43 +205,45 @@ namespace TaskManager.Controls
                 }
             }
 
-            dgvRow.Tag = taskItem;
+            dgvRow.Tag = item;
 
-            // TODO: addrow の処理と共通化
             var menu = new ContextMenuStrip();
             menu.ItemClicked += MenuOnItemClicked;
             menu.Items.Add("クリップボードにコピー");
             dgvRow.ContextMenuStrip = menu;
 
-            this.SetTaskItemToRow(taskItem, dgvRow);
+            this.SetTaskItemToRow(item, dgvRow);
 
             this.Rows.Add(dgvRow);
         }
-
+        
+        /// <summary>
+        /// セル上のボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private async void OnCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            var rowIndex = e.RowIndex;
+            var columnIndex = e.ColumnIndex;
+
             DataGridColumnInfo info;
-            if (this.columnInfoMap.TryGetValue(e.ColumnIndex, out info))
+            if (this.columnInfoMap.TryGetValue(columnIndex, out info))
             {
                 if (info != null)
                 {
-                    // TODO:このあたりの固定文字は調整
-                    var orgRowIndex = e.RowIndex;
-                    var orgColumnIndex = e.ColumnIndex;
-                    if(orgRowIndex < 0 || orgRowIndex >= this.RowCount)
+
+                    if(rowIndex < 0 || rowIndex >= this.RowCount)
                     {
                         return;
                     }
 
-                    if (orgColumnIndex < 0 || orgColumnIndex >= this.ColumnCount)
+                    if (columnIndex < 0 || columnIndex >= this.ColumnCount)
                     {
                         return;
                     }
 
-                    var cell = this.Rows[orgRowIndex].Cells[orgColumnIndex];
-                    //var text = string.Format("{0} {1} row:{2} column:{3}", cell.Value.ToString(), info.ContentName, e.RowIndex, e.ColumnIndex);
-                    //MessageBox.Show(text);
-
+                    var cell = this.Rows[rowIndex].Cells[columnIndex];
                     if (cell.Value == null)
                     {
                         return;
@@ -241,7 +255,7 @@ namespace TaskManager.Controls
                         return;
                     }
 
-                    var row = this.Rows[e.RowIndex];
+                    var row = this.Rows[rowIndex];
 
                     var contentName = cell.Value.ToString();
                     var isAdd = contentName == "追加";
@@ -252,10 +266,12 @@ namespace TaskManager.Controls
                     var isTorikeshi = contentName == "取消";
 
                     var curItem = this.GetTaskItemInRow(row);
-                    var isCopmleted = curItem != null ? curItem.IsComeplate : false;
 
-                    if (isCopmleted)
+                    // 完了済みタスクかどうか
+                    var isCompleted = curItem != null ? curItem.IsComeplate : false;
+                    if (isCompleted)
                     {
+                        // 完了済みの場合は取り消しのみ許可
                         if (isTorikeshi)
                         {
                             var item = this.GetTaskItemInRow(row);
@@ -267,130 +283,39 @@ namespace TaskManager.Controls
                     }
                     else
                     {
+                        // 未完了のタスク
                         if (isAdd)
                         {
-                            var item = new TaskItem();
-                            KeyInfo groupKey = null;
-                            if (this.showingGroup != null)
-                            {
-                                groupKey = this.showingGroup.Key;
-                            }
-
-                            item.Key = KeyInfo.CreateKeyInfoTask(groupKey);
-
-                            var win = new TaskEditForm();
-                            win.Initialize(this.showingGroup, item);
-                            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
-                            if (ret == SubWindowResult.Submit)
-                            {
-                                if (item.Group != null)
-                                {
-                                    if (item.Group.Equals(groupKey) || this.showingGroup == null)
-                                    {
-                                        this.AddRow(item);
-
-                                        var targetRow = this.Rows[orgRowIndex];
-                                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                                        SetTaskItemToRow(item, targetRow);
-                                    }
-                                }
-                            }
+                            // 追加
+                            await this.ExecuteAdd();
                         }
                         else if (isEdit)
                         {
-                            var item = this.GetTaskItemInRow(row);
-                            if (item != null)
+                            // 編集
+                            if (curItem != null)
                             {
-                                var win = new TaskEditForm();
-                                win.Initialize(this.showingGroup, item);
-                                var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
-                                if (ret == SubWindowResult.Submit)
-                                {
-                                    ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                                    this.ClearAllTaskItems();
-                                    if (this.showingGroup != null)
-                                    {
-                                        this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
-                                    }
-                                    else
-                                    {
-                                        var list = new List<TaskItem>();
-                                        ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
-                                            (task) =>
-                                            {
-                                                list.Add(task);
-                                            });
-                                        this.RefleshTaskItems(list, null);
-                                    }
-                                }
+                                await this.ExecuteEdit(curItem);
                             }
                         }
                         else if (isDelete)
                         {
-                            var message = "タスクを削除します。";
-                            var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
-                            if (msgRet == DialogResult.Yes)
-                            {
-                                var item = this.GetTaskItemInRow(row);
-                                if (item != null)
-                                {
-                                    this.Rows.Remove(row);
-                                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
-
-                                    var list = new List<TaskItem>();
-                                    ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
-                                        (task) =>
-                                        {
-                                            list.Add(task);
-                                        });
-
-                                    this.ClearAllTaskItems();
-                                    if (this.showingGroup != null)
-                                    {
-                                        this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
-                                    }
-                                    else
-                                    {
-                                        this.RefleshTaskItems(list, null);
-                                    }
-                                }
-                            }
+                            // 削除
+                            this.ExecuteDelete(row);
                         }
                         else if (isCopy)
                         {
-                            var item = this.GetTaskItemInRow(row);
-                            if (item != null)
+                            // 複製
+                            if (curItem != null)
                             {
-                                var newItem = new TaskItem();
-
-                                newItem.Group = item.Group;
-                                newItem.Title = item.Title;
-                                newItem.Memo = item.Memo;
-                                newItem.DateTimeLimit = item.DateTimeLimit;
-                                newItem.Key = KeyInfo.CreateKeyInfoTask(item.Group);
-
-                                this.AddTaskItem(newItem);
-
-                                if (item.Group != null)
-                                {
-                                    if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(item.Group))
-                                    {
-                                        ResourceManager.Instance.AddTaskItem(item.Group, newItem);
-                                    }
-                                }
-
-                                if (this.showingGroup != null)
-                                {
-                                    this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
-                                }
+                                this.ExecuteCopy(curItem);
                             }
                         }
                         else if (isComplete)
                         {
-                            var item = this.GetTaskItemInRow(row);
-                            if (item != null)
+                            // 完了
+                            if (curItem != null)
                             {
-                                item.IsComeplate = true;
+                                curItem.IsComeplate = true;
                             }
                         }
                     }
@@ -399,7 +324,151 @@ namespace TaskManager.Controls
                 }
             }
         }
+        
+        /// <summary>
+        /// 追加処理を実行します。
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task<bool> ExecuteAdd()
+        {
+            var item = new TaskItem();
+            KeyInfo groupKey = null;
+            if (this.ShowingGroup != null)
+            {
+                groupKey = this.ShowingGroup.Key;
+            }
 
+            item.Key = KeyInfo.CreateKeyInfoTask(groupKey);
+
+            var win = new TaskEditForm();
+            win.Initialize(this.ShowingGroup, item);
+            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+            if (ret == SubWindowResult.Submit)
+            {
+                if (item.Group != null)
+                {
+                    if (item.Group.Equals(groupKey) || this.ShowingGroup == null)
+                    {
+                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                        this.AddRow(item);
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 編集処理を実行します。
+        /// </summary>
+        /// <param name="taskItem">タスク</param>
+        /// <returns>Task</returns>
+        private async Task<bool> ExecuteEdit(TaskItem taskItem)
+        {
+            var win = new TaskEditForm();
+            win.Initialize(this.ShowingGroup, taskItem);
+            var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+            if (ret == SubWindowResult.Submit)
+            {
+                ResourceManager.Instance.TaskInfoRoot.AddTaskItem(taskItem.Group, taskItem);
+                if (this.ShowingGroup != null)
+                {
+                    this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
+                }
+                else
+                {
+                    var list = ResourceManager.Instance.GetAllTaskItems();
+                    this.RefleshTaskItems(list, null);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 削除処理を実行します。
+        /// </summary>
+        /// <param name="row">行</param>
+        /// <returns>Task</returns>
+        private bool ExecuteDelete(DataGridViewRow row)
+        {
+            var message = "タスクを削除します。";
+            var msgRet = MessageBox.Show(message, "確認", MessageBoxButtons.YesNo);
+            if (msgRet == DialogResult.Yes)
+            {
+                var item = this.GetTaskItemInRow(row);
+                if (item != null)
+                {
+                    this.Rows.Remove(row);
+                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
+
+                    if (this.ShowingGroup != null)
+                    {
+                        this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
+                    }
+                    else
+                    {
+                        var taskList = ResourceManager.Instance.GetAllTaskItems();
+
+                        var tmp = DateTime.Now;
+                        var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                        var thres = now.AddDays(3);
+
+                        //now >= date
+                        // 超過、1日前、2日前、3日前
+                        var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
+                        this.RefleshTaskItems(filtered, null);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 複製処理を実行します。
+        /// </summary>
+        /// <param name="taskItem">タスク</param>
+        /// <returns>Task</returns>
+        private bool ExecuteCopy(TaskItem taskItem)
+        {
+            var newItem = new TaskItem();
+
+            newItem.Group = taskItem.Group;
+            newItem.Title = taskItem.Title;
+            newItem.Memo = taskItem.Memo;
+            newItem.DateTimeLimit = taskItem.DateTimeLimit;
+            newItem.Key = KeyInfo.CreateKeyInfoTask(taskItem.Group);
+
+            this.AddRow(newItem);
+
+            if (taskItem.Group != null)
+            {
+                if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(taskItem.Group))
+                {
+                    ResourceManager.Instance.AddTaskItem(taskItem.Group, newItem);
+                }
+            }
+
+            if (this.ShowingGroup != null)
+            {
+                this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
+            }
+            
+            return true;
+        }
+
+        /// <summary>
+        /// 行の内容にタスク情報を設定します。
+        /// </summary>
+        /// <param name="item">タスク</param>
+        /// <param name="row">行</param>
         private void SetTaskItemToRow(TaskItem item, DataGridViewRow row)
         {
             foreach (var info in this.columnInfoMap)
@@ -432,30 +501,11 @@ namespace TaskManager.Controls
             }
         }
 
-        private void AddRow(TaskItem item)
-        {
-            var dgvRow = new DataGridViewRow();
-            dgvRow.CreateCells(this);
-
-            for (int i = 0; i < dgvRow.Cells.Count; i++)
-            {
-                var btnCell = dgvRow.Cells[i] as DataGridViewButtonCell;
-                if (btnCell != null)
-                {
-                    btnCell.Value = this.columnInfoMap[i].ContentName;
-                }
-            }
-
-            dgvRow.Tag = item;
-
-            var menu = new ContextMenuStrip();
-            menu.ItemClicked += MenuOnItemClicked;
-            menu.Items.Add("クリップボードにコピー");
-            dgvRow.ContextMenuStrip = menu;
-
-            this.Rows.Add(dgvRow);
-        }
-
+        /// <summary>
+        /// コンテキストメニュー実行時のイベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private void MenuOnItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             var selected = this.SelectedCells;
@@ -474,6 +524,7 @@ namespace TaskManager.Controls
         /// <summary>
         /// テキストボックス用のヘッダを追加します
         /// </summary>
+        /// <param name="info">ヘッダ情報</param>
         private void AddTextBoxHeader(DataGridColumnInfo info)
         {
             var header = new DataGridViewTextBoxColumn();
@@ -485,6 +536,7 @@ namespace TaskManager.Controls
         /// <summary>
         /// コンボボックス用のヘッダを追加します
         /// </summary>
+        /// <param name="info">ヘッダ情報</param>
         private void AddButtonHeader(DataGridColumnInfo info)
         {
             var header = new DataGridViewButtonColumn();
@@ -518,8 +570,12 @@ namespace TaskManager.Controls
             header.FillWeight = headerSize;
         }
         
+        /// <summary>
+        /// セルの状態を更新します。
+        /// </summary>
         private void UpdateCellStatus()
         {
+            var taskList = new List<TaskItem>();
             for (var index = 0; index < this.RowCount; index++)
             {
                 var row = this.Rows[index];
@@ -528,6 +584,8 @@ namespace TaskManager.Controls
                 var grpData = row.Tag as TaskItem;
                 if (grpData != null)
                 {
+                    taskList.Add(grpData);
+
                     var isEnable = false;
                     var kanryoCell = row.Cells[0] as DataGridViewButtonCell;
                     if (kanryoCell != null)
@@ -560,6 +618,7 @@ namespace TaskManager.Controls
 
                         var cell = row.Cells[3] as DataGridViewCell;
 
+                        // TODO: Configへ
                         var yellowZone = now.AddDays(-3);
                         var normalZone = now.AddDays(-5);
                         if (date > now)
@@ -596,10 +655,20 @@ namespace TaskManager.Controls
 
             if (this.UpdateEvent != null)
             {
-                this.UpdateEvent(this, null);
+                var args = new TaskIchiranEventArgs();
+                args.GroupItem = this.ShowingGroup;
+                args.TaskItem = new List<TaskItem>();
+                args.TaskItem.AddRange(taskList);
+
+                this.UpdateEvent(this, args);
             }
         }
 
+        /// <summary>
+        /// 行内のタスク情報を取得します。
+        /// </summary>
+        /// <param name="row">行</param>
+        /// <returns>タスク情報</returns>
         private TaskItem GetTaskItemInRow(DataGridViewRow row)
         {
             if (row != null)
@@ -633,7 +702,9 @@ namespace TaskManager.Controls
             }
         }
 
-
+        /// <summary>
+        /// スクロールバーの描画を設定します
+        /// </summary>
         private void SetShowScrollBar()
         {
             foreach (Control control in this.Controls)
@@ -648,6 +719,11 @@ namespace TaskManager.Controls
             }
         }
 
+        /// <summary>
+        /// スクロールバーの表示更新イベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private void ScrollBarOnVisibleChanged(object sender, EventArgs e)
         {
             var scrollBar = sender as VScrollBar;
@@ -664,6 +740,11 @@ namespace TaskManager.Controls
             }
         }
 
+        /// <summary>
+        /// スクロール実施時イベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
         private void ScrollHandler(object sender, ScrollEventArgs e)
         {
             // スクロール時に選択状態にあるセルの内容がスクロール後の他のセルの内容が

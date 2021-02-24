@@ -52,14 +52,14 @@ namespace TaskManager
                 if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(rootGroupKey)))
                 {
                     var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(rootGroupKey));
-                    TaskGroupInfo.SetRootGroup(item);
+                    TaskGroupInfo.OverriteRootGroup(item);
                 }
 
                 var defaultGroupKey = TaskGroupInfo.GetDefaultGroup().Key;
                 if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(defaultGroupKey)))
                 {
                     var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(defaultGroupKey));
-                    TaskGroupInfo.SetDefaultGroup(item);
+                    TaskGroupInfo.OverriteDefaultGroup(item);
                 }
 
                 // 全グループに対してキーの再生成
@@ -160,6 +160,15 @@ namespace TaskManager
             }
 
             return result;
+        }
+
+        public List<TaskItem> GetAllTaskItems()
+        {
+            var list = new List<TaskItem>();
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+                (task) => { list.Add(task); });
+
+            return list;
         }
 
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)

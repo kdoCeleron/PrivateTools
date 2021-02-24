@@ -8,9 +8,15 @@ using Newtonsoft.Json;
 
 namespace TaskManager.Data
 {
+    /// <summary>
+    /// グループ情報
+    /// </summary>
     [JsonObject]
     public class TaskGroupInfo
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TaskGroupInfo()
         {
             this.Name = string.Empty;
@@ -18,6 +24,9 @@ namespace TaskManager.Data
             this.ChildTaskItems = new HashSet<TaskItem>();
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         static TaskGroupInfo()
         {
             _rootGroup = new TaskGroupInfo();
@@ -36,39 +45,77 @@ namespace TaskManager.Data
             _defaultGroup.ParentGroup = _rootGroup.Key;
         }
 
+        /// <summary>
+        /// デフォルト(未分類)グループ
+        /// </summary>
         private static TaskGroupInfo _defaultGroup;
+
+        /// <summary>
+        /// ルートのグループ
+        /// </summary>
         private static TaskGroupInfo _rootGroup;
 
+        /// <summary>
+        /// グループのキー情報
+        /// </summary>
         [JsonProperty("Key")]
         public KeyInfo Key { get; set; }
 
+        /// <summary>
+        /// グループの名称
+        /// </summary>
         [JsonProperty("Name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// 親グループ
+        /// </summary>
         [JsonProperty("ParentGroup")]
         public KeyInfo ParentGroup { get; set; }
 
+        /// <summary>
+        /// 子グループ
+        /// </summary>
         [JsonProperty("ChildGroups")]
         public HashSet<KeyInfo> ChildGroups { get; set; }
 
+        /// <summary>
+        /// 子タスク
+        /// </summary>
         [JsonProperty("ChildTaskItems")]
         public HashSet<TaskItem> ChildTaskItems { get; set; }
 
-        public static void SetDefaultGroup(TaskGroupInfo value)
+        /// <summary>
+        /// デフォルトのグループ情報を更新します。
+        /// </summary>
+        /// <param name="value">更新値</param>
+        public static void OverriteDefaultGroup(TaskGroupInfo value)
         {
             _defaultGroup = value;
         }
 
-        public static void SetRootGroup(TaskGroupInfo value)
+        /// <summary>
+        /// ルートのグループ情報を更新します。
+        /// </summary>
+        /// <param name="value">更新値</param>
+        public static void OverriteRootGroup(TaskGroupInfo value)
         {
             _rootGroup = value;
         }
 
+        /// <summary>
+        /// デフォルトグループの情報を取得します。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public static TaskGroupInfo GetDefaultGroup()
         {
             return _defaultGroup;
         }
 
+        /// <summary>
+        /// ルートグループの情報を取得します。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public static TaskGroupInfo GetRootGroup()
         {
             return _rootGroup;

@@ -61,7 +61,7 @@ namespace TaskManager
 
         private bool isUpdatingTaskIchiran = false;
 
-        private void DgvRecentTasksOnUpdateEvent(object sender, TaskItem e)
+        private void DgvRecentTasksOnUpdateEvent(object sender, TaskIchiranEventArgs e)
         {
             if (isUpdatingTaskIchiran)
             {
@@ -78,20 +78,21 @@ namespace TaskManager
             //this.DgvAllTasks.ClearAllTaskItems();
 
             //this.RefleshTaskGroupIchiran();
-            this.DgvAllTasks.ClearAllTaskItems();
-            if (this.DgvAllTasks.showingGroup != null)
+            if (this.DgvAllTasks.ShowingGroup != null)
             {
-                this.DgvAllTasks.RefleshTaskItems(this.DgvAllTasks.showingGroup.ChildTaskItems.ToList(), this.DgvAllTasks.showingGroup);
+                this.DgvAllTasks.RefleshTaskItems(this.DgvAllTasks.ShowingGroup.ChildTaskItems.ToList(), this.DgvAllTasks.ShowingGroup);
             }
             else
             {
                 InitializeTaskList();
             }
 
+            this.RefleshTaskGroupIchiran();
+
             this.isUpdatingTaskIchiran = false;
         }
 
-        private void DgvAllTasksOnUpdateEvent(object sender, TaskItem e)
+        private void DgvAllTasksOnUpdateEvent(object sender, TaskIchiranEventArgs e)
         {
             if (isUpdatingTaskIchiran)
             {
@@ -99,10 +100,9 @@ namespace TaskManager
             }
 
             isUpdatingTaskIchiran = true;
-
-            this.tmpTaskList.Clear();
-
-            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, CollectTaskItem);
+            
+            // TODO:一覧のdelete処理と統一
+            var taskList = ResourceManager.Instance.GetAllTaskItems();
 
             var tmp = DateTime.Now;
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
@@ -110,30 +110,19 @@ namespace TaskManager
 
             //now >= date
             // 超過、1日前、2日前、3日前
-            var filtered = tmpTaskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
-            this.DgvRecentTasks.ClearAllTaskItems();
+            var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
             this.DgvRecentTasks.RefleshTaskItems(filtered, null);
 
             this.RefleshTaskGroupIchiran();
 
             this.isUpdatingTaskIchiran = false;
         }
-
-        private List<TaskItem> tmpTaskList = new List<TaskItem>();
-
+        
         private void InitializeTaskList()
         {
             this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
-            this.tmpTaskList.Clear();
-
-            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null, CollectTaskItem);
-
-            this.DgvAllTasks.RefleshTaskItems(this.tmpTaskList, null);
-        }
-
-        private void CollectTaskItem(TaskItem obj)
-        {
-            this.tmpTaskList.Add(obj);
+            var taskList = ResourceManager.Instance.GetAllTaskItems();
+            this.DgvAllTasks.RefleshTaskItems(taskList, null);
         }
 
         private void InitializeGroupList()
@@ -161,8 +150,6 @@ namespace TaskManager
                 var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    this.DgvAllTasks.ClearAllTaskItems();
-
                     var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
                     
                     this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
@@ -333,6 +320,12 @@ namespace TaskManager
 
             var fileName = string.Format("TaskAllList_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"));
             File.WriteAllLines(fileName, list, Encoding.UTF8);
+
+            var path = Environment.CurrentDirectory;
+            if (Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
     }
 }
