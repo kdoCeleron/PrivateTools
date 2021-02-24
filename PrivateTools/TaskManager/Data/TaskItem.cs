@@ -55,5 +55,25 @@ namespace TaskManager.Data
         {
             return ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group];
         }
+
+        public string GetInfoText()
+        {
+            var separator = "\t";
+            var ret = string.Empty;
+            if (this.Group != null)
+            {
+                if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(this.Group))
+                {
+                    ret += ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group].Name;
+                    ret += separator;
+                }
+            }
+
+            ret += this.Title + separator;
+            ret += this.DateTimeLimit + separator;
+            ret += this.Memo + separator;
+
+            return ret;
+        }
     }
 }

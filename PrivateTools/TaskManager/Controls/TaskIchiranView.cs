@@ -195,6 +195,12 @@ namespace TaskManager.Controls
 
             dgvRow.Tag = taskItem;
 
+            // TODO: addrow の処理と共通化
+            var menu = new ContextMenuStrip();
+            menu.ItemClicked += MenuOnItemClicked;
+            menu.Items.Add("クリップボードにコピー");
+            dgvRow.ContextMenuStrip = menu;
+
             this.SetTaskItemToRow(taskItem, dgvRow);
 
             this.Rows.Add(dgvRow);
@@ -442,7 +448,27 @@ namespace TaskManager.Controls
 
             dgvRow.Tag = item;
 
+            var menu = new ContextMenuStrip();
+            menu.ItemClicked += MenuOnItemClicked;
+            menu.Items.Add("クリップボードにコピー");
+            dgvRow.ContextMenuStrip = menu;
+
             this.Rows.Add(dgvRow);
+        }
+
+        private void MenuOnItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            var selected = this.SelectedCells;
+            if (selected.Count == 1)
+            {
+                var row = selected[0].OwningRow;
+                var task = row.Tag as TaskItem;
+                if (task != null)
+                {
+                    var txt = task.GetInfoText();
+                    Clipboard.SetText(txt);
+                }
+            }
         }
 
         /// <summary>
