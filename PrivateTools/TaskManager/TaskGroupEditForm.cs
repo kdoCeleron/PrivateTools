@@ -40,14 +40,14 @@ namespace TaskManager
                 this.CmbParentGroup.Items.Add(item);
             }
 
-            if (parent != null)
-            {
-                this.CmbParentGroup.SelectedItem = parent;
-            }
-
             // TODO: update can change parentGroup
+            //if (parent != null)
+            //{
+            //    this.CmbParentGroup.SelectedItem = parent;
+            //}
+
             this.CmbParentGroup.Enabled = false;
-            // this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
+            this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
 
             if (group != null)
             {

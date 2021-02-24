@@ -134,7 +134,7 @@ namespace TaskManager.Controls
 
         public void ClearAllTaskItems()
         {
-            this.showingGroup = null;
+            // this.showingGroup = null;
 
             this.Rows.Clear();
             this.UpdateCellStatus();
@@ -171,6 +171,15 @@ namespace TaskManager.Controls
                     // TODO:このあたりの固定文字は調整
                     var orgRowIndex = e.RowIndex;
                     var orgColumnIndex = e.ColumnIndex;
+                    if(orgRowIndex < 0 || orgRowIndex < this.RowCount - 1)
+                    {
+                        return;
+                    }
+
+                    if (orgColumnIndex < 0 || orgColumnIndex < this.ColumnCount - 1)
+                    {
+                        return;
+                    }
 
                     var cell = this.Rows[orgRowIndex].Cells[orgColumnIndex];
                     //var text = string.Format("{0} {1} row:{2} column:{3}", cell.Value.ToString(), info.ContentName, e.RowIndex, e.ColumnIndex);
@@ -290,6 +299,19 @@ namespace TaskManager.Controls
                                 newItem.Key = KeyInfo.CreateKeyInfoTask(item.Group);
 
                                 this.AddTaskItem(newItem);
+
+                                if (item.Group != null)
+                                {
+                                    if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(item.Group))
+                                    {
+                                        ResourceManager.Instance.AddTaskItem(item.Group, newItem);
+                                    }
+                                }
+
+                                if (this.showingGroup != null)
+                                {
+                                    this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                }
                             }
                         }
                         else if (isComplete)
