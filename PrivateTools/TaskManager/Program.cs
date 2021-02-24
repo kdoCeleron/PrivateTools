@@ -46,6 +46,10 @@ namespace TaskManager
         [STAThread]
         public static void Main()
         {
+            // Logger の設定ファイルを読み込み
+            var log4netConfigPath = @".\Log4net.xml";
+            Logger.LoadConfig(log4netConfigPath);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
