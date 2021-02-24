@@ -72,6 +72,8 @@ namespace TaskManager.Controls
             this.AllowUserToOrderColumns = false;
             this.ScrollBars = ScrollBars.Vertical;
             this.BackgroundColor = SystemColors.ControlLight;
+            // this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.CellDoubleClick += OnCellDoubleClick;
 
             var style = new DataGridViewCellStyle();
             style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -79,7 +81,7 @@ namespace TaskManager.Controls
             style.Font = new Font("MS UI Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 128);
             style.ForeColor = SystemColors.WindowText;
             style.WrapMode = DataGridViewTriState.True;
-            style.SelectionBackColor = Color.Transparent;
+            style.SelectionBackColor = Color.Aqua;
             style.SelectionForeColor = Color.Black;
 
             this.ColumnHeadersDefaultCellStyle = style;
@@ -113,6 +115,43 @@ namespace TaskManager.Controls
 
             this.UpdateCellStatus();
             this.SetShowScrollBar();
+        }
+
+        private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var rowIndex = e.RowIndex;
+            if (rowIndex > 0)
+            {
+                var row = this.Rows[rowIndex];
+
+                // TODO: 以下、編集時と同じ処理のため共通化する
+                var item = this.GetTaskItemInRow(row);
+                if (item != null)
+                {
+                    var win = new TaskEditForm();
+                    win.Initialize(this.showingGroup, item);
+                    var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
+                    if (ret == SubWindowResult.Submit)
+                    {
+                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                        this.ClearAllTaskItems();
+                        if (this.showingGroup != null)
+                        {
+                            this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                        }
+                        else
+                        {
+                            var list = new List<TaskItem>();
+                            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+                                (task) =>
+                                {
+                                    list.Add(task);
+                                });
+                            this.RefleshTaskItems(list, null);
+                        }
+                    }
+                }
+            }
         }
 
         public void RefleshTaskItems(List<TaskItem> taskItems, TaskGroupInfo showingTaskGroup)
@@ -442,7 +481,7 @@ namespace TaskManager.Controls
             var headerStyle = new DataGridViewCellStyle();
             headerStyle.Alignment = alignment;
             headerStyle.SelectionForeColor = Color.Black;
-            headerStyle.SelectionBackColor = Color.Transparent;
+            headerStyle.SelectionBackColor = Color.Aqua;
 
             header.DefaultCellStyle = headerStyle;
             header.HeaderText = headerName;
