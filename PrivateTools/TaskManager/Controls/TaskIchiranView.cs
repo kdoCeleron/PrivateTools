@@ -89,7 +89,7 @@ namespace TaskManager.Controls
             //this.CellEndEdit += this.OnCellEndEdit;
             //this.EditingControlShowing += this.OnEditingControlShowing;
             this.UserAddedRow += this.OnUserAddedRow;
-            //this.Scroll += this.ScrollHandler;
+            this.Scroll += this.ScrollHandler;
             //this.CellEnter += this.CellEnterHandler;
 
             this.CellContentClick += OnCellContentClick;
@@ -571,6 +571,15 @@ namespace TaskManager.Controls
                 scrollBar.Size = new Size(scrollBar.Width, this.ClientRectangle.Height - 2);
                 scrollBar.Show();
             }
+        }
+
+        private void ScrollHandler(object sender, ScrollEventArgs e)
+        {
+            // スクロール時に選択状態にあるセルの内容がスクロール後の他のセルの内容が
+            // 映り込んでしまい、文字が潰れる現象が発生した。
+            // スクロールイベントをフックし、セルの選択状態を解除することで、本現象が発生しないようにする。
+            // 本処理の動作を確認したところ、選択セルのテキストカーソルが消えることはなかった
+            this.ClearSelection();
         }
 
     }

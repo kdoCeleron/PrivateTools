@@ -270,8 +270,11 @@ namespace TaskManager
                 if (selected != null)
                 {
                     var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
-                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskGroup(item);
-                    RefleshTaskGroupIchiran();
+                    if (!selected.Equals(TaskGroupInfo.GetRootGroup().Key) && !selected.Equals(TaskGroupInfo.GetDefaultGroup().Key))
+                    {
+                        ResourceManager.Instance.TaskInfoRoot.RemoveTaskGroup(item);
+                        RefleshTaskGroupIchiran();
+                    }
                 }
             }
         }

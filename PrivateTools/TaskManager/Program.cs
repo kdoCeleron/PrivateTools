@@ -129,6 +129,7 @@ namespace TaskManager
         {
             // 例外情報をエラーログに出力する
             var unKnownMessage = "予期せぬエラーが発生しました。\nツール管理者へ連絡してください。";
+            Logger.WriteErrorLog(unKnownMessage, e);
             MessageBox.Show(unKnownMessage, "エラー");
         }
 
