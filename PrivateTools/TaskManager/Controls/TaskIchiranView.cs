@@ -262,7 +262,21 @@ namespace TaskManager.Controls
                                 if (ret == SubWindowResult.Submit)
                                 {
                                     ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
-                                    SetTaskItemToRow(item, row);
+                                    this.ClearAllTaskItems();
+                                    if (this.showingGroup != null)
+                                    {
+                                        this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                    }
+                                    else
+                                    {
+                                        var list = new List<TaskItem>();
+                                        ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+                                            (task) =>
+                                            {
+                                                list.Add(task);
+                                            });
+                                        this.RefleshTaskItems(list, null);
+                                    }
                                 }
                             }
                         }
