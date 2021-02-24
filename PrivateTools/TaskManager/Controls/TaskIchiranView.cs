@@ -238,9 +238,9 @@ namespace TaskManager.Controls
                             var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
                             if (ret == SubWindowResult.Submit)
                             {
-                                if (groupKey != null)
+                                if (item.Group != null)
                                 {
-                                    if (item.Group.Equals(groupKey))
+                                    if (item.Group.Equals(groupKey) || this.showingGroup == null)
                                     {
                                         this.AddRow(item);
 
@@ -278,9 +278,21 @@ namespace TaskManager.Controls
                                     this.Rows.Remove(row);
                                     ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
 
+                                    var list = new List<TaskItem>();
+                                    ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+                                        (task) =>
+                                        {
+                                            list.Add(task);
+                                        });
+
+                                    this.ClearAllTaskItems();
                                     if (this.showingGroup != null)
                                     {
                                         this.RefleshTaskItems(this.showingGroup.ChildTaskItems.ToList(), this.showingGroup);
+                                    }
+                                    else
+                                    {
+                                        this.RefleshTaskItems(list, null);
                                     }
                                 }
                             }
