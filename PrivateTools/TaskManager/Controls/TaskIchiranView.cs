@@ -171,12 +171,12 @@ namespace TaskManager.Controls
                     // TODO:このあたりの固定文字は調整
                     var orgRowIndex = e.RowIndex;
                     var orgColumnIndex = e.ColumnIndex;
-                    if(orgRowIndex < 0 || orgRowIndex < this.RowCount - 1)
+                    if(orgRowIndex < 0 || orgRowIndex >= this.RowCount)
                     {
                         return;
                     }
 
-                    if (orgColumnIndex < 0 || orgColumnIndex < this.ColumnCount - 1)
+                    if (orgColumnIndex < 0 || orgColumnIndex >= this.ColumnCount)
                     {
                         return;
                     }
