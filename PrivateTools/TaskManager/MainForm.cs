@@ -313,5 +313,26 @@ namespace TaskManager
                 System.Diagnostics.Process.Start(path);
             }
         }
+
+        private void BtnOutputCsv_Click(object sender, EventArgs e)
+        {
+            var allTaskList = new List<TaskItem>();
+            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+                (task) =>
+                {
+                    allTaskList.Add(task);
+                });
+
+            var list = new List<string>();
+            foreach (var taskItem in allTaskList)
+            {
+                var tmp = taskItem.GetInfoText(",");
+                tmp = tmp.Replace(Environment.NewLine, @"\r\n");
+                list.Add(tmp);
+            }
+
+            var fileName = string.Format("TaskAllList_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            File.WriteAllLines(fileName, list, Encoding.UTF8);
+        }
     }
 }
