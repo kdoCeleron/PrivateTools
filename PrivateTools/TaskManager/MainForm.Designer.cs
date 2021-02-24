@@ -53,6 +53,7 @@ namespace TaskManager
             this.LabelTaskView = new System.Windows.Forms.Label();
             this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
+            this.BtnOpenExecFolder = new System.Windows.Forms.Button();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -94,6 +95,7 @@ namespace TaskManager
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.BtnOpenExecFolder);
             this.panel2.Controls.Add(this.BtnInfos);
             this.panel2.Controls.Add(this.DgvRecentTasks);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -274,6 +276,16 @@ namespace TaskManager
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
             // 
+            // BtnOpenExecFolder
+            // 
+            this.BtnOpenExecFolder.Location = new System.Drawing.Point(875, 3);
+            this.BtnOpenExecFolder.Name = "BtnOpenExecFolder";
+            this.BtnOpenExecFolder.Size = new System.Drawing.Size(75, 23);
+            this.BtnOpenExecFolder.TabIndex = 2;
+            this.BtnOpenExecFolder.Text = "フォルダを開く";
+            this.BtnOpenExecFolder.UseVisualStyleBackColor = true;
+            this.BtnOpenExecFolder.Click += new System.EventHandler(this.BtnOpenExecFolder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -326,6 +338,7 @@ namespace TaskManager
         private System.Windows.Forms.Label LblDisplayGroup;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button BtnInfos;
+        private System.Windows.Forms.Button BtnOpenExecFolder;
     }
 }
 

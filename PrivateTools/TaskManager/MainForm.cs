@@ -304,5 +304,14 @@ namespace TaskManager
             var win = new InfoViewForm();
             var ret = await win.ShowWindow(this);
         }
+
+        private void BtnOpenExecFolder_Click(object sender, EventArgs e)
+        {
+            var path = Environment.CurrentDirectory;
+            if (Directory.Exists(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
+        }
     }
 }
