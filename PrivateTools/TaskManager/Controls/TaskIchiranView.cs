@@ -379,8 +379,18 @@ namespace TaskManager.Controls
                 }
                 else
                 {
-                    var list = ResourceManager.Instance.GetAllTaskItems();
-                    this.RefleshTaskItems(list, null);
+                    if (!this.isVisibleAddTask)
+                    {
+                        var taskList = ResourceManager.Instance.GetAllTaskItems();
+
+                        var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
+                        this.RefleshTaskItems(filtered, null);
+                    }
+                    else
+                    {
+                        var list = ResourceManager.Instance.GetAllTaskItems();
+                        this.RefleshTaskItems(list, null);
+                    }
                 }
 
                 return true;
@@ -412,16 +422,25 @@ namespace TaskManager.Controls
                     }
                     else
                     {
-                        var taskList = ResourceManager.Instance.GetAllTaskItems();
+                        // TODO: 編集と共通化
+                        if (!this.isVisibleAddTask)
+                        {
+                            var taskList = ResourceManager.Instance.GetAllTaskItems();
 
-                        var tmp = DateTime.Now;
-                        var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
-                        var thres = now.AddDays(3);
+                            var tmp = DateTime.Now;
+                            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                            var thres = now.AddDays(3);
 
-                        //now >= date
-                        // 超過、1日前、2日前、3日前
-                        var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
-                        this.RefleshTaskItems(filtered, null);
+                            //now >= date
+                            // 超過、1日前、2日前、3日前
+                            var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
+                            this.RefleshTaskItems(filtered, null);
+                        }
+                        else
+                        {
+                            var list = ResourceManager.Instance.GetAllTaskItems();
+                            this.RefleshTaskItems(list, null);
+                        }
                     }
 
                     return true;
@@ -456,11 +475,17 @@ namespace TaskManager.Controls
                 }
             }
 
+            // TODO: 共通化
             if (this.ShowingGroup != null)
             {
                 this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
             }
-            
+            else
+            {
+                var list = ResourceManager.Instance.GetAllTaskItems();
+                this.RefleshTaskItems(list, null);
+            }
+
             return true;
         }
 
@@ -542,6 +567,7 @@ namespace TaskManager.Controls
             var header = new DataGridViewButtonColumn();
 
             this.SetCommnoHeaderStyle(info.HeaderName, info.Width, info.Alignment, header);
+            header.SortMode = DataGridViewColumnSortMode.NotSortable;
             header.Tag = info;
 
             this.Columns.Add(header);
@@ -564,7 +590,7 @@ namespace TaskManager.Controls
             header.DefaultCellStyle = headerStyle;
             header.HeaderText = headerName;
             header.Resizable = DataGridViewTriState.False;
-            header.SortMode = DataGridViewColumnSortMode.NotSortable;
+            header.SortMode = DataGridViewColumnSortMode.Automatic;
 
             header.Width = headerSize;
             header.FillWeight = headerSize;
@@ -619,17 +645,11 @@ namespace TaskManager.Controls
                         var cell = row.Cells[3] as DataGridViewCell;
 
                         // TODO: Configへ
-                        var yellowZone = now.AddDays(-3);
-                        var normalZone = now.AddDays(-5);
-                        if (date > now)
-                        {
-                            cell.Style.BackColor = Color.White;
-                        }
-                        else if (now >= date || yellowZone < date)
+                        if (Utils.IsOverRedZone(date))
                         {
                             cell.Style.BackColor = Color.Red;
                         }
-                        else if (yellowZone >= date || normalZone < date)
+                        else if (Utils.IsOverYellowZone(date))
                         {
                             cell.Style.BackColor = Color.Yellow;
                         }

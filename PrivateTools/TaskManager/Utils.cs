@@ -9,6 +9,8 @@ using System.Windows.Forms;
 
 namespace TaskManager
 {
+    using TaskManager.Data;
+
     /// <summary>
     /// 汎用ユーティリティクラス
     /// </summary>
@@ -31,6 +33,52 @@ namespace TaskManager
             }
 
             return path;
+        }
+
+        public static bool IsOverRedZone(DateTime value)
+        {
+            var tmp = DateTime.Now;
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day + 1); // 繰り上げ
+            var date = new DateTime(value.Year, value.Month, value.Day);
+
+            // TODO: Configへ
+            var redZone = now.AddDays(1);
+            var normalZone = now.AddDays(3);
+            if (redZone >= date)
+            {
+                // 期限間近 or 期限超過
+                return true;
+            }
+            else if (redZone < date && normalZone > date)
+            {
+                // 1～3日前
+                return false;
+            }
+
+            return false;
+        }
+
+        public static bool IsOverYellowZone(DateTime value)
+        {
+            var tmp = DateTime.Now;
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day + 1);  // 繰り上げ
+            var date = new DateTime(value.Year, value.Month, value.Day);
+
+            // TODO: Configへ
+            var redZone = now.AddDays(1);
+            var normalZone = now.AddDays(3);
+            if (redZone >= date)
+            {
+                // 期限間近 or 期限超過
+                return false;
+            }
+            else if (redZone < date && normalZone > date)
+            {
+                // 1～3日前
+                return true;
+            }
+
+            return false;
         }
     }
 }

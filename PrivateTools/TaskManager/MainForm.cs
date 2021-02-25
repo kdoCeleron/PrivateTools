@@ -127,14 +127,10 @@ namespace TaskManager
             
             // TODO:一覧のdelete処理と統一
             var taskList = ResourceManager.Instance.GetAllTaskItems();
-
-            var tmp = DateTime.Now;
-            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
-            var thres = now.AddDays(3);
-
+            
             // now >= date
             // 超過、1日前、2日前、3日前
-            var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
+            var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
             this.DgvRecentTasks.RefleshTaskItems(filtered, null);
 
             this.RefleshTaskGroupIchiran();
