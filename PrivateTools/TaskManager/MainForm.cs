@@ -205,7 +205,7 @@ namespace TaskManager
 
             {
                 // 全タスク表示用の項目
-                var lvItem = this.LsvGroup.Items.Add("全グループ");
+                var lvItem = this.LsvGroup.Items.Add("全てのタスク");
                 var allTaskList = ResourceManager.Instance.GetAllTaskItems();
                 lvItem.SubItems.Add(string.Format("{0:D}件", allTaskList.Count));
                 lvItem.Tag = TaskGroupInfo.GetRootGroup().Key;
