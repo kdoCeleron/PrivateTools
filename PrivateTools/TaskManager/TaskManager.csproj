@@ -143,4 +143,7 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Remove Under 1Line When Release Start -->
+  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.7\StyleCop.targets" />
+  <!-- Remove Under 1Line When Release End   -->
 </Project>
