@@ -99,7 +99,7 @@ namespace TaskManager
         {
             if (File.Exists(configFilePath))
             {
-                var fullPath = Path.GetFullPath(configFilePath);
+                var fullPath = Utils.GetFullPath(configFilePath);
                 log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(fullPath));
             }
         }

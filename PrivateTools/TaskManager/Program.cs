@@ -127,7 +127,7 @@ namespace TaskManager
         private static void ReportUnhandledException(Exception e)
         {
             // 例外情報をエラーログに出力する
-            var unKnownMessage = "予期せぬエラーが発生しました。\nツール管理者へ連絡してください。";
+            var unKnownMessage = string.Format("予期せぬエラーが発生しました。\nツール管理者へ連絡してください。\n例外情報：{0}", e.ToString());
             Logger.WriteErrorLog(unKnownMessage, e);
             MessageBox.Show(unKnownMessage, "エラー");
         }

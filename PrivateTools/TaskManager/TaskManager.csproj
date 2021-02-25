@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="TaskIchiranEventArgs.cs" />
     <Compile Include="UiContext.cs" />
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="InfoViewForm.resx">
       <DependentUpon>InfoViewForm.cs</DependentUpon>
     </EmbeddedResource>

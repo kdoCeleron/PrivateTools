@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace TaskManager.Configration
 {
     using System.Text;
@@ -63,8 +65,9 @@ namespace TaskManager.Configration
             ns.Add(string.Empty, string.Empty);
 
             Config item = null;
-
-            StreamReader sr = new StreamReader(ConfigFilePath, Encoding.UTF8);
+            
+            var fullPath = Utils.GetFullPath(ConfigFilePath);
+            StreamReader sr = new StreamReader(fullPath, Encoding.UTF8);
             item = (Config)serializer.Deserialize(sr);
             sr.Close();
             Instance = item;
@@ -80,7 +83,8 @@ namespace TaskManager.Configration
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
             ns.Add(string.Empty, string.Empty);
 
-            StreamWriter sw = new StreamWriter(ConfigFilePath, false, Encoding.UTF8);
+            var fullPath = Utils.GetFullPath(ConfigFilePath);
+            StreamWriter sw = new StreamWriter(fullPath, false, Encoding.UTF8);
             serializer.Serialize(sw, Config.Instance, ns);
             sw.Close();
         }

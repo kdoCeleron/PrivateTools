@@ -36,7 +36,7 @@ namespace TaskManager
 
             KeyInfo.Initialize();
 
-            var path = taskListSavePath;
+            var path = Utils.GetFullPath(taskListSavePath);
             if (File.Exists(path))
             {
                 var text = File.ReadAllText(path);
@@ -139,7 +139,7 @@ namespace TaskManager
             }
 
             var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.Indented);
-            File.WriteAllText(taskListSavePath, jsonStr);
+            File.WriteAllText(Utils.GetFullPath(taskListSavePath), jsonStr);
         }
 
         public List<TaskGroupInfo> GetRootGroups()

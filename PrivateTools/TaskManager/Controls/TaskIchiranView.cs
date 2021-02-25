@@ -148,7 +148,7 @@ namespace TaskManager.Controls
         private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var rowIndex = e.RowIndex;
-            if (rowIndex > 0)
+            if (rowIndex >= 0)
             {
                 var row = this.Rows[rowIndex];
                 var task = this.GetTaskItemInRow(row);
