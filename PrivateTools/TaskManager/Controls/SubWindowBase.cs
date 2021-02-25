@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.SymbolStore;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SubWindowBase.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   サブ画面基底クラス
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace TaskManager.Controls
 {
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
     /// <summary>
     /// サブ画面基底クラス
     /// </summary>
@@ -50,25 +53,13 @@ namespace TaskManager.Controls
                 this.Location = new Point(posX, posY);
             }
 
-            this.Closing += OnClosing;
+            this.Closing += this.OnClosing;
 
             this.Owner.Enabled = false;
 
             this.Show();
 
             return this._tcs.Task;
-        }
-
-        /// <summary>
-        /// 画面が閉じられる際のイベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">e</param>
-        private void OnClosing(object sender, CancelEventArgs e)
-        {
-            this._tcs.TrySetResult(SubWindowResult.None);
-
-            this.Owner.Enabled = true;
         }
 
         /// <summary>
@@ -87,7 +78,7 @@ namespace TaskManager.Controls
         /// </summary>
         /// <param name="msg">msg</param>
         /// <param name="keyData">keyData</param>
-        /// <returns></returns>
+        /// <returns>ret</returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Escape)
@@ -97,6 +88,18 @@ namespace TaskManager.Controls
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// 画面が閉じられる際のイベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            this._tcs.TrySetResult(SubWindowResult.None);
+
+            this.Owner.Enabled = true;
         }
     }
 }

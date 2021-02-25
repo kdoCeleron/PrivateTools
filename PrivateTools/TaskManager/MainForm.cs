@@ -91,6 +91,40 @@ namespace TaskManager
             this.DgvAllTasksOnUpdateEvent(null, null);
 
             this.InitializeGroupList();
+
+            this.TxtFilter.TextChanged += TxtFilter_OnTextChanged;
+        }
+
+        /// <summary>
+        /// フィルタテキストボックスの入力値変更イベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
+        private void TxtFilter_OnTextChanged(object sender, EventArgs e)
+        {
+            var curText = this.TxtFilter.Text;
+
+            var target = new List<TaskItem>();
+            List<TaskItem> currentList;
+            if (this.DgvAllTasks.ShowingGroup != null)
+            {
+                currentList = this.DgvAllTasks.ShowingGroup.ChildTaskItems.ToList();
+            }
+            else
+            {
+                currentList = ResourceManager.Instance.GetAllTaskItems();
+            }
+
+            foreach (var taskItem in currentList)
+            {
+                var str = taskItem.GetItemStrs();
+                if (str.Any(x => x.Contains(curText)))
+                {
+                    target.Add(taskItem);
+                }
+            }
+
+            this.DgvAllTasks.RefleshTaskItems(target, this.DgvAllTasks.ShowingGroup);
         }
 
         private void DgvRecentTasksOnUpdateEvent(object sender, TaskIchiranEventArgs e)
@@ -111,6 +145,8 @@ namespace TaskManager
                 this.ShowAllTaskListInDgvAllTasks();
             }
 
+            this.TxtFilter_OnTextChanged(null, null);
+
             this.RefleshTaskGroupIchiran();
 
             this.isUpdatingTaskIchiran = false;
@@ -128,9 +164,7 @@ namespace TaskManager
             // TODO:一覧のdelete処理と統一
             var taskList = ResourceManager.Instance.GetAllTaskItems();
             
-            // now >= date
-            // 超過、1日前、2日前、3日前
-            var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
+            var filtered = Utils.FilterRecentLimitTask(taskList);
             this.DgvRecentTasks.RefleshTaskItems(filtered, null);
 
             this.RefleshTaskGroupIchiran();

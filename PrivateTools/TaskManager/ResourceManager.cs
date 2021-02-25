@@ -12,8 +12,6 @@ namespace TaskManager
 {
     public class ResourceManager
     {
-        private bool isInitialized = false;
-
         private static ResourceManager instance = new ResourceManager();
 
         private static string taskListSavePath = @".\taskList.json";
@@ -41,11 +39,7 @@ namespace TaskManager
             {
                 var text = File.ReadAllText(path);
                 var jsonObj = JsonConvert.DeserializeObject<TaskInfoRoot>(text);
-                //foreach (var info in jsonObj.TaskGroupListJsonObj)
-                //{
-                //    jsonObj.TaskGroupList.Add(info.Key, info);
-                //}
-
+                
                 instance.TaskInfoRoot = jsonObj;
 
                 var rootGroupKey = TaskGroupInfo.GetRootGroup().Key;
@@ -113,9 +107,7 @@ namespace TaskManager
                 instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup(), null);
                 instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup(), TaskGroupInfo.GetRootGroup());
             }
-
-            this.isInitialized = true;
-
+            
             return true;
         }
 
@@ -165,7 +157,9 @@ namespace TaskManager
         public List<TaskItem> GetAllTaskItems()
         {
             var list = new List<TaskItem>();
-            ResourceManager.Instance.ExecInnerGroupAndTasks(TaskGroupInfo.GetRootGroup(), null,
+            ResourceManager.Instance.ExecInnerGroupAndTasks(
+                TaskGroupInfo.GetRootGroup(),
+                null,
                 (task) => { list.Add(task); });
 
             return list;

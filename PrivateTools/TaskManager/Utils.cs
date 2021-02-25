@@ -16,6 +16,11 @@ namespace TaskManager
     /// </summary>
     public static class Utils
     {
+        /// <summary>
+        /// フルパスを取得します。
+        /// </summary>
+        /// <param name="path">ファイルパス</param>
+        /// <returns>取得結果</returns>
         public static string GetFullPath(string path)
         {
             if (Path.IsPathRooted(path))
@@ -26,13 +31,20 @@ namespace TaskManager
 
             // 相対パスの場合は、exeの実行パスを基点としたフルパスにする。
             var cur = Path.GetDirectoryName(Application.ExecutablePath);
-            //var cur = Environment.CurrentDirectory;
             if (cur != null)
             {
                 return Path.Combine(cur, path);
             }
 
             return path;
+        }
+
+        public static List<TaskItem> FilterRecentLimitTask(List<TaskItem> taskItem)
+        {
+            return taskItem.Where(x => 
+                    Utils.IsOverRedZone(x.DateTimeLimit)
+                    || Utils.IsOverYellowZone(x.DateTimeLimit))
+                .OrderBy(x => x.DateTimeLimit).ToList();
         }
 
         public static bool IsOverRedZone(DateTime value)

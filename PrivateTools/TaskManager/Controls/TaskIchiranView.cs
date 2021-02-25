@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using TaskManager.Data;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TaskIchiranView.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   タスク一覧コントロール
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace TaskManager.Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using TaskManager.Data;
+
     /// <summary>
     /// タスク一覧コントロール
     /// </summary>
     public class TaskIchiranView : DataGridView
     {
-        /// <summary>
-        /// 一覧更新時イベント
-        /// </summary>
-        public event EventHandler<TaskIchiranEventArgs> UpdateEvent;
-
         /// <summary>
         /// 列情報のマッピング
         /// </summary>
@@ -72,11 +75,15 @@ namespace TaskManager.Controls
         }
 
         /// <summary>
+        /// 一覧更新時イベント
+        /// </summary>
+        public event EventHandler<TaskIchiranEventArgs> UpdateEvent;
+
+        /// <summary>
         /// 表示中のタスクグループ
         /// </summary>
         public TaskGroupInfo ShowingGroup { get; private set; }
-
-
+        
         /// <summary>
         /// 初期化
         /// </summary>
@@ -91,12 +98,10 @@ namespace TaskManager.Controls
             this.AllowDrop = false;
             this.MultiSelect = false;
             this.RowHeadersVisible = false;
-            // this.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.AllowUserToOrderColumns = false;
             this.ScrollBars = ScrollBars.Vertical;
             this.BackgroundColor = SystemColors.ControlLight;
-            // this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.CellDoubleClick += OnCellDoubleClick;
+            this.CellDoubleClick += this.OnCellDoubleClick;
 
             var style = new DataGridViewCellStyle();
             style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -109,15 +114,11 @@ namespace TaskManager.Controls
 
             this.ColumnHeadersDefaultCellStyle = style;
             this.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-
-            //this.CellClick += this.OnCellClick;
-            //this.CellEndEdit += this.OnCellEndEdit;
-            //this.EditingControlShowing += this.OnEditingControlShowing;
+            
             this.UserAddedRow += this.OnUserAddedRow;
             this.Scroll += this.ScrollHandler;
-            //this.CellEnter += this.CellEnterHandler;
 
-            this.CellContentClick += OnCellContentClick;
+            this.CellContentClick += this.OnCellContentClick;
 
             foreach (var info in this.columnInfoMap)
             {
@@ -141,25 +142,6 @@ namespace TaskManager.Controls
         }
 
         /// <summary>
-        /// セルのダブルクリックイベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">e</param>
-        private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var rowIndex = e.RowIndex;
-            if (rowIndex >= 0)
-            {
-                var row = this.Rows[rowIndex];
-                var task = this.GetTaskItemInRow(row);
-                if (task != null)
-                {
-                    var ret = await ExecuteEdit(task);
-                }
-            }
-        }
-
-        /// <summary>
         /// /タスク一覧の内容を指定のデータでリフレッシュします。
         /// </summary>
         /// <param name="taskItems">表示対象のタスク</param>
@@ -179,7 +161,26 @@ namespace TaskManager.Controls
         }
 
         /// <summary>
-        ///一覧中の全てのタスクをクリアします。
+        /// セルのダブルクリックイベント
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="e">e</param>
+        private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var rowIndex = e.RowIndex;
+            if (rowIndex >= 0)
+            {
+                var row = this.Rows[rowIndex];
+                var task = this.GetTaskItemInRow(row);
+                if (task != null)
+                {
+                    var ret = await this.ExecuteEdit(task);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 一覧中の全てのタスクをクリアします。
         /// </summary>
         private void ClearAllTaskItems()
         {
@@ -208,7 +209,7 @@ namespace TaskManager.Controls
             dgvRow.Tag = item;
 
             var menu = new ContextMenuStrip();
-            menu.ItemClicked += MenuOnItemClicked;
+            menu.ItemClicked += this.MenuOnItemClicked;
             menu.Items.Add("クリップボードにコピー");
             dgvRow.ContextMenuStrip = menu;
 
@@ -399,7 +400,7 @@ namespace TaskManager.Controls
                     {
                         var taskList = ResourceManager.Instance.GetAllTaskItems();
 
-                        var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
+                        var filtered = Utils.FilterRecentLimitTask(taskList);
                         this.RefleshTaskItems(filtered, null);
                     }
                     else
@@ -443,8 +444,7 @@ namespace TaskManager.Controls
                         {
                             var taskList = ResourceManager.Instance.GetAllTaskItems();
 
-                            var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
-
+                            var filtered = Utils.FilterRecentLimitTask(taskList);
                             this.RefleshTaskItems(filtered, null);
                         }
                         else
@@ -498,8 +498,7 @@ namespace TaskManager.Controls
                 {
                     var taskList = ResourceManager.Instance.GetAllTaskItems();
 
-                    var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
-
+                    var filtered = Utils.FilterRecentLimitTask(taskList);
                     this.RefleshTaskItems(filtered, null);
                 }
                 else
@@ -726,6 +725,11 @@ namespace TaskManager.Controls
             this.CellReadOnly(e.Row.Index, e.Row);
         }
 
+        /// <summary>
+        /// セルを編集不可状態にします。
+        /// </summary>
+        /// <param name="rowIndx">行index</param>
+        /// <param name="row">行</param>
         private void CellReadOnly(int rowIndx, DataGridViewRow row)
         {
             for (var index = 1; index < row.Cells.Count; index++)
@@ -780,10 +784,6 @@ namespace TaskManager.Controls
         /// <param name="e">e</param>
         private void ScrollHandler(object sender, ScrollEventArgs e)
         {
-            // スクロール時に選択状態にあるセルの内容がスクロール後の他のセルの内容が
-            // 映り込んでしまい、文字が潰れる現象が発生した。
-            // スクロールイベントをフックし、セルの選択状態を解除することで、本現象が発生しないようにする。
-            // 本処理の動作を確認したところ、選択セルのテキストカーソルが消えることはなかった
             this.ClearSelection();
         }
 

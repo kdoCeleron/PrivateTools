@@ -1,8 +1,16 @@
-﻿
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Config.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   設定ファイル管理クラス
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace TaskManager.Configration
 {
-    using System.Text;
     using System.IO;
+    using System.Text;
     using System.Xml.Serialization;
 
     /// <summary>
@@ -39,12 +47,12 @@ namespace TaskManager.Configration
         /// </summary>
         public Config()
         {
+            // Do Noting
         }
 
         #endregion
 
         #region プロパティ
-
 
         #endregion
 

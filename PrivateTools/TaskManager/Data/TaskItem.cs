@@ -99,18 +99,33 @@ namespace TaskManager.Data
         public string GetInfoText(string delimiter = "\t")
         {
             var ret = string.Empty;
+            var items = this.GetItemStrs();
+            for (int i = 0; i < items.Count; i++)
+            {
+                ret += items[i];
+                if (i != items.Count - 1)
+                {
+                    ret += delimiter;
+                }
+            }
+            
+            return ret;
+        }
+
+        public List<string> GetItemStrs()
+        {
+            var ret = new List<string>();
             if (this.Group != null)
             {
                 if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(this.Group))
                 {
-                    ret += ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group].Name;
-                    ret += delimiter;
+                    ret.Add(ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group].Name);
                 }
             }
 
-            ret += this.Title + delimiter;
-            ret += this.DateTimeLimit + delimiter;
-            ret += this.Memo + delimiter;
+            ret.Add(this.Title);
+            ret.Add(this.DateTimeLimit.ToString());
+            ret.Add(this.Memo);
 
             return ret;
         }
