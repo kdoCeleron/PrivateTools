@@ -366,7 +366,7 @@ namespace TaskManager.Controls
                 {
                     if (item.Group.Equals(groupKey) || this.ShowingGroup == null)
                     {
-                        ResourceManager.Instance.TaskInfoRoot.AddTaskItem(item.Group, item);
+                        ResourceManager.Instance.AddTaskItem(item.Group, item);
                         this.AddRow(item);
                     }
                 }
@@ -389,7 +389,7 @@ namespace TaskManager.Controls
             var ret = await win.ShowWindow(ResourceManager.Instance.MainForm);
             if (ret == SubWindowResult.Submit)
             {
-                ResourceManager.Instance.TaskInfoRoot.AddTaskItem(taskItem.Group, taskItem);
+                ResourceManager.Instance.AddTaskItem(taskItem.Group, taskItem);
                 if (this.ShowingGroup != null)
                 {
                     this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
@@ -431,7 +431,7 @@ namespace TaskManager.Controls
                 if (item != null)
                 {
                     this.Rows.Remove(row);
-                    ResourceManager.Instance.TaskInfoRoot.RemoveTaskItem(item);
+                    ResourceManager.Instance.RemoveTaskItem(item);
 
                     if (this.ShowingGroup != null)
                     {
@@ -480,10 +480,7 @@ namespace TaskManager.Controls
 
             if (taskItem.Group != null)
             {
-                if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(taskItem.Group))
-                {
-                    ResourceManager.Instance.AddTaskItem(taskItem.Group, newItem);
-                }
+                ResourceManager.Instance.AddTaskItem(taskItem.Group, newItem);
             }
 
             // TODO: 共通化
@@ -528,7 +525,7 @@ namespace TaskManager.Controls
                     string setValue = string.Empty;
                     if (columnIndex == 1)
                     {
-                        setValue = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.Group].Name;
+                        setValue = ResourceManager.Instance.GetGroupName(item.Group);
                     }
                     else if (columnIndex == 2)
                     {

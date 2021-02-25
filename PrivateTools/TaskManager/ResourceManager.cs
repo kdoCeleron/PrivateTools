@@ -10,12 +10,29 @@ using TaskManager.Data;
 
 namespace TaskManager
 {
+    /// <summary>
+    /// リソース管理
+    /// </summary>
     public class ResourceManager
     {
+        /// <summary>
+        /// シングルトンインスタンス
+        /// </summary>
         private static ResourceManager instance = new ResourceManager();
 
+        /// <summary>
+        /// タスク情報保存ファイル
+        /// </summary>
         private static string taskListSavePath = @".\taskList.json";
 
+        /// <summary>
+        /// タスク情報
+        /// </summary>
+        private TaskInfoRoot TaskInfoRoot;
+
+        /// <summary>
+        /// シングルトンインスタンス
+        /// </summary>
         public static ResourceManager Instance
         {
             get
@@ -24,10 +41,15 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// メイン画面への参照
+        /// </summary>
         public Form MainForm { get; set; }
 
-        public TaskInfoRoot TaskInfoRoot;
-
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <returns></returns>
         public bool Initialize()
         {
             this.TaskInfoRoot = new TaskInfoRoot();
@@ -188,6 +210,42 @@ namespace TaskManager
         public void RemoveTaskItem(TaskItem taskItem)
         {
             instance.TaskInfoRoot.RemoveTaskItem(taskItem);
+        }
+
+        public TaskGroupInfo GetGroupInfo(KeyInfo groupKey)
+        {
+            if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(groupKey))
+            {
+                return instance.TaskInfoRoot.TaskGroupList[groupKey];
+            }
+
+            return null;
+        }
+
+        public string GetGroupName(KeyInfo groupKey)
+        {
+            var group = instance.GetGroupInfo(groupKey);
+            if (group != null)
+            {
+                return group.Name;
+            }
+
+            return string.Empty;
+        }
+
+        public List<TaskGroupInfo> GetGroupList()
+        {
+            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList                             
+                .Select(x => x.Value)
+                .ToList();
+        }
+
+        public List<TaskGroupInfo> GetGroupListExcludeRoot()
+        {
+            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList
+                .Where(x => !x.Key.Equals(TaskGroupInfo.GetRootGroup().Key))
+                .Select(x => x.Value)
+                .ToList();
         }
         
         public void ExecInnerGroupAndTasks(TaskGroupInfo rootGroup, Action<TaskGroupInfo> groupAction, Action<TaskItem> taskAction)

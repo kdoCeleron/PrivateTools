@@ -166,7 +166,10 @@ namespace TaskManager.Data
         /// <param name="taskItem">タスク情報</param>
         public void AddTaskItem(KeyInfo group, TaskItem taskItem)
         {
-            this.TaskGroupList[group].ChildTaskItems.Add(taskItem);
+            if (this.TaskGroupList.ContainsKey(group))
+            {
+                this.TaskGroupList[group].ChildTaskItems.Add(taskItem);
+            }
         }
 
         /// <summary>

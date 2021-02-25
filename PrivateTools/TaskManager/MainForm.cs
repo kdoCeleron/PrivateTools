@@ -209,7 +209,7 @@ namespace TaskManager
                     }
                     else
                     {
-                        var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                        var group = ResourceManager.Instance.GetGroupInfo(selected);
 
                         this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
 
@@ -258,7 +258,7 @@ namespace TaskManager
                 // TODO:再帰
                 foreach (var childGroup in taskGroupInfo.ChildGroups)
                 {
-                    var group = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[childGroup];
+                    var group = ResourceManager.Instance.GetGroupInfo(childGroup);
                     var childTaskName = group.Name;
                     var childTaskNum = group.ChildTaskItems.Count;
                     var childLvItem = this.LsvGroup.Items.Add("  |-- " + childTaskName);
@@ -304,7 +304,7 @@ namespace TaskManager
                 var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    var item = ResourceManager.Instance.GetGroupInfo(selected);
                     parent = item;
                 }
             }
@@ -323,10 +323,10 @@ namespace TaskManager
                 var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    var item = ResourceManager.Instance.GetGroupInfo(selected);
                     if (!selected.Equals(TaskGroupInfo.GetRootGroup().Key) && !selected.Equals(TaskGroupInfo.GetDefaultGroup().Key))
                     {
-                        ResourceManager.Instance.TaskInfoRoot.RemoveTaskGroup(item);
+                        ResourceManager.Instance.RemoveTaskGroup(item);
                         RefleshTaskGroupIchiran();
                     }
                 }
@@ -340,11 +340,11 @@ namespace TaskManager
                 var selected = this.LsvGroup.SelectedItems[0].Tag as KeyInfo;
                 if (selected != null)
                 {
-                    var item = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[selected];
+                    var item = ResourceManager.Instance.GetGroupInfo(selected);
                     if (!selected.Equals(TaskGroupInfo.GetRootGroup().Key) && !selected.Equals(TaskGroupInfo.GetDefaultGroup().Key))
                     {
                         var win = new TaskGroupEditForm();
-                        win.Initialize(item, false, ResourceManager.Instance.TaskInfoRoot.TaskGroupList[item.ParentGroup]);
+                        win.Initialize(item, false, ResourceManager.Instance.GetGroupInfo(item.ParentGroup));
                         var ret = await win.ShowWindow(this);
 
                         RefleshTaskGroupIchiran();

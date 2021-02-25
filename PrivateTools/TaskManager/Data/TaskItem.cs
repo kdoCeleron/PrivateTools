@@ -88,7 +88,7 @@ namespace TaskManager.Data
         public TaskGroupInfo GetGroup()
         {
             // TODO:別の箇所に共通関数化
-            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group];
+            return ResourceManager.Instance.GetGroupInfo(this.Group);
         }
 
         /// <summary>
@@ -117,10 +117,7 @@ namespace TaskManager.Data
             var ret = new List<string>();
             if (this.Group != null)
             {
-                if (ResourceManager.Instance.TaskInfoRoot.TaskGroupList.ContainsKey(this.Group))
-                {
-                    ret.Add(ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.Group].Name);
-                }
+                ret.Add(ResourceManager.Instance.GetGroupName(this.Group));
             }
 
             ret.Add(this.Title);

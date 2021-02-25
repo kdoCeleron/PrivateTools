@@ -43,8 +43,7 @@ namespace TaskManager
 
         public bool Initialize(TaskGroupInfo groupInfo, TaskItem taskItem)
         {
-            var list = ResourceManager.Instance.TaskInfoRoot.TaskGroupList
-                .Where(x => !x.Key.Equals(TaskGroupInfo.GetRootGroup().Key)).Select(x => x.Value).ToArray();
+            var list = ResourceManager.Instance.GetGroupListExcludeRoot().ToArray();
             foreach (var item in list)
             {
                 this.CmbGroup.Items.Add(item);
@@ -63,12 +62,13 @@ namespace TaskManager
                 }
             }
 
-            this.CmbGroup.SelectedItem = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[taskItem.Group];
+            this.CmbGroup.SelectedItem = ResourceManager.Instance.GetGroupInfo(taskItem.Group);
             this.TxtTitle.Text = taskItem.Title;
             this.DtpLimit.Value = taskItem.DateTimeLimit;
             this.TxtMemo.Text = taskItem.Memo;
 
             this.CmbAttachFiles.Enabled = false;
+
             // TODO:実装
             //foreach (var file in taskItem.AttachFile)
             //{
@@ -147,7 +147,7 @@ namespace TaskManager
             {   
                 if(!this.target.Group.Equals(this.CmbGroup.SelectedItem))
                 {
-                    var prevParent = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.target.Group];
+                    var prevParent = ResourceManager.Instance.GetGroupInfo(this.target.Group);
                     if (prevParent != null)
                     {
                         if (prevParent.ChildTaskItems.Contains(this.target))
@@ -165,7 +165,7 @@ namespace TaskManager
                         this.target.Group = ((TaskGroupInfo)this.CmbGroup.SelectedItem).Key;
                     }
 
-                    var parent = ResourceManager.Instance.TaskInfoRoot.TaskGroupList[this.target.Group];
+                    var parent = ResourceManager.Instance.GetGroupInfo(this.target.Group);
                     parent.ChildTaskItems.Add(this.target);
                 }
 

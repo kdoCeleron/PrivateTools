@@ -35,7 +35,7 @@ namespace TaskManager
         {
             this.isAdd = isAddOperation;
             
-            foreach (var item in ResourceManager.Instance.TaskInfoRoot.TaskGroupList.Values)
+            foreach (var item in ResourceManager.Instance.GetGroupList())
             {
                 this.CmbParentGroup.Items.Add(item);
             }
