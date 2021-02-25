@@ -267,6 +267,8 @@ namespace TaskManager.Controls
 
                     var curItem = this.GetTaskItemInRow(row);
 
+                    var ret = false;
+
                     // 完了済みタスクかどうか
                     var isCompleted = curItem != null ? curItem.IsComeplate : false;
                     if (isCompleted)
@@ -278,6 +280,7 @@ namespace TaskManager.Controls
                             if (item != null)
                             {
                                 item.IsComeplate = false;
+                                ret = true;
                             }
                         }
                     }
@@ -287,27 +290,27 @@ namespace TaskManager.Controls
                         if (isAdd)
                         {
                             // 追加
-                            await this.ExecuteAdd();
+                            ret = await this.ExecuteAdd();
                         }
                         else if (isEdit)
                         {
                             // 編集
                             if (curItem != null)
                             {
-                                await this.ExecuteEdit(curItem);
+                                ret = await this.ExecuteEdit(curItem);
                             }
                         }
                         else if (isDelete)
                         {
                             // 削除
-                            this.ExecuteDelete(row);
+                            ret = this.ExecuteDelete(row);
                         }
                         else if (isCopy)
                         {
                             // 複製
                             if (curItem != null)
                             {
-                                this.ExecuteCopy(curItem);
+                                ret = this.ExecuteCopy(curItem);
                             }
                         }
                         else if (isComplete)
@@ -316,11 +319,24 @@ namespace TaskManager.Controls
                             if (curItem != null)
                             {
                                 curItem.IsComeplate = true;
+                                ret = true;
                             }
                         }
                     }
                     
                     this.UpdateCellStatus();
+
+                    if (ret)
+                    {
+                        if (this.UpdateEvent != null)
+                        {
+                            var args = new TaskIchiranEventArgs();
+                            args.GroupItem = this.ShowingGroup;
+                            args.TaskItem = new List<TaskItem>();
+
+                            this.UpdateEvent(this, args);
+                        }
+                    }
                 }
             }
         }
@@ -427,13 +443,8 @@ namespace TaskManager.Controls
                         {
                             var taskList = ResourceManager.Instance.GetAllTaskItems();
 
-                            var tmp = DateTime.Now;
-                            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
-                            var thres = now.AddDays(3);
+                            var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
 
-                            //now >= date
-                            // 超過、1日前、2日前、3日前
-                            var filtered = taskList.Where(x => x.DateTimeLimit < thres).OrderBy(x => x.DateTimeLimit).ToList();
                             this.RefleshTaskItems(filtered, null);
                         }
                         else
@@ -482,8 +493,20 @@ namespace TaskManager.Controls
             }
             else
             {
-                var list = ResourceManager.Instance.GetAllTaskItems();
-                this.RefleshTaskItems(list, null);
+                // TODO: 編集と共通化
+                if (!this.isVisibleAddTask)
+                {
+                    var taskList = ResourceManager.Instance.GetAllTaskItems();
+
+                    var filtered = taskList.Where(x => Utils.IsOverRedZone(x.DateTimeLimit) || Utils.IsOverYellowZone(x.DateTimeLimit)).OrderBy(x => x.DateTimeLimit).ToList();
+
+                    this.RefleshTaskItems(filtered, null);
+                }
+                else
+                {
+                    var list = ResourceManager.Instance.GetAllTaskItems();
+                    this.RefleshTaskItems(list, null);
+                }
             }
 
             return true;
@@ -671,16 +694,6 @@ namespace TaskManager.Controls
                         }
                     }
                 }
-            }
-
-            if (this.UpdateEvent != null)
-            {
-                var args = new TaskIchiranEventArgs();
-                args.GroupItem = this.ShowingGroup;
-                args.TaskItem = new List<TaskItem>();
-                args.TaskItem.AddRange(taskList);
-
-                this.UpdateEvent(this, args);
             }
         }
 
