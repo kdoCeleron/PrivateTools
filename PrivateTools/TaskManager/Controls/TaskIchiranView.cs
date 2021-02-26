@@ -99,7 +99,7 @@ namespace TaskManager.Controls
             this.MultiSelect = false;
             this.RowHeadersVisible = false;
             this.AllowUserToOrderColumns = false;
-            this.ScrollBars = ScrollBars.Vertical;
+            this.ScrollBars = ScrollBars.Both;
             this.BackgroundColor = SystemColors.ControlLight;
             this.CellDoubleClick += this.OnCellDoubleClick;
 
@@ -174,7 +174,10 @@ namespace TaskManager.Controls
                 var task = this.GetTaskItemInRow(row);
                 if (task != null)
                 {
-                    var ret = await this.ExecuteEdit(task);
+                    if (!task.IsComeplate)
+                    {
+                        var ret = await this.ExecuteEdit(task);
+                    }
                 }
             }
         }
@@ -274,7 +277,7 @@ namespace TaskManager.Controls
                     var isCompleted = curItem != null ? curItem.IsComeplate : false;
                     if (isCompleted)
                     {
-                        // 完了済みの場合は取り消しのみ許可
+                        // 完了済みの場合は取り消し,削除のみ許可
                         if (isTorikeshi)
                         {
                             var item = this.GetTaskItemInRow(row);
@@ -283,6 +286,10 @@ namespace TaskManager.Controls
                                 item.IsComeplate = false;
                                 ret = true;
                             }
+                        }
+                        else if (isDelete)
+                        {
+                            ret = this.ExecuteDelete(row);
                         }
                     }
                     else
@@ -608,7 +615,7 @@ namespace TaskManager.Controls
 
             header.DefaultCellStyle = headerStyle;
             header.HeaderText = headerName;
-            header.Resizable = DataGridViewTriState.False;
+            header.Resizable = DataGridViewTriState.True;
             header.SortMode = DataGridViewColumnSortMode.Automatic;
 
             header.Width = headerSize;

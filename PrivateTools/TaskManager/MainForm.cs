@@ -181,15 +181,14 @@ namespace TaskManager
 
         private void InitializeGroupList()
         {
-            // シンボル一覧の設定
             this.LsvGroup.HideSelection = false;
             this.LsvGroup.FullRowSelect = true;
             this.LsvGroup.MultiSelect = false;
             this.LsvGroup.GridLines = true;
             this.LsvGroup.View = View.Details;
             this.LsvGroup.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            this.LsvGroup.ColumnWidthChanging += this.SymbolListView_OnColumnWidthChanging;
-            this.LsvGroup.SelectedIndexChanged += LsvGroupOnSelectedIndexChanged;
+            this.LsvGroup.ColumnWidthChanging += this.LsvGroup_OnColumnWidthChanging;
+            this.LsvGroup.SelectedIndexChanged += this.LsvGroupOnSelectedIndexChanged;
             this.LsvGroup.ShowItemToolTips = true;
 
             this.RefleshTaskGroupIchiran();
@@ -270,7 +269,7 @@ namespace TaskManager
             this.LsvGroup.EndUpdate();
         }
 
-        private void SymbolListView_OnColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void LsvGroup_OnColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             var maxColumnIdx = this.LsvGroup.Columns.Count - 1;
 
