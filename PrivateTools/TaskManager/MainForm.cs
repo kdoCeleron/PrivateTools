@@ -167,6 +167,8 @@ namespace TaskManager
             var filtered = Utils.FilterRecentLimitTask(taskList);
             this.DgvRecentTasks.RefleshTaskItems(filtered, null);
 
+            this.TxtFilter_OnTextChanged(null, null);
+
             this.RefleshTaskGroupIchiran();
 
             this.isUpdatingTaskIchiran = false;

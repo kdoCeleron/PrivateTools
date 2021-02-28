@@ -138,7 +138,6 @@ namespace TaskManager.Controls
             }
 
             this.UpdateCellStatus();
-            this.SetShowScrollBar();
         }
 
         /// <summary>
@@ -168,12 +167,20 @@ namespace TaskManager.Controls
         private async void OnCellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             var rowIndex = e.RowIndex;
+            var columnIndex = e.ColumnIndex;
             if (rowIndex >= 0)
             {
                 var row = this.Rows[rowIndex];
                 var task = this.GetTaskItemInRow(row);
                 if (task != null)
                 {
+                    var cell = row.Cells[columnIndex];
+                    if (cell != null && cell is DataGridViewButtonCell)
+                    {
+                        // ボタンのセルは反応させない
+                        return;
+                    }
+
                     if (!task.IsComeplate)
                     {
                         var ret = await this.ExecuteEdit(task);
@@ -740,44 +747,6 @@ namespace TaskManager.Controls
             {
                 var cell = this[index, rowIndx];
                 cell.ReadOnly = true;
-            }
-        }
-
-        /// <summary>
-        /// スクロールバーの描画を設定します
-        /// </summary>
-        private void SetShowScrollBar()
-        {
-            foreach (Control control in this.Controls)
-            {
-                if (control is VScrollBar)
-                {
-                    var vsb = (VScrollBar)control;
-                    vsb.Visible = true;
-                    vsb.VisibleChanged += new EventHandler(this.ScrollBarOnVisibleChanged);
-                    vsb.BackColor = Color.Black;
-                }
-            }
-        }
-
-        /// <summary>
-        /// スクロールバーの表示更新イベント
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">e</param>
-        private void ScrollBarOnVisibleChanged(object sender, EventArgs e)
-        {
-            var scrollBar = sender as VScrollBar;
-            if (scrollBar == null)
-            {
-                return;
-            }
-
-            if (!scrollBar.Visible)
-            {
-                scrollBar.Location = new Point(this.ClientRectangle.Width - scrollBar.Width - 1, 1);
-                scrollBar.Size = new Size(scrollBar.Width, this.ClientRectangle.Height - 2);
-                scrollBar.Show();
             }
         }
 
