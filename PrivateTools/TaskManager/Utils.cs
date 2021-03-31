@@ -49,8 +49,8 @@ namespace TaskManager
 
         public static bool IsOverRedZone(DateTime value)
         {
-            var tmp = DateTime.Now;
-            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day + 1); // 繰り上げ
+            var tmp = DateTime.Now.AddDays(1);
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day); // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
 
             // TODO: Configへ
@@ -72,8 +72,8 @@ namespace TaskManager
 
         public static bool IsOverYellowZone(DateTime value)
         {
-            var tmp = DateTime.Now;
-            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day + 1);  // 繰り上げ
+            var tmp = DateTime.Now.AddDays(1);
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);  // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
 
             // TODO: Configへ
