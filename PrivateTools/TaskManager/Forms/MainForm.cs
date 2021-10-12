@@ -50,6 +50,8 @@ namespace TaskManager.Forms
 
             this.Load += this.OnLoad;
             this.Closing += this.OnClosing;
+
+            Config.Instance.ReadConfig();
         }
 
         /// <summary>
@@ -482,6 +484,14 @@ namespace TaskManager.Forms
             {
                 System.Diagnostics.Process.Start(dir);
             }
+        }
+
+        private void btnEditConfig_Click(object sender, EventArgs e)
+        {
+            var win = new ConfigEditForm();
+            win.Initialize(Config.Instance.EditableItems);
+
+            var ret = win.ShowWindow(this);
         }
     }
 }

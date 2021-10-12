@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
+  <EditableItems>
+    <IsInitShowMainForm>true</IsInitShowMainForm>
     <ThresDaysRed>1</ThresDaysRed>
     <ThresDaysYellow>3</ThresDaysYellow>
+  </EditableItems>
 </Config>

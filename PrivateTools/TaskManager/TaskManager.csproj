@@ -67,11 +67,18 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\DataGridColumnInfo.cs" />
+    <Compile Include="ConfigrationData\EditableConfigData.cs" />
     <Compile Include="Data\KeyInfo.cs" />
     <Compile Include="Data\TaskGroupInfo.cs" />
     <Compile Include="Data\TaskInfoRoot.cs" />
     <Compile Include="Data\TaskItem.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Forms\ConfigEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConfigEditForm.Designer.cs">
+      <DependentUpon>ConfigEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InfoViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +110,9 @@
     <Compile Include="TaskIchiranEventArgs.cs" />
     <Compile Include="UiContext.cs" />
     <Compile Include="Utils.cs" />
+    <EmbeddedResource Include="Forms\ConfigEditForm.resx">
+      <DependentUpon>ConfigEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoViewForm.resx">
       <DependentUpon>InfoViewForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,9 +147,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ConfigrationData\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Configs\Config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

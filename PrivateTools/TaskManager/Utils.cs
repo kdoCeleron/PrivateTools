@@ -65,8 +65,8 @@ namespace TaskManager
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day); // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
             
-            var redZone = now.AddDays(Config.Instance.ThresDaysRed);
-            var normalZone = now.AddDays(Config.Instance.ThresDaysYellow);
+            var redZone = now.AddDays(Config.Instance.EditableItems.ThresDaysRed);
+            var normalZone = now.AddDays(Config.Instance.EditableItems.ThresDaysYellow);
             if (redZone >= date)
             {
                 // 期限間近 or 期限超過
@@ -92,8 +92,8 @@ namespace TaskManager
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);  // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
 
-            var redZone = now.AddDays(Config.Instance.ThresDaysRed);
-            var normalZone = now.AddDays(Config.Instance.ThresDaysYellow);
+            var redZone = now.AddDays(Config.Instance.EditableItems.ThresDaysRed);
+            var normalZone = now.AddDays(Config.Instance.EditableItems.ThresDaysYellow);
             if (redZone >= date)
             {
                 // 期限間近 or 期限超過

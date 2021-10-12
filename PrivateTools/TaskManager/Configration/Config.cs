@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using TaskManager.ConfigrationData;
+
 namespace TaskManager.Configration
 {
     using System.IO;
@@ -55,14 +57,9 @@ namespace TaskManager.Configration
         #region プロパティ
 
         /// <summary>
-        /// 赤色表示のしきい値
+        /// 変更可能設定
         /// </summary>
-        public int ThresDaysRed { get; set; }
-
-        /// <summary>
-        /// 黄色表示のしきい値
-        /// </summary>
-        public int ThresDaysYellow { get; set; }
+        public EditableConfigData EditableItems { get; set; }
 
         #endregion
 
