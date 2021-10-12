@@ -79,12 +79,6 @@
     <Compile Include="Forms\ConfigEditForm.Designer.cs">
       <DependentUpon>ConfigEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\InfoViewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InfoViewForm.Designer.cs">
-      <DependentUpon>InfoViewForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -112,9 +106,6 @@
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="Forms\ConfigEditForm.resx">
       <DependentUpon>ConfigEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\InfoViewForm.resx">
-      <DependentUpon>InfoViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -36,9 +36,9 @@ namespace TaskManager.Forms
             this.LabelDateTime = new System.Windows.Forms.Label();
             this.PanelTop = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnEditConfig = new System.Windows.Forms.Button();
             this.BtnOutputCsv = new System.Windows.Forms.Button();
             this.BtnOpenExecFolder = new System.Windows.Forms.Button();
-            this.BtnInfos = new System.Windows.Forms.Button();
             this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelRecentTasks = new System.Windows.Forms.Label();
@@ -58,7 +58,6 @@ namespace TaskManager.Forms
             this.LabelTaskView = new System.Windows.Forms.Label();
             this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
-            this.btnEditConfig = new System.Windows.Forms.Button();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -103,13 +102,22 @@ namespace TaskManager.Forms
             this.panel2.Controls.Add(this.btnEditConfig);
             this.panel2.Controls.Add(this.BtnOutputCsv);
             this.panel2.Controls.Add(this.BtnOpenExecFolder);
-            this.panel2.Controls.Add(this.BtnInfos);
             this.panel2.Controls.Add(this.DgvRecentTasks);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 25);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1043, 145);
             this.panel2.TabIndex = 3;
+            // 
+            // btnEditConfig
+            // 
+            this.btnEditConfig.Location = new System.Drawing.Point(956, 32);
+            this.btnEditConfig.Name = "btnEditConfig";
+            this.btnEditConfig.Size = new System.Drawing.Size(75, 23);
+            this.btnEditConfig.TabIndex = 4;
+            this.btnEditConfig.Text = "設定変更";
+            this.btnEditConfig.UseVisualStyleBackColor = true;
+            this.btnEditConfig.Click += new System.EventHandler(this.btnEditConfig_Click);
             // 
             // BtnOutputCsv
             // 
@@ -130,16 +138,6 @@ namespace TaskManager.Forms
             this.BtnOpenExecFolder.Text = "フォルダを開く";
             this.BtnOpenExecFolder.UseVisualStyleBackColor = true;
             this.BtnOpenExecFolder.Click += new System.EventHandler(this.BtnOpenExecFolder_Click);
-            // 
-            // BtnInfos
-            // 
-            this.BtnInfos.Location = new System.Drawing.Point(956, 3);
-            this.BtnInfos.Name = "BtnInfos";
-            this.BtnInfos.Size = new System.Drawing.Size(75, 23);
-            this.BtnInfos.TabIndex = 1;
-            this.BtnInfos.Text = "情報";
-            this.BtnInfos.UseVisualStyleBackColor = true;
-            this.BtnInfos.Click += new System.EventHandler(this.BtnInfos_Click);
             // 
             // DgvRecentTasks
             // 
@@ -321,16 +319,6 @@ namespace TaskManager.Forms
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
             // 
-            // btnEditConfig
-            // 
-            this.btnEditConfig.Location = new System.Drawing.Point(956, 32);
-            this.btnEditConfig.Name = "btnEditConfig";
-            this.btnEditConfig.Size = new System.Drawing.Size(75, 23);
-            this.btnEditConfig.TabIndex = 4;
-            this.btnEditConfig.Text = "設定変更";
-            this.btnEditConfig.UseVisualStyleBackColor = true;
-            this.btnEditConfig.Click += new System.EventHandler(this.btnEditConfig_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -383,7 +371,6 @@ namespace TaskManager.Forms
         private System.Windows.Forms.ColumnHeader ColumnTaskNum;
         private System.Windows.Forms.Label LblDisplayGroup;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button BtnInfos;
         private System.Windows.Forms.Button BtnOpenExecFolder;
         private System.Windows.Forms.Button BtnOutputCsv;
         private System.Windows.Forms.Label label2;

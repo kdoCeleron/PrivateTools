@@ -432,18 +432,7 @@ namespace TaskManager.Forms
                 }
             }
         }
-
-        /// <summary>
-        /// 情報ボタン押下時イベント
-        /// </summary>
-        /// <param name="sender">イベント送信オブジェクト</param>
-        /// <param name="e">イベント引数</param>
-        private async void BtnInfos_Click(object sender, EventArgs e)
-        {
-            var win = new InfoViewForm();
-            var ret = await win.ShowWindow(this);
-        }
-
+        
         /// <summary>
         /// フォルダを開くボタン押下時イベント
         /// </summary>
