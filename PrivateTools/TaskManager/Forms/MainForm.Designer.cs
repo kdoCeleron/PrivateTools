@@ -1,7 +1,7 @@
 ﻿
 using TaskManager.Controls;
 
-namespace TaskManager
+namespace TaskManager.Forms
 {
     partial class MainForm
     {

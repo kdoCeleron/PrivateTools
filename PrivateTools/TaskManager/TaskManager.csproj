@@ -68,41 +68,41 @@
     <Compile Include="Data\TaskInfoRoot.cs" />
     <Compile Include="Data\TaskItem.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="InfoViewForm.cs">
+    <Compile Include="Forms\InfoViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoViewForm.Designer.cs">
+    <Compile Include="Forms\InfoViewForm.Designer.cs">
       <DependentUpon>InfoViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Logger.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceManager.cs" />
-    <Compile Include="TaskEditForm.cs">
+    <Compile Include="Forms\TaskEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TaskEditForm.Designer.cs">
+    <Compile Include="Forms\TaskEditForm.Designer.cs">
       <DependentUpon>TaskEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TaskGroupEditForm.cs">
+    <Compile Include="Forms\TaskGroupEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TaskGroupEditForm.Designer.cs">
+    <Compile Include="Forms\TaskGroupEditForm.Designer.cs">
       <DependentUpon>TaskGroupEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TaskIchiranEventArgs.cs" />
     <Compile Include="UiContext.cs" />
     <Compile Include="Utils.cs" />
-    <EmbeddedResource Include="InfoViewForm.resx">
+    <EmbeddedResource Include="Forms\InfoViewForm.resx">
       <DependentUpon>InfoViewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -114,10 +114,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="TaskEditForm.resx">
+    <EmbeddedResource Include="Forms\TaskEditForm.resx">
       <DependentUpon>TaskEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TaskGroupEditForm.resx">
+    <EmbeddedResource Include="Forms\TaskGroupEditForm.resx">
       <DependentUpon>TaskGroupEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

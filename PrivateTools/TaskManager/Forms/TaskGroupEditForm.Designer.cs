@@ -1,4 +1,4 @@
-﻿namespace TaskManager
+﻿namespace TaskManager.Forms
 {
     partial class TaskGroupEditForm
     {

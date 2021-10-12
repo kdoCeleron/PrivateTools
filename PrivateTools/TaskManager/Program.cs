@@ -1,4 +1,6 @@
-﻿namespace TaskManager
+﻿using TaskManager.Forms;
+
+namespace TaskManager
 {
     using System;
     using System.Collections.Generic;

@@ -19,7 +19,7 @@ using TaskManager.Configration;
 using TaskManager.Data;
 using Timer = System.Threading.Timer;
 
-namespace TaskManager
+namespace TaskManager.Forms
 {
     /// <summary>
     /// メインフォーム
