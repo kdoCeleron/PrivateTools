@@ -93,6 +93,29 @@ namespace TaskManager.Forms
             this.InitializeGroupList();
 
             this.TxtFilter.TextChanged += this.TxtFilter_OnTextChanged;
+
+            InitializeTaskTray();
+        }
+
+        /// <summary>
+        /// タスクトレイの設定を初期化します。
+        /// </summary>
+        private void InitializeTaskTray()
+        {
+            // タスクトレイの設定
+            var icon = new NotifyIcon();
+
+            icon.Icon = new System.Drawing.Icon(@".\icon\main.ico");
+            icon.Visible = true;
+            icon.Text = this.Text;
+
+            var menu = new ContextMenuStrip();
+            var menuItem = new ToolStripMenuItem();
+            menuItem.Text = "終了";
+            menuItem.Click += (o, args) => { this.Close(); };
+            menu.Items.Add(menuItem);
+
+            icon.ContextMenuStrip = menu;
         }
 
         /// <summary>

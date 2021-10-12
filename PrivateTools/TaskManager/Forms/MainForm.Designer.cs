@@ -39,7 +39,6 @@ namespace TaskManager.Forms
             this.BtnOutputCsv = new System.Windows.Forms.Button();
             this.BtnOpenExecFolder = new System.Windows.Forms.Button();
             this.BtnInfos = new System.Windows.Forms.Button();
-            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelRecentTasks = new System.Windows.Forms.Label();
             this.PanelRight = new System.Windows.Forms.Panel();
@@ -51,22 +50,23 @@ namespace TaskManager.Forms
             this.ColumnGroups = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnTaskNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PanelLeft = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.TxtFilter = new System.Windows.Forms.TextBox();
             this.LblDisplayGroup = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.LabelTaskView = new System.Windows.Forms.Label();
-            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
-            this.TxtFilter = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
+            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
             this.panel1.SuspendLayout();
             this.PanelRight.SuspendLayout();
             this.PanelLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).BeginInit();
             this.PanelButtom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHeader
@@ -138,15 +138,6 @@ namespace TaskManager.Forms
             this.BtnInfos.Text = "情報";
             this.BtnInfos.UseVisualStyleBackColor = true;
             this.BtnInfos.Click += new System.EventHandler(this.BtnInfos_Click);
-            // 
-            // DgvRecentTasks
-            // 
-            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvRecentTasks.Location = new System.Drawing.Point(12, 6);
-            this.DgvRecentTasks.Name = "DgvRecentTasks";
-            this.DgvRecentTasks.RowTemplate.Height = 21;
-            this.DgvRecentTasks.Size = new System.Drawing.Size(754, 130);
-            this.DgvRecentTasks.TabIndex = 0;
             // 
             // panel1
             // 
@@ -257,6 +248,22 @@ namespace TaskManager.Forms
             this.PanelLeft.Size = new System.Drawing.Size(772, 376);
             this.PanelLeft.TabIndex = 3;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(616, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 12);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "フィルタ";
+            // 
+            // TxtFilter
+            // 
+            this.TxtFilter.Location = new System.Drawing.Point(660, 11);
+            this.TxtFilter.Name = "TxtFilter";
+            this.TxtFilter.Size = new System.Drawing.Size(100, 19);
+            this.TxtFilter.TabIndex = 5;
+            // 
             // LblDisplayGroup
             // 
             this.LblDisplayGroup.AutoSize = true;
@@ -284,15 +291,6 @@ namespace TaskManager.Forms
             this.LabelTaskView.TabIndex = 2;
             this.LabelTaskView.Text = "タスク一覧";
             // 
-            // DgvAllTasks
-            // 
-            this.DgvAllTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvAllTasks.Location = new System.Drawing.Point(9, 44);
-            this.DgvAllTasks.Name = "DgvAllTasks";
-            this.DgvAllTasks.RowTemplate.Height = 21;
-            this.DgvAllTasks.Size = new System.Drawing.Size(754, 320);
-            this.DgvAllTasks.TabIndex = 1;
-            // 
             // PanelButtom
             // 
             this.PanelButtom.Controls.Add(this.PanelRight);
@@ -303,21 +301,23 @@ namespace TaskManager.Forms
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
             // 
-            // TxtFilter
+            // DgvAllTasks
             // 
-            this.TxtFilter.Location = new System.Drawing.Point(660, 11);
-            this.TxtFilter.Name = "TxtFilter";
-            this.TxtFilter.Size = new System.Drawing.Size(100, 19);
-            this.TxtFilter.TabIndex = 5;
+            this.DgvAllTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvAllTasks.Location = new System.Drawing.Point(9, 44);
+            this.DgvAllTasks.Name = "DgvAllTasks";
+            this.DgvAllTasks.RowTemplate.Height = 21;
+            this.DgvAllTasks.Size = new System.Drawing.Size(754, 320);
+            this.DgvAllTasks.TabIndex = 1;
             // 
-            // label2
+            // DgvRecentTasks
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(616, 15);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "フィルタ";
+            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvRecentTasks.Location = new System.Drawing.Point(12, 6);
+            this.DgvRecentTasks.Name = "DgvRecentTasks";
+            this.DgvRecentTasks.RowTemplate.Height = 21;
+            this.DgvRecentTasks.Size = new System.Drawing.Size(754, 130);
+            this.DgvRecentTasks.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -335,15 +335,15 @@ namespace TaskManager.Forms
             this.PanelHeader.PerformLayout();
             this.PanelTop.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.PanelRight.ResumeLayout(false);
             this.PanelRight.PerformLayout();
             this.PanelLeft.ResumeLayout(false);
             this.PanelLeft.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).EndInit();
             this.PanelButtom.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
             this.ResumeLayout(false);
 
         }
