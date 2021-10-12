@@ -75,19 +75,13 @@
         /// </summary>
         [JsonProperty("AttachFile")]
         public List<string> AttachFile { get; set; }
-
-        // TODO:追々。。
-        ////public TaskItem ParentTask { get; set; }
-
-        ////public List<TaskItem> ChildTasks { get; set; }
-
+        
         /// <summary>
         /// 親グループの情報を取得する。
         /// </summary>
         /// <returns>取得結果</returns>
         public TaskGroupInfo GetGroup()
         {
-            // TODO:別の箇所に共通関数化
             return ResourceManager.Instance.GetGroupInfo(this.Group);
         }
 

@@ -171,7 +171,6 @@ namespace TaskManager.Forms
 
             this.isUpdatingTaskIchiran = true;
             
-            // TODO:一覧のdelete処理と統一
             var taskList = ResourceManager.Instance.GetAllTaskItems();
             
             var filtered = Utils.FilterRecentLimitTask(taskList);
@@ -234,9 +233,7 @@ namespace TaskManager.Forms
                         var group = ResourceManager.Instance.GetGroupInfo(selected);
 
                         this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
-
-                        //// TODO:サブグループのタスクも
-
+                        
                         this.LblDisplayGroup.Text = string.Format("[{0}]", group.Name);
                     }
 
@@ -280,7 +277,6 @@ namespace TaskManager.Forms
                 lvItem.SubItems.Add(string.Format("{0:D}件", taskNum));
                 lvItem.Tag = taskGroupInfo.Key;
 
-                // TODO:再帰
                 foreach (var childGroup in taskGroupInfo.ChildGroups)
                 {
                     var group = ResourceManager.Instance.GetGroupInfo(childGroup);
@@ -326,7 +322,7 @@ namespace TaskManager.Forms
                 var now = DateTime.Now;
                 this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm");
 
-                // TODO:recenttask update
+                this.DgvAllTasksOnUpdateEvent(null, null);
 
                 // TODO:windows通知の仮実装。
                 var tasks = ResourceManager.Instance.GetAllTaskItems().Any(x => Utils.IsOverRedZone(x.DateTimeLimit));

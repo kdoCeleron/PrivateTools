@@ -41,7 +41,6 @@
         /// <param name="parent">親グループ</param>
         public void AddTaskGroup(TaskGroupInfo groupInfo, TaskGroupInfo parent)
         {
-            // TODO:削除予定
             this.TaskGroupList.Add(groupInfo.Key, groupInfo);
             this.TaskGroupListJsonObj.Add(groupInfo);
 
@@ -149,8 +148,6 @@
             foreach (var childGroup in taskGroupInfo.ChildGroups)
             {
                 KeyInfo.DeleteKeyInfo(childGroup);
-
-                // TODO:さらに下位も
             }
 
             foreach (var childTaskItem in taskGroupInfo.ChildTaskItems)

@@ -1,4 +1,6 @@
-﻿namespace TaskManager
+﻿using TaskManager.Configration;
+
+namespace TaskManager
 {
     using System;
     using System.Collections.Generic;
@@ -53,7 +55,7 @@
         }
 
         /// <summary>
-        /// 赤表示(期限切れ)圏内かどうかを判定します
+        /// 赤表示圏内かどうかを判定します
         /// </summary>
         /// <param name="value">日時</param>
         /// <returns>true：正/false：それ以外</returns>
@@ -62,10 +64,9 @@
             var tmp = DateTime.Now.AddDays(1);
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day); // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
-
-            // TODO: Configへ
-            var redZone = now.AddDays(1);
-            var normalZone = now.AddDays(3);
+            
+            var redZone = now.AddDays(Config.Instance.ThresDaysRed);
+            var normalZone = now.AddDays(Config.Instance.ThresDaysYellow);
             if (redZone >= date)
             {
                 // 期限間近 or 期限超過
@@ -73,7 +74,7 @@
             }
             else if (redZone < date && normalZone > date)
             {
-                // 1～3日前
+                // それ以外
                 return false;
             }
 
@@ -81,7 +82,7 @@
         }
 
         /// <summary>
-        /// 黄色表示(期限間近)圏内かどうかを判定します
+        /// 黄色表示圏内かどうかを判定します
         /// </summary>
         /// <param name="value">日時</param>
         /// <returns>true：正/false：それ以外</returns>
@@ -91,9 +92,8 @@
             var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);  // 繰り上げ
             var date = new DateTime(value.Year, value.Month, value.Day);
 
-            // TODO: Configへ
-            var redZone = now.AddDays(1);
-            var normalZone = now.AddDays(3);
+            var redZone = now.AddDays(Config.Instance.ThresDaysRed);
+            var normalZone = now.AddDays(Config.Instance.ThresDaysYellow);
             if (redZone >= date)
             {
                 // 期限間近 or 期限超過
@@ -101,7 +101,7 @@
             }
             else if (redZone < date && normalZone > date)
             {
-                // 1～3日前
+                // それ以外の範囲
                 return true;
             }
 

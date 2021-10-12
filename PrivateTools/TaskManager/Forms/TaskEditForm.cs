@@ -81,13 +81,6 @@
 
             this.CmbAttachFiles.Enabled = false;
 
-            // TODO:実装
-            ////foreach (var file in taskItem.AttachFile)
-            ////{
-            ////    var fileName = Path.GetFileName(file);
-            ////    this.CmbAttachFiles.Items.Add(fileName);
-            ////}
-
             this.target = taskItem;
 
             return true;
@@ -135,7 +128,7 @@
             var saveFileName = string.Empty;
             if (!string.IsNullOrEmpty(file))
             {
-                // TODO:複数ファイル対応
+                // 複数ファイル対応
                 // UIにファイル追加/削除ボタンでもよいか
                 if (!File.Exists(file))
                 {
@@ -205,7 +198,7 @@
                 {
                     this.target.AttachFileOrg.Add(file);
 
-                    // TODO:コピー処理
+                    // コピー処理
                     // savefilename
                 }
 

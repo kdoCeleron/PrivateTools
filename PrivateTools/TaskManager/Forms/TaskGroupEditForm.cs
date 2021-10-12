@@ -58,12 +58,6 @@
                 this.CmbParentGroup.Items.Add(item);
             }
 
-            // TODO: update can change parentGroup
-            ////if (parent != null)
-            ////{
-            ////    this.CmbParentGroup.SelectedItem = parent;
-            ////}
-
             this.CmbParentGroup.Enabled = false;
             this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
 

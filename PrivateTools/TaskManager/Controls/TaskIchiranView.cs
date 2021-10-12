@@ -136,7 +136,7 @@ namespace TaskManager.Controls
                 }
                 else
                 {
-                    // TODO:追々
+                    // 現状は対象外。
                 }
             }
 
@@ -448,27 +448,8 @@ namespace TaskManager.Controls
                 {
                     this.Rows.Remove(row);
                     ResourceManager.Instance.RemoveTaskItem(item);
-
-                    if (this.ShowingGroup != null)
-                    {
-                        this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
-                    }
-                    else
-                    {
-                        // TODO: 編集と共通化
-                        if (!this.isVisibleAddTask)
-                        {
-                            var taskList = ResourceManager.Instance.GetAllTaskItems();
-
-                            var filtered = Utils.FilterRecentLimitTask(taskList);
-                            this.RefleshTaskItems(filtered, null);
-                        }
-                        else
-                        {
-                            var list = ResourceManager.Instance.GetAllTaskItems();
-                            this.RefleshTaskItems(list, null);
-                        }
-                    }
+                    
+                    this.RefleshTaskItemsOnCurrentGroup();
 
                     return true;
                 }
@@ -499,14 +480,22 @@ namespace TaskManager.Controls
                 ResourceManager.Instance.AddTaskItem(taskItem.Group, newItem);
             }
 
-            // TODO: 共通化
+            this.RefleshTaskItemsOnCurrentGroup();
+
+            return true;
+        }
+
+        /// <summary>
+        /// 現在の表示グループに応じて、一覧を再描画します。
+        /// </summary>
+        private void RefleshTaskItemsOnCurrentGroup()
+        {
             if (this.ShowingGroup != null)
             {
                 this.RefleshTaskItems(this.ShowingGroup.ChildTaskItems.ToList(), this.ShowingGroup);
             }
             else
             {
-                // TODO: 編集と共通化
                 if (!this.isVisibleAddTask)
                 {
                     var taskList = ResourceManager.Instance.GetAllTaskItems();
@@ -520,9 +509,8 @@ namespace TaskManager.Controls
                     this.RefleshTaskItems(list, null);
                 }
             }
-
-            return true;
         }
+
 
         /// <summary>
         /// 行の内容にタスク情報を設定します。
@@ -536,8 +524,7 @@ namespace TaskManager.Controls
                 if (info.Value.ColumnType != DataGridColumnType.Button)
                 {
                     var columnIndex = info.Value.ColumnIndex;
-
-                    // TODO:プロパティの参照とインデックスの組み合わせ
+                    
                     string setValue = string.Empty;
                     if (columnIndex == 1)
                     {
@@ -673,13 +660,10 @@ namespace TaskManager.Controls
 
                     if (isEnable)
                     {
-                        var tmp = DateTime.Now;
-                        var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
                         var date = new DateTime(grpData.DateTimeLimit.Year, grpData.DateTimeLimit.Month, grpData.DateTimeLimit.Day);
 
                         var cell = row.Cells[3] as DataGridViewCell;
 
-                        // TODO: Configへ
                         if (Utils.IsOverRedZone(date))
                         {
                             cell.Style.BackColor = Color.Red;

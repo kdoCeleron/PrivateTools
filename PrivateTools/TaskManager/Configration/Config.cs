@@ -54,6 +54,16 @@ namespace TaskManager.Configration
 
         #region プロパティ
 
+        /// <summary>
+        /// 赤色表示のしきい値
+        /// </summary>
+        public int ThresDaysRed { get; set; }
+
+        /// <summary>
+        /// 黄色表示のしきい値
+        /// </summary>
+        public int ThresDaysYellow { get; set; }
+
         #endregion
 
         #region メソッド
