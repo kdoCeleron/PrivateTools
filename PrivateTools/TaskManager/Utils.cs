@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TaskManager
+﻿namespace TaskManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
     using TaskManager.Data;
 
     /// <summary>
@@ -39,6 +39,11 @@ namespace TaskManager
             return path;
         }
 
+        /// <summary>
+        /// 直近の期限タスクを取得します。
+        /// </summary>
+        /// <param name="taskItem">探索対象</param>
+        /// <returns>取得結果</returns>
         public static List<TaskItem> FilterRecentLimitTask(List<TaskItem> taskItem)
         {
             return taskItem.Where(x => 
@@ -47,6 +52,11 @@ namespace TaskManager
                 .OrderBy(x => x.DateTimeLimit).ToList();
         }
 
+        /// <summary>
+        /// 赤表示(期限切れ)圏内かどうかを判定します
+        /// </summary>
+        /// <param name="value">日時</param>
+        /// <returns>true：正/false：それ以外</returns>
         public static bool IsOverRedZone(DateTime value)
         {
             var tmp = DateTime.Now.AddDays(1);
@@ -70,6 +80,11 @@ namespace TaskManager
             return false;
         }
 
+        /// <summary>
+        /// 黄色表示(期限間近)圏内かどうかを判定します
+        /// </summary>
+        /// <param name="value">日時</param>
+        /// <returns>true：正/false：それ以外</returns>
         public static bool IsOverYellowZone(DateTime value)
         {
             var tmp = DateTime.Now.AddDays(1);

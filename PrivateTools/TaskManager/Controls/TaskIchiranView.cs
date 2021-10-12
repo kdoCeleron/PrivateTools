@@ -243,8 +243,7 @@ namespace TaskManager.Controls
             {
                 if (info != null)
                 {
-
-                    if(rowIndex < 0 || rowIndex >= this.RowCount)
+                    if (rowIndex < 0 || rowIndex >= this.RowCount)
                     {
                         return;
                     }
@@ -759,6 +758,5 @@ namespace TaskManager.Controls
         {
             this.ClearSelection();
         }
-
     }
 }

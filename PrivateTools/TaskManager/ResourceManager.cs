@@ -28,7 +28,7 @@ namespace TaskManager
         /// <summary>
         /// タスク情報
         /// </summary>
-        private TaskInfoRoot TaskInfoRoot;
+        private TaskInfoRoot taskInfoRoot;
 
         /// <summary>
         /// シングルトンインスタンス
@@ -49,10 +49,10 @@ namespace TaskManager
         /// <summary>
         /// 初期化処理
         /// </summary>
-        /// <returns></returns>
+        /// <returns>実行結果</returns>
         public bool Initialize()
         {
-            this.TaskInfoRoot = new TaskInfoRoot();
+            this.taskInfoRoot = new TaskInfoRoot();
 
             KeyInfo.Initialize();
 
@@ -62,24 +62,24 @@ namespace TaskManager
                 var text = File.ReadAllText(path);
                 var jsonObj = JsonConvert.DeserializeObject<TaskInfoRoot>(text);
                 
-                instance.TaskInfoRoot = jsonObj;
+                instance.taskInfoRoot = jsonObj;
 
                 var rootGroupKey = TaskGroupInfo.GetRootGroup().Key;
-                if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(rootGroupKey)))
+                if (instance.taskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(rootGroupKey)))
                 {
-                    var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(rootGroupKey));
+                    var item = instance.taskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(rootGroupKey));
                     TaskGroupInfo.OverriteRootGroup(item);
                 }
 
                 var defaultGroupKey = TaskGroupInfo.GetDefaultGroup().Key;
-                if (instance.TaskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(defaultGroupKey)))
+                if (instance.taskInfoRoot.TaskGroupListJsonObj.Any(x => x.Key.Equals(defaultGroupKey)))
                 {
-                    var item = instance.TaskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(defaultGroupKey));
+                    var item = instance.taskInfoRoot.TaskGroupListJsonObj.First(x => x.Key.Equals(defaultGroupKey));
                     TaskGroupInfo.OverriteDefaultGroup(item);
                 }
 
                 // 全グループに対してキーの再生成
-                foreach (var taskGroupInfo in instance.TaskInfoRoot.TaskGroupListJsonObj)
+                foreach (var taskGroupInfo in instance.taskInfoRoot.TaskGroupListJsonObj)
                 {
                     if (!KeyInfo.IsCreatedKeyGroup(taskGroupInfo.Key))
                     {
@@ -87,7 +87,7 @@ namespace TaskManager
 
                         taskGroupInfo.ChildGroups.Clear();
                         var filetered =
-                            instance.TaskInfoRoot.TaskGroupListJsonObj.Where(x =>
+                            instance.taskInfoRoot.TaskGroupListJsonObj.Where(x =>
                                 x.ParentGroup != null && x.ParentGroup.Equals(taskGroupInfo.Key)).ToList();
                         if (filetered.Any())
                         {
@@ -118,24 +118,27 @@ namespace TaskManager
                         childTaskItem.Group = taskGroupInfo.Key;
                     }
 
-                    if (!instance.TaskInfoRoot.TaskGroupList.ContainsKey(taskGroupInfo.Key))
+                    if (!instance.taskInfoRoot.TaskGroupList.ContainsKey(taskGroupInfo.Key))
                     {
-                        instance.TaskInfoRoot.TaskGroupList.Add(taskGroupInfo.Key, taskGroupInfo);
+                        instance.taskInfoRoot.TaskGroupList.Add(taskGroupInfo.Key, taskGroupInfo);
                     }
                 }
             }
             else
             {
-                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup(), null);
-                instance.TaskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup(), TaskGroupInfo.GetRootGroup());
+                instance.taskInfoRoot.AddTaskGroup(TaskGroupInfo.GetRootGroup(), null);
+                instance.taskInfoRoot.AddTaskGroup(TaskGroupInfo.GetDefaultGroup(), TaskGroupInfo.GetRootGroup());
             }
             
             return true;
         }
 
+        /// <summary>
+        /// 全タスク情報を保存します。
+        /// </summary>
         public void SaveTaskList()
         {
-            foreach (var taskGroupInfo in instance.TaskInfoRoot.TaskGroupListJsonObj)
+            foreach (var taskGroupInfo in instance.taskInfoRoot.TaskGroupListJsonObj)
             {
                 var removeTasks = new List<TaskItem>();
                 foreach (var childTaskItem in taskGroupInfo.ChildTaskItems)
@@ -152,14 +155,18 @@ namespace TaskManager
                 }
             }
 
-            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.TaskInfoRoot, Formatting.Indented);
+            var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.taskInfoRoot, Formatting.Indented);
             File.WriteAllText(Utils.GetFullPath(taskListSavePath), jsonStr);
         }
 
+        /// <summary>
+        /// ルートのグループ情報を取得します。
+        /// </summary>
+        /// <returns>取得けっｋ</returns>
         public List<TaskGroupInfo> GetRootGroups()
         {
             var result = new List<TaskGroupInfo>();
-            foreach (var item in instance.TaskInfoRoot.TaskGroupList)
+            foreach (var item in instance.taskInfoRoot.TaskGroupList)
             {
                 var key = item.Key;
                 var value = item.Value;
@@ -176,6 +183,10 @@ namespace TaskManager
             return result;
         }
 
+        /// <summary>
+        /// 全タスクの情報を取得します。
+        /// </summary>
+        /// <returns>取得けっｋ</returns>
         public List<TaskItem> GetAllTaskItems()
         {
             var list = new List<TaskItem>();
@@ -187,41 +198,77 @@ namespace TaskManager
             return list;
         }
 
+        /// <summary>
+        /// グループを追加します。
+        /// </summary>
+        /// <param name="name">グループ名称</param>
+        /// <param name="parent">親グループ</param>
+        /// <returns>追加結果</returns>
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)
         {
-            return instance.TaskInfoRoot.AddTaskGroup(name, parent);
+            return instance.taskInfoRoot.AddTaskGroup(name, parent);
         }
 
+        /// <summary>
+        /// グループ情報を編集します。
+        /// </summary>
+        /// <param name="original">元のグループ情報</param>
+        /// <param name="editName">編集先名称</param>
+        /// <param name="editParent">編集先親グループ</param>
+        /// <returns>編集結果</returns>
         public TaskGroupInfo EditTaskGroup(TaskGroupInfo original, string editName = null, TaskGroupInfo editParent = null)
         {
-            return instance.TaskInfoRoot.EditTaskGroup(original, editName, editParent);
+            return instance.taskInfoRoot.EditTaskGroup(original, editName, editParent);
         }
 
+        /// <summary>
+        /// グループ情報を削除します。
+        /// </summary>
+        /// <param name="taskGroupInfo">削除対象のグループ情報</param>
         public void RemoveTaskGroup(TaskGroupInfo taskGroupInfo)
         {
-            instance.TaskInfoRoot.RemoveTaskGroup(taskGroupInfo);
+            instance.taskInfoRoot.RemoveTaskGroup(taskGroupInfo);
         }
 
+        /// <summary>
+        /// タスクを追加します。
+        /// </summary>
+        /// <param name="group">所属グル－プ</param>
+        /// <param name="taskItem">追加するタスク情報</param>
         public void AddTaskItem(KeyInfo group, TaskItem taskItem)
         {
-            instance.TaskInfoRoot.AddTaskItem(group, taskItem);
+            instance.taskInfoRoot.AddTaskItem(group, taskItem);
         }
 
+        /// <summary>
+        /// タスクを削除します。
+        /// </summary>
+        /// <param name="taskItem">削除するタスク情報</param>
         public void RemoveTaskItem(TaskItem taskItem)
         {
-            instance.TaskInfoRoot.RemoveTaskItem(taskItem);
+            instance.taskInfoRoot.RemoveTaskItem(taskItem);
         }
 
+        /// <summary>
+        /// キーに一致するグループ情報を取得します。
+        /// </summary>
+        /// <param name="groupKey">キー</param>
+        /// <returns>取得結果</returns>
         public TaskGroupInfo GetGroupInfo(KeyInfo groupKey)
         {
-            if (instance.TaskInfoRoot.TaskGroupList.ContainsKey(groupKey))
+            if (instance.taskInfoRoot.TaskGroupList.ContainsKey(groupKey))
             {
-                return instance.TaskInfoRoot.TaskGroupList[groupKey];
+                return instance.taskInfoRoot.TaskGroupList[groupKey];
             }
 
             return null;
         }
 
+        /// <summary>
+        /// キ－に一致するグループ名称を取得します。
+        /// </summary>
+        /// <param name="groupKey">キー</param>
+        /// <returns>取得けっｋ</returns>
         public string GetGroupName(KeyInfo groupKey)
         {
             var group = instance.GetGroupInfo(groupKey);
@@ -233,21 +280,35 @@ namespace TaskManager
             return string.Empty;
         }
 
+        /// <summary>
+        /// 全グループの情報を取得します。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public List<TaskGroupInfo> GetGroupList()
         {
-            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList                             
+            return ResourceManager.Instance.taskInfoRoot.TaskGroupList                             
                 .Select(x => x.Value)
                 .ToList();
         }
 
+        /// <summary>
+        /// ルートグループ以外の全グループを取得します。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public List<TaskGroupInfo> GetGroupListExcludeRoot()
         {
-            return ResourceManager.Instance.TaskInfoRoot.TaskGroupList
+            return ResourceManager.Instance.taskInfoRoot.TaskGroupList
                 .Where(x => !x.Key.Equals(TaskGroupInfo.GetRootGroup().Key))
                 .Select(x => x.Value)
                 .ToList();
         }
         
+        /// <summary>
+        /// 管理内のグループおよびタスクに対して指定の処理を実行します。
+        /// </summary>
+        /// <param name="rootGroup">探索のルートグループ</param>
+        /// <param name="groupAction">グループに対して実行する処理</param>
+        /// <param name="taskAction">タスクに対して実行する処理</param>
         public void ExecInnerGroupAndTasks(TaskGroupInfo rootGroup, Action<TaskGroupInfo> groupAction, Action<TaskItem> taskAction)
         {
             if (rootGroup == null)
@@ -265,7 +326,7 @@ namespace TaskManager
 
             foreach (var childGroup in rootGroup.ChildGroups)
             {
-                var group = instance.TaskInfoRoot.TaskGroupList[childGroup];
+                var group = instance.taskInfoRoot.TaskGroupList[childGroup];
                 this.ExecInnerGroupAndTasks(group, groupAction, taskAction);
 
                 if (groupAction != null)

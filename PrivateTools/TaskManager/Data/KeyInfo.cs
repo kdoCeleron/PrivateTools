@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-
-namespace TaskManager.Data
+﻿namespace TaskManager.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// タスクおよびグループを特定するキー情報
     /// </summary>
@@ -29,18 +29,6 @@ namespace TaskManager.Data
         private KeyType keyType;
 
         /// <summary>
-        /// キーの種別
-        /// </summary>
-        private enum KeyType
-        {
-            None,
-
-            Group,
-
-            Task
-        }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
         private KeyInfo()
@@ -48,6 +36,27 @@ namespace TaskManager.Data
             this.keyType = KeyType.None;
             this.KeyTask = string.Empty;
             this.KeyGroup = string.Empty;
+        }
+
+        /// <summary>
+        /// キーの種別
+        /// </summary>
+        private enum KeyType
+        {
+            /// <summary>
+            /// なし
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// グループ
+            /// </summary>
+            Group,
+
+            /// <summary>
+            /// タスク
+            /// </summary>
+            Task
         }
 
         /// <summary>
@@ -143,7 +152,7 @@ namespace TaskManager.Data
                 return info;
             }
 
-            // TODO:key枯渇
+            //// TODO:key枯渇
 
             return null;
         }
@@ -166,7 +175,7 @@ namespace TaskManager.Data
         /// <returns>true: 生成済み/false: 未生成</returns>
         public static bool IsCreatedKeyTask(KeyInfo group, KeyInfo task)
         {
-            if(groupAllKeys.Contains(group.KeyGroup))
+            if (groupAllKeys.Contains(group.KeyGroup))
             {
                 if (taskAllKeys.ContainsKey(group.KeyTask))
                 {

@@ -1,30 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using TaskManager.Controls;
-using TaskManager.Data;
-
-namespace TaskManager
+﻿namespace TaskManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using System.Windows.Forms.VisualStyles;
+    using TaskManager.Controls;
+    using TaskManager.Data;
+
+    /// <summary>
+    /// タスク編集画面
+    /// </summary>
     public partial class TaskEditForm : SubWindowBase
     {
+        /// <summary>
+        /// 編集対象
+        /// </summary>
         private TaskItem target;
 
-        public event EventHandler<TaskItem> UpdateEvent;
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TaskEditForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            this.Load += OnLoad;
+            this.Load += this.OnLoad;
 
             this.DtpLimit.Format = DateTimePickerFormat.Custom;
             this.DtpLimit.CustomFormat = "yyyy年 MM月 dd日 HH:mm:ss";
@@ -35,12 +42,17 @@ namespace TaskManager
             this.TxtMemo.ImeMode = ImeMode.Hiragana;
         }
 
-        private void OnLoad(object sender, EventArgs e)
-        {
-            this.MaximumSize = this.Size;
-            this.MinimumSize = this.Size;
-        }
+        /// <summary>
+        /// 更新時イベント
+        /// </summary>
+        public event EventHandler<TaskItem> UpdateEvent;
 
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <param name="groupInfo">グループ情報</param>
+        /// <param name="taskItem">タスク情報</param>
+        /// <returns>結果</returns>
         public bool Initialize(TaskGroupInfo groupInfo, TaskItem taskItem)
         {
             var list = ResourceManager.Instance.GetGroupListExcludeRoot().ToArray();
@@ -70,17 +82,33 @@ namespace TaskManager
             this.CmbAttachFiles.Enabled = false;
 
             // TODO:実装
-            //foreach (var file in taskItem.AttachFile)
-            //{
-            //    var fileName = Path.GetFileName(file);
-            //    this.CmbAttachFiles.Items.Add(fileName);
-            //}
+            ////foreach (var file in taskItem.AttachFile)
+            ////{
+            ////    var fileName = Path.GetFileName(file);
+            ////    this.CmbAttachFiles.Items.Add(fileName);
+            ////}
 
             this.target = taskItem;
 
             return true;
         }
 
+        /// <summary>
+        /// 画面ロード時処理
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void OnLoad(object sender, EventArgs e)
+        {
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+        }
+
+        /// <summary>
+        /// 更新ボタン押下時処理
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
             var canUpdate = true;
@@ -145,7 +173,7 @@ namespace TaskManager
 
             if (canUpdate)
             {   
-                if(!this.target.Group.Equals(this.CmbGroup.SelectedItem))
+                if (!this.target.Group.Equals(this.CmbGroup.SelectedItem))
                 {
                     var prevParent = ResourceManager.Instance.GetGroupInfo(this.target.Group);
                     if (prevParent != null)
@@ -190,6 +218,11 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// キャンセルボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             var groupEdited = this.target.Group.Equals(this.CmbGroup.SelectedItem);

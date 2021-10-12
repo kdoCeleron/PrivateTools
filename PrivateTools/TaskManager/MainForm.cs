@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using Microsoft.Toolkit.Uwp.Notifications;
 using TaskManager.Configration;
 using TaskManager.Data;
 using Timer = System.Threading.Timer;
@@ -78,21 +78,21 @@ namespace TaskManager
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
 
-            this._nowTimer = new Timer(NowTimerCallBack);
+            this._nowTimer = new Timer(this.NowTimerCallBack);
             this._nowTimer.Change(new TimeSpan(), TimeSpan.FromMinutes(1));
 
             this.DgvAllTasks.Initialize(true);
             this.DgvRecentTasks.Initialize(false);
 
-            this.DgvAllTasks.UpdateEvent += DgvAllTasksOnUpdateEvent;
-            this.DgvRecentTasks.UpdateEvent += DgvRecentTasksOnUpdateEvent;
+            this.DgvAllTasks.UpdateEvent += this.DgvAllTasksOnUpdateEvent;
+            this.DgvRecentTasks.UpdateEvent += this.DgvRecentTasksOnUpdateEvent;
 
             this.ShowAllTaskListInDgvAllTasks();
             this.DgvAllTasksOnUpdateEvent(null, null);
 
             this.InitializeGroupList();
 
-            this.TxtFilter.TextChanged += TxtFilter_OnTextChanged;
+            this.TxtFilter.TextChanged += this.TxtFilter_OnTextChanged;
         }
 
         /// <summary>
@@ -127,6 +127,11 @@ namespace TaskManager
             this.DgvAllTasks.RefleshTaskItems(target, this.DgvAllTasks.ShowingGroup);
         }
 
+        /// <summary>
+        /// 直近のタスク一覧更新時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void DgvRecentTasksOnUpdateEvent(object sender, TaskIchiranEventArgs e)
         {
             if (this.isUpdatingTaskIchiran)
@@ -152,6 +157,11 @@ namespace TaskManager
             this.isUpdatingTaskIchiran = false;
         }
 
+        /// <summary>
+        /// 全タスク一覧の更新時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void DgvAllTasksOnUpdateEvent(object sender, TaskIchiranEventArgs e)
         {
             if (this.isUpdatingTaskIchiran)
@@ -159,7 +169,7 @@ namespace TaskManager
                 return;
             }
 
-            isUpdatingTaskIchiran = true;
+            this.isUpdatingTaskIchiran = true;
             
             // TODO:一覧のdelete処理と統一
             var taskList = ResourceManager.Instance.GetAllTaskItems();
@@ -174,6 +184,9 @@ namespace TaskManager
             this.isUpdatingTaskIchiran = false;
         }
         
+        /// <summary>
+        /// タスク一覧に全てのタスクを表示します。
+        /// </summary>
         private void ShowAllTaskListInDgvAllTasks()
         {
             this.LblDisplayGroup.Text = string.Format("[{0}]", "全てのタスク");
@@ -181,6 +194,9 @@ namespace TaskManager
             this.DgvAllTasks.RefleshTaskItems(taskList, null);
         }
 
+        /// <summary>
+        /// タスクグループの一覧を初期化します。
+        /// </summary>
         private void InitializeGroupList()
         {
             this.LsvGroup.HideSelection = false;
@@ -196,6 +212,11 @@ namespace TaskManager
             this.RefleshTaskGroupIchiran();
         }
 
+        /// <summary>
+        /// タスクグループ一覧の選択変更時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void LsvGroupOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
@@ -214,7 +235,7 @@ namespace TaskManager
 
                         this.DgvAllTasks.RefleshTaskItems(group.ChildTaskItems.ToList(), group);
 
-                        // TODO:サブグループのタスクも
+                        //// TODO:サブグループのタスクも
 
                         this.LblDisplayGroup.Text = string.Format("[{0}]", group.Name);
                     }
@@ -227,6 +248,9 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// タスクグループ一覧を再描画します。
+        /// </summary>
         private void RefleshTaskGroupIchiran()
         {
             if (this.isSuspentGroupListView)
@@ -271,6 +295,11 @@ namespace TaskManager
             this.LsvGroup.EndUpdate();
         }
 
+        /// <summary>
+        /// タスグループ一覧の列幅変更抑止イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void LsvGroup_OnColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             var maxColumnIdx = this.LsvGroup.Columns.Count - 1;
@@ -286,6 +315,10 @@ namespace TaskManager
             e.Cancel = true;
         }
 
+        /// <summary>
+        /// 現在時刻更新タイマイベント
+        /// </summary>
+        /// <param name="state">イベント引数</param>
         private void NowTimerCallBack(object state)
         {
             UiContext.Post(() =>
@@ -294,9 +327,24 @@ namespace TaskManager
                 this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm");
 
                 // TODO:recenttask update
+
+                // TODO:windows通知の仮実装。
+                var tasks = ResourceManager.Instance.GetAllTaskItems().Any(x => Utils.IsOverRedZone(x.DateTimeLimit));
+                if (tasks)
+                {
+                    var toast = new ToastContentBuilder()
+                        .AddText("タスクの期限切れ通知")
+                        .AddText("期限切れのタスクがあります。確認してください");
+                    toast.Show();
+                }
             });
         }
 
+        /// <summary>
+        /// グループ追加ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private async void BtnAddGroup_Click(object sender, EventArgs e)
         {
             var parent = TaskGroupInfo.GetRootGroup();
@@ -314,9 +362,14 @@ namespace TaskManager
             win.Initialize(null, true, parent);
             var ret = await win.ShowWindow(this);
 
-            RefleshTaskGroupIchiran();
+            this.RefleshTaskGroupIchiran();
         }
 
+        /// <summary>
+        /// グループ削除ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnRemoveGroup_Click(object sender, EventArgs e)
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
@@ -328,12 +381,17 @@ namespace TaskManager
                     if (!selected.Equals(TaskGroupInfo.GetRootGroup().Key) && !selected.Equals(TaskGroupInfo.GetDefaultGroup().Key))
                     {
                         ResourceManager.Instance.RemoveTaskGroup(item);
-                        RefleshTaskGroupIchiran();
+                        this.RefleshTaskGroupIchiran();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// グループリネームボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private async void BtnReNameGroup_Click(object sender, EventArgs e)
         {
             if (this.LsvGroup.SelectedItems.Count > 0)
@@ -348,18 +406,28 @@ namespace TaskManager
                         win.Initialize(item, false, ResourceManager.Instance.GetGroupInfo(item.ParentGroup));
                         var ret = await win.ShowWindow(this);
 
-                        RefleshTaskGroupIchiran();
+                        this.RefleshTaskGroupIchiran();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 情報ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private async void BtnInfos_Click(object sender, EventArgs e)
         {
             var win = new InfoViewForm();
             var ret = await win.ShowWindow(this);
         }
 
+        /// <summary>
+        /// フォルダを開くボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnOpenExecFolder_Click(object sender, EventArgs e)
         {
             var path = Environment.CurrentDirectory;
@@ -369,6 +437,11 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// CSV出力ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト7</param>
+        /// <param name="e">イベント引数</param>
         private void BtnOutputCsv_Click(object sender, EventArgs e)
         {
             var allTaskList = ResourceManager.Instance.GetAllTaskItems();

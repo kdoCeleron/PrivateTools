@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TaskManager
+﻿namespace TaskManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
     /// <summary>
     /// エントリポイント
     /// </summary>
-    static class Program
+    public static class Program
     {
         #region フィールド
 
@@ -135,7 +135,7 @@ namespace TaskManager
         /// <summary>
         /// 2重起動チェック
         /// </summary>
-        /// <returns></returns>
+        /// <returns>実行結果</returns>
         private static bool IsDuplicate()
         {
             try

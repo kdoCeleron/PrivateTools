@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-
-namespace TaskManager.Data
+﻿namespace TaskManager.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// タスク管理情報のルートクラスです。
     /// </summary>
@@ -34,7 +34,6 @@ namespace TaskManager.Data
         [JsonIgnore]
         public Dictionary<KeyInfo, TaskGroupInfo> TaskGroupList { get; set; }
 
-        // TODO:削除予定
         /// <summary>
         /// 新しいグループ情報を追加します。
         /// </summary>
@@ -42,6 +41,7 @@ namespace TaskManager.Data
         /// <param name="parent">親グループ</param>
         public void AddTaskGroup(TaskGroupInfo groupInfo, TaskGroupInfo parent)
         {
+            // TODO:削除予定
             this.TaskGroupList.Add(groupInfo.Key, groupInfo);
             this.TaskGroupListJsonObj.Add(groupInfo);
 
@@ -57,6 +57,7 @@ namespace TaskManager.Data
         /// </summary>
         /// <param name="name">追加するグループの名称</param>
         /// <param name="parent">親グループ</param>
+        /// <returns>追加結果</returns>
         public TaskGroupInfo AddTaskGroup(string name, TaskGroupInfo parent)
         {
             var group = new TaskGroupInfo();

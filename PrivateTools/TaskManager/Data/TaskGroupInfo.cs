@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-
-namespace TaskManager.Data
+﻿namespace TaskManager.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// グループ情報
     /// </summary>
@@ -15,14 +15,14 @@ namespace TaskManager.Data
     public class TaskGroupInfo
     {
         /// <summary>
-        /// コンストラクタ
+        /// デフォルト(未分類)グループ
         /// </summary>
-        public TaskGroupInfo()
-        {
-            this.Name = string.Empty;
-            this.ChildGroups = new HashSet<KeyInfo>();
-            this.ChildTaskItems = new HashSet<TaskItem>();
-        }
+        private static TaskGroupInfo _defaultGroup;
+
+        /// <summary>
+        /// ルートのグループ
+        /// </summary>
+        private static TaskGroupInfo _rootGroup;
 
         /// <summary>
         /// コンストラクタ
@@ -46,14 +46,14 @@ namespace TaskManager.Data
         }
 
         /// <summary>
-        /// デフォルト(未分類)グループ
+        /// コンストラクタ
         /// </summary>
-        private static TaskGroupInfo _defaultGroup;
-
-        /// <summary>
-        /// ルートのグループ
-        /// </summary>
-        private static TaskGroupInfo _rootGroup;
+        public TaskGroupInfo()
+        {
+            this.Name = string.Empty;
+            this.ChildGroups = new HashSet<KeyInfo>();
+            this.ChildTaskItems = new HashSet<TaskItem>();
+        }
 
         /// <summary>
         /// グループのキー情報

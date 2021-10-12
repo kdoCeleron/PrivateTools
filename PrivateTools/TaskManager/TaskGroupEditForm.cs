@@ -1,36 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using TaskManager.Controls;
-using TaskManager.Data;
-
-namespace TaskManager
+﻿namespace TaskManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using System.Windows.Forms.VisualStyles;
+    using TaskManager.Controls;
+    using TaskManager.Data;
+
+    /// <summary>
+    /// グループ編集画面
+    /// </summary>
     public partial class TaskGroupEditForm : SubWindowBase
     {
+        /// <summary>
+        /// 編集対象
+        /// </summary>
         private TaskGroupInfo target;
 
+        /// <summary>
+        /// 追加画面かどうか
+        /// </summary>
         private bool isAdd;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public TaskGroupEditForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            this.Load += OnLoad;
+            this.Load += this.OnLoad;
             this.CmbParentGroup.DisplayMember = "Name";
             this.CmbParentGroup.ValueMember = "Name";
 
             this.TxtGroupName.ImeMode = ImeMode.Hiragana;
         }
 
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <param name="group">編集対象のグループ情報</param>
+        /// <param name="isAddOperation">追加画面かどうか</param>
+        /// <param name="parent">親グループ</param>
         public void Initialize(TaskGroupInfo group, bool isAddOperation, TaskGroupInfo parent)
         {
             this.isAdd = isAddOperation;
@@ -41,10 +59,10 @@ namespace TaskManager
             }
 
             // TODO: update can change parentGroup
-            //if (parent != null)
-            //{
-            //    this.CmbParentGroup.SelectedItem = parent;
-            //}
+            ////if (parent != null)
+            ////{
+            ////    this.CmbParentGroup.SelectedItem = parent;
+            ////}
 
             this.CmbParentGroup.Enabled = false;
             this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
@@ -68,12 +86,22 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// 画面ロード時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void OnLoad(object sender, EventArgs e)
         {
             this.MaximumSize = this.Size;
             this.MinimumSize = this.Size;
         }
 
+        /// <summary>
+        /// 確定ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnKakutei_Click(object sender, EventArgs e)
         {
             this.CmbParentGroup.BackColor = Color.White;
@@ -122,6 +150,11 @@ namespace TaskManager
             }
         }
 
+        /// <summary>
+        /// キャンセルボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             this.CloseWindow(SubWindowResult.Cancel);

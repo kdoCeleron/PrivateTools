@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-
-namespace TaskManager.Data
+﻿namespace TaskManager.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// タスク情報の管理クラス
     /// </summary>
@@ -19,7 +19,7 @@ namespace TaskManager.Data
         /// </summary>
         public TaskItem()
         {
-            // this.Group = TaskGroupInfo.GetDefaultGroup();
+            //// this.Group = TaskGroupInfo.GetDefaultGroup();
 
             this.Title = string.Empty;
             this.DateTimeLimit = DateTime.Now;
@@ -77,9 +77,9 @@ namespace TaskManager.Data
         public List<string> AttachFile { get; set; }
 
         // TODO:追々。。
-        //public TaskItem ParentTask { get; set; }
+        ////public TaskItem ParentTask { get; set; }
 
-        //public List<TaskItem> ChildTasks { get; set; }
+        ////public List<TaskItem> ChildTasks { get; set; }
 
         /// <summary>
         /// 親グループの情報を取得する。
@@ -112,6 +112,10 @@ namespace TaskManager.Data
             return ret;
         }
 
+        /// <summary>
+        /// タスクの内容を示す文字列を取得します。
+        /// </summary>
+        /// <returns>取得結果</returns>
         public List<string> GetItemStrs()
         {
             var ret = new List<string>();

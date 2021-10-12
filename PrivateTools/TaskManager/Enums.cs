@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskManager
+﻿namespace TaskManager
 {
     /// <summary>
     /// タスク一覧の列種別
     /// </summary>
     public enum DataGridColumnType
     {
+        /// <summary>
+        /// ボタン
+        /// </summary>
         Button,
 
+        /// <summary>
+        /// ラベル
+        /// </summary>
         Label,
 
+        /// <summary>
+        /// テキストボックス
+        /// </summary>
         TextBox
     }
 
@@ -23,10 +26,19 @@ namespace TaskManager
     /// </summary>
     public enum SubWindowResult
     {
+        /// <summary>
+        /// なし
+        /// </summary>
         None,
 
+        /// <summary>
+        /// 確定
+        /// </summary>
         Submit,
 
+        /// <summary>
+        /// キャンセル
+        /// </summary>
         Cancel
     }
 }
