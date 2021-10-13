@@ -16,14 +16,14 @@ namespace TaskManager
     public class ResourceManager
     {
         /// <summary>
+        /// タスク情報保存ファイル
+        /// </summary>
+        public static string taskListSavePath = @".\taskList.json";
+
+        /// <summary>
         /// シングルトンインスタンス
         /// </summary>
         private static ResourceManager instance = new ResourceManager();
-
-        /// <summary>
-        /// タスク情報保存ファイル
-        /// </summary>
-        private static string taskListSavePath = @".\taskList.json";
 
         /// <summary>
         /// タスク情報

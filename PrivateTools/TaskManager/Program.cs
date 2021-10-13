@@ -1,4 +1,6 @@
-﻿using TaskManager.Forms;
+﻿using System.Runtime.CompilerServices;
+using TaskManager.Configration;
+using TaskManager.Forms;
 
 namespace TaskManager
 {
@@ -55,6 +57,9 @@ namespace TaskManager
             var log4netConfigPath = @".\Log4net.xml";
             Logger.LoadConfig(log4netConfigPath);
 
+            Config.Instance.ReadConfig();
+            ResourceManager.Instance.Initialize();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -65,7 +70,17 @@ namespace TaskManager
                 Environment.Exit(0);
             }
 
-            Application.Run(new MainForm());
+            if (Config.Instance.EditableItems.IsStayInTaskTray)
+            {
+                InitializeTaskTray();
+                Application.Run();
+            }
+            else
+            {
+                var mainform = new MainForm();
+                mainform.Closing += OnApplicationExit;
+                Application.Run(mainform);
+            }
         }
 
         /// <summary>
@@ -176,6 +191,51 @@ namespace TaskManager
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// タスクトレイの設定を初期化します。
+        /// </summary>
+        private static void InitializeTaskTray()
+        {
+            // タスクトレイの設定
+            var icon = new NotifyIcon();
+
+            icon.Icon = new System.Drawing.Icon(@".\icon\main.ico");
+            icon.Visible = true;
+            icon.Text = "タスク管理ツール";
+
+            var menu = new ContextMenuStrip();
+            {
+                var menuItem = new ToolStripMenuItem();
+                menuItem.Text = "メイン画面表示";
+                menuItem.Click += (sender, args) =>
+                {
+                    var win = new MainForm();
+                    win.Show();
+                };
+
+                menu.Items.Add(menuItem);
+            }
+            {
+                var menuItem = new ToolStripMenuItem();
+                menuItem.Text = "終了";
+                menuItem.Click += OnApplicationExit;
+                menu.Items.Add(menuItem);
+            }
+
+            icon.ContextMenuStrip = menu;
+        }
+
+        /// <summary>
+        /// アプリケーション終了時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private static void OnApplicationExit(object sender, EventArgs e)
+        {
+            Config.Instance.WriteConfig();
+            ResourceManager.Instance.SaveTaskList();
         }
 
         #endregion

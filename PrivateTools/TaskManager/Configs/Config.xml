@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
   <EditableItems>
+    <IsStayInTaskTray>true</IsStayInTaskTray>
     <IsInitShowMainForm>true</IsInitShowMainForm>
+    <IsNotifyWindowsToast>false</IsNotifyWindowsToast>
     <ThresDaysRed>1</ThresDaysRed>
     <ThresDaysYellow>3</ThresDaysYellow>
   </EditableItems>

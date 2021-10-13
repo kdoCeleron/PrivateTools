@@ -49,22 +49,8 @@ namespace TaskManager.Forms
             this.InitializeComponent();
 
             this.Load += this.OnLoad;
-            this.Closing += this.OnClosing;
-
-            Config.Instance.ReadConfig();
         }
-
-        /// <summary>
-        /// 画面が閉じられる際のイベントです
-        /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="e">e</param>
-        private void OnClosing(object sender, CancelEventArgs e)
-        {
-            ResourceManager.Instance.SaveTaskList();
-            Config.Instance.WriteConfig();
-        }
-
+        
         /// <summary>
         /// 画面ロード時のイベントです
         /// </summary>
@@ -74,7 +60,6 @@ namespace TaskManager.Forms
         {
             UiContext.Initialize();
 
-            ResourceManager.Instance.Initialize();
             ResourceManager.Instance.MainForm = this;
 
             this.MaximumSize = this.Size;
@@ -95,29 +80,6 @@ namespace TaskManager.Forms
             this.InitializeGroupList();
 
             this.TxtFilter.TextChanged += this.TxtFilter_OnTextChanged;
-
-            InitializeTaskTray();
-        }
-
-        /// <summary>
-        /// タスクトレイの設定を初期化します。
-        /// </summary>
-        private void InitializeTaskTray()
-        {
-            // タスクトレイの設定
-            var icon = new NotifyIcon();
-
-            icon.Icon = new System.Drawing.Icon(@".\icon\main.ico");
-            icon.Visible = true;
-            icon.Text = this.Text;
-
-            var menu = new ContextMenuStrip();
-            var menuItem = new ToolStripMenuItem();
-            menuItem.Text = "終了";
-            menuItem.Click += (o, args) => { this.Close(); };
-            menu.Items.Add(menuItem);
-
-            icon.ContextMenuStrip = menu;
         }
 
         /// <summary>
@@ -481,6 +443,19 @@ namespace TaskManager.Forms
             win.Initialize(Config.Instance.EditableItems);
 
             var ret = win.ShowWindow(this);
+        }
+
+        private void btnBackup_Click(object sender, EventArgs e)
+        {
+            var msg = MessageBox.Show("現在の設定および管理情報のバックアップを行います。", "確認", MessageBoxButtons.YesNo);
+            if (msg == DialogResult.Yes)
+            {
+                var configFile = Config.ConfigFilePath;
+                var taskFile = ResourceManager.taskListSavePath;
+
+                // TODO:バックアップ処理
+                // 解析ツールを作った時の共通処理を移植する。
+            }
         }
     }
 }

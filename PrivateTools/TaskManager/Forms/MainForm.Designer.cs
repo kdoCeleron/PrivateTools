@@ -58,6 +58,7 @@ namespace TaskManager.Forms
             this.LabelTaskView = new System.Windows.Forms.Label();
             this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
+            this.btnBackup = new System.Windows.Forms.Button();
             this.PanelHeader.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -99,6 +100,7 @@ namespace TaskManager.Forms
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnBackup);
             this.panel2.Controls.Add(this.btnEditConfig);
             this.panel2.Controls.Add(this.BtnOutputCsv);
             this.panel2.Controls.Add(this.BtnOpenExecFolder);
@@ -319,6 +321,16 @@ namespace TaskManager.Forms
             this.PanelButtom.Size = new System.Drawing.Size(1043, 376);
             this.PanelButtom.TabIndex = 4;
             // 
+            // btnBackup
+            // 
+            this.btnBackup.Location = new System.Drawing.Point(875, 61);
+            this.btnBackup.Name = "btnBackup";
+            this.btnBackup.Size = new System.Drawing.Size(75, 23);
+            this.btnBackup.TabIndex = 5;
+            this.btnBackup.Text = "バックアップ";
+            this.btnBackup.UseVisualStyleBackColor = true;
+            this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -376,6 +388,7 @@ namespace TaskManager.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox TxtFilter;
         private System.Windows.Forms.Button btnEditConfig;
+        private System.Windows.Forms.Button btnBackup;
     }
 }
 
