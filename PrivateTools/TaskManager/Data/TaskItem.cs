@@ -24,9 +24,8 @@
             this.Title = string.Empty;
             this.DateTimeLimit = DateTime.Now;
             this.Memo = string.Empty;
-
-            this.AttachFileOrg = new List<string>();
-            this.AttachFile = new List<string>();
+            
+            this.AttachFile = new List<AttachedFileInfo>();
         }
 
         /// <summary>
@@ -63,18 +62,12 @@
         /// </summary>
         [JsonProperty("Memo")]
         public string Memo { get; set; }
-
-        /// <summary>
-        /// 添付ファイル(元ファイルパス)
-        /// </summary>
-        [JsonProperty("AttachFileOrg")]
-        public List<string> AttachFileOrg { get; set; }
-
+        
         /// <summary>
         /// 添付ファイル
         /// </summary>
         [JsonProperty("AttachFile")]
-        public List<string> AttachFile { get; set; }
+        public List<AttachedFileInfo> AttachFile { get; set; }
         
         /// <summary>
         /// 親グループの情報を取得する。

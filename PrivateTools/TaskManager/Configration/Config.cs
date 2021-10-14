@@ -67,6 +67,11 @@ namespace TaskManager.Configration
         public string CsvRootDir { get; set; }
 
         /// <summary>
+        /// 添付ファイルの管理ディレクトリ
+        /// </summary>
+        public string AttachedFileRootDir { get; set; }
+
+        /// <summary>
         /// 変更可能設定
         /// </summary>
         public EditableConfigData EditableItems { get; set; }

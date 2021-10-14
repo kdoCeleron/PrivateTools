@@ -66,6 +66,7 @@
     <Compile Include="Controls\TaskIchiranView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Data\AttachedFileInfo.cs" />
     <Compile Include="Data\DataGridColumnInfo.cs" />
     <Compile Include="ConfigrationData\EditableConfigData.cs" />
     <Compile Include="Data\KeyInfo.cs" />

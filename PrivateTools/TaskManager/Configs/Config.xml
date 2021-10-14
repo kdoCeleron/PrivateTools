@@ -2,6 +2,7 @@
 <Config>
   <BackupRootDir>.\Backup</BackupRootDir>
   <CsvRootDir>.\CSV</CsvRootDir>
+  <AttachedFileRootDir>.\AttachedFiles</AttachedFileRootDir>
   <EditableItems>
     <IsStayInTaskTray>true</IsStayInTaskTray>
     <IsInitShowMainForm>true</IsInitShowMainForm>

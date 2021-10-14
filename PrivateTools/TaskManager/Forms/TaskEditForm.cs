@@ -1,4 +1,5 @@
-﻿using TaskManager.Interfaces;
+﻿using TaskManager.Configration;
+using TaskManager.Interfaces;
 
 namespace TaskManager.Forms
 {
@@ -161,14 +162,15 @@ namespace TaskManager.Forms
                     var curFileNameList = new List<string>();
                     foreach (var tmp in this.target.AttachFile)
                     {
-                        curFileNameList.Add(Path.GetFileName(tmp));
+                        curFileNameList.Add(Path.GetFileName(tmp.FilePath));
                     }
 
                     if (curFileNameList.Contains(fileName))
                     {
-                        var ret = MessageBox.Show("同名のファイルを添付済みです。追加して保存しますか？\nYes:リネームして保存\nNo:保存しない", "確認", MessageBoxButtons.YesNo);
+                        var ret = MessageBox.Show("同名のファイルを添付済みです。別名で保存しますか？\nYes:リネームして保存\nNo:上書き保存", "確認", MessageBoxButtons.YesNoCancel);
                         if (ret == DialogResult.Yes)
                         {
+                            // コピーで保存
                             var extension = Path.GetExtension(fileName);
                             var removeExtension = Path.GetFileNameWithoutExtension(fileName);
                             var append = removeExtension + "_コピー";
@@ -176,6 +178,12 @@ namespace TaskManager.Forms
 
                             isAppendFile = true;
                         }
+                        else if(ret == DialogResult.No)
+                        {
+                            // 上書き保存
+                            isAppendFile = true;
+                        }
+
                     }
 
                     saveFileName = fileName;
@@ -214,10 +222,26 @@ namespace TaskManager.Forms
 
                 if (isAppendFile)
                 {
-                    this.target.AttachFileOrg.Add(file);
+                    var item = new AttachedFileInfo();
 
-                    // コピー処理
-                    // savefilename
+                    if (!Directory.Exists(Config.Instance.AttachedFileRootDir))
+                    {
+                        Directory.CreateDirectory(Config.Instance.AttachedFileRootDir);
+                    }
+
+                    var taskKey = this.target.Key.Key;
+                    var taskDir = Path.Combine(Config.Instance.AttachedFileRootDir, taskKey);
+                    if (!Directory.Exists(taskDir))
+                    {
+                        Directory.CreateDirectory(taskDir);
+                    }
+                    
+                    item.FilePath = Path.Combine(taskDir, saveFileName);
+                    item.OrgFilePath = file;
+
+                    this.target.AttachFile.Add(item);
+                    
+                    File.Copy(item.OrgFilePath, item.FilePath, true);
                 }
 
                 if (this.UpdateEvent != null)
