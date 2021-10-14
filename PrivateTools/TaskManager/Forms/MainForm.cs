@@ -439,11 +439,7 @@ namespace TaskManager.Forms
         /// <param name="e">イベント引数</param>
         private void BtnOpenExecFolder_Click(object sender, EventArgs e)
         {
-            var path = Environment.CurrentDirectory;
-            if (Directory.Exists(path))
-            {
-                System.Diagnostics.Process.Start(path);
-            }
+            TaskTrayMenuEvents.ShowExecFolder(sender, e);
         }
 
         /// <summary>
@@ -453,25 +449,7 @@ namespace TaskManager.Forms
         /// <param name="e">イベント引数</param>
         private void BtnOutputCsv_Click(object sender, EventArgs e)
         {
-            var allTaskList = ResourceManager.Instance.GetAllTaskItems();
-
-            var list = new List<string>();
-            foreach (var taskItem in allTaskList)
-            {
-                var tmp = taskItem.GetInfoText(",");
-                tmp = tmp.Replace(Environment.NewLine, @"\r\n");
-                list.Add(tmp);
-            }
-
-            var fileName = string.Format("TaskAllList_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"));
-            var path = Utils.GetFullPath(fileName);
-            File.WriteAllLines(path, list, Encoding.UTF8);
-
-            var dir = Path.GetDirectoryName(path);
-            if (Directory.Exists(dir))
-            {
-                System.Diagnostics.Process.Start(dir);
-            }
+            TaskTrayMenuEvents.OutputCsvTaskList(sender, e);
         }
 
         /// <summary>

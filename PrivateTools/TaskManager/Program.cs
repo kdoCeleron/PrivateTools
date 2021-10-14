@@ -215,6 +215,7 @@ namespace TaskManager
             icon.Icon = new System.Drawing.Icon(@".\icon\main.ico");
             icon.Visible = true;
             icon.Text = "タスク管理ツール";
+            icon.MouseUp += TaskTrayMenuEvents.IconOnMouseUp;
 
             var menu = new ContextMenuStrip();
             {
@@ -224,6 +225,20 @@ namespace TaskManager
                 menu.Items.Add(menuItem);
             }
 
+            {
+                var menuItem = new ToolStripMenuItem();
+                menuItem.Text = "タスク一覧をCSV出力";
+                menuItem.Click += TaskTrayMenuEvents.OutputCsvTaskList;
+                menu.Items.Add(menuItem);
+            }
+
+            {
+                var menuItem = new ToolStripMenuItem();
+                menuItem.Text = "実行フォルダを開く";
+                menuItem.Click += TaskTrayMenuEvents.ShowExecFolder;
+                menu.Items.Add(menuItem);
+            }
+            
             {
                 var menuItem = new ToolStripMenuItem();
                 menuItem.Text = "設定変更";
@@ -239,6 +254,17 @@ namespace TaskManager
             }
 
             icon.ContextMenuStrip = menu;
+
+            TaskTrayMenuEvents.Icon = icon;
+
+            Application.ApplicationExit += (sender, e) =>
+            {
+                if (TaskTrayMenuEvents.Icon != null)
+                {
+                    TaskTrayMenuEvents.Icon.Dispose();
+                    TaskTrayMenuEvents.Icon = null;
+                }
+            };
         }
 
         #endregion

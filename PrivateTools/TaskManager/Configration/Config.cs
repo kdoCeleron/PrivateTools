@@ -62,6 +62,11 @@ namespace TaskManager.Configration
         public string BackupRootDir { get; set; }
 
         /// <summary>
+        /// CSV出力機能用のディレクトリ
+        /// </summary>
+        public string CsvRootDir { get; set; }
+
+        /// <summary>
         /// 変更可能設定
         /// </summary>
         public EditableConfigData EditableItems { get; set; }
