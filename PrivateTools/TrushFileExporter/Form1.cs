@@ -1,4 +1,6 @@
-﻿namespace TrushFIleExporter
+﻿using MyTools.Common.Extensions;
+
+namespace TrushFIleExporter
 {
     using System;
     using System.Collections.Generic;

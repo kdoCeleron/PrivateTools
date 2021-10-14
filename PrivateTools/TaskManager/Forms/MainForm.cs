@@ -437,7 +437,12 @@ namespace TaskManager.Forms
             }
         }
 
-        private void btnEditConfig_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 編集ボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void BtnEditConfig_Click(object sender, EventArgs e)
         {
             var win = new ConfigEditForm();
             win.Initialize(Config.Instance.EditableItems);
@@ -445,14 +450,18 @@ namespace TaskManager.Forms
             var ret = win.ShowWindow(this);
         }
 
-        private void btnBackup_Click(object sender, EventArgs e)
+        /// <summary>
+        /// バックアップボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void BtnBackup_Click(object sender, EventArgs e)
         {
             var msg = MessageBox.Show("現在の設定および管理情報のバックアップを行います。", "確認", MessageBoxButtons.YesNo);
             if (msg == DialogResult.Yes)
             {
-                var configFile = Config.ConfigFilePath;
-                var taskFile = ResourceManager.taskListSavePath;
-
+                // var configFile = Config.ConfigFilePath;
+                // var taskFile = ResourceManager.TaskListSavePath;
                 // TODO:バックアップ処理
                 // 解析ツールを作った時の共通処理を移植する。
             }

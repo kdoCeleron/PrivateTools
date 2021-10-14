@@ -217,6 +217,7 @@ namespace TaskManager
 
                 menu.Items.Add(menuItem);
             }
+
             {
                 var menuItem = new ToolStripMenuItem();
                 menuItem.Text = "終了";

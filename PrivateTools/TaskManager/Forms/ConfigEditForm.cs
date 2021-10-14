@@ -23,7 +23,7 @@ namespace TaskManager.Forms
         /// </summary>
         public ConfigEditForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace TaskManager
         /// <summary>
         /// タスク情報保存ファイル
         /// </summary>
-        public static string taskListSavePath = @".\taskList.json";
+        public static string TaskListSavePath = @".\taskList.json";
 
         /// <summary>
         /// シングルトンインスタンス
@@ -56,7 +56,7 @@ namespace TaskManager
 
             KeyInfo.Initialize();
 
-            var path = Utils.GetFullPath(taskListSavePath);
+            var path = Utils.GetFullPath(TaskListSavePath);
             if (File.Exists(path))
             {
                 var text = File.ReadAllText(path);
@@ -156,7 +156,7 @@ namespace TaskManager
             }
 
             var jsonStr = JsonConvert.SerializeObject(ResourceManager.Instance.taskInfoRoot, Formatting.Indented);
-            File.WriteAllText(Utils.GetFullPath(taskListSavePath), jsonStr);
+            File.WriteAllText(Utils.GetFullPath(TaskListSavePath), jsonStr);
         }
 
         /// <summary>

@@ -511,7 +511,6 @@ namespace TaskManager.Controls
             }
         }
 
-
         /// <summary>
         /// 行の内容にタスク情報を設定します。
         /// </summary>

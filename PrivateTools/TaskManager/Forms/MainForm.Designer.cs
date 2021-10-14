@@ -119,7 +119,7 @@ namespace TaskManager.Forms
             this.btnEditConfig.TabIndex = 4;
             this.btnEditConfig.Text = "設定変更";
             this.btnEditConfig.UseVisualStyleBackColor = true;
-            this.btnEditConfig.Click += new System.EventHandler(this.btnEditConfig_Click);
+            this.btnEditConfig.Click += new System.EventHandler(this.BtnEditConfig_Click);
             // 
             // BtnOutputCsv
             // 
@@ -329,7 +329,7 @@ namespace TaskManager.Forms
             this.btnBackup.TabIndex = 5;
             this.btnBackup.Text = "バックアップ";
             this.btnBackup.UseVisualStyleBackColor = true;
-            this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
+            this.btnBackup.Click += new System.EventHandler(this.BtnBackup_Click);
             // 
             // MainForm
             // 

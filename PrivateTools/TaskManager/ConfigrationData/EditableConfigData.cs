@@ -37,6 +37,5 @@ namespace TaskManager.ConfigrationData
         /// 黄色表示のしきい値
         /// </summary>
         public int ThresDaysYellow { get; set; }
-
     }
 }

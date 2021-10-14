@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <log4net>
+
+        <!-- アプリケーションログ出力設定 -->
+        <appender name="ApplicationLog" type="log4net.Appender.RollingFileAppender" >
+            <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+            <File value=".\Log\App.log" />
+            <appendToFile value="true" />
+            <staticLogFileName value="true" />
+            <rollingStyle value="Composite" />
+            <datePattern value='"_"yyyyMMdd".log"' />
+            <maxSizeRollBackups value="5" />
+            <maximumFileSize value="20MB" />
+            <layout type="log4net.Layout.PatternLayout">
+                <ConversionPattern value="%date %message%n" />
+            </layout>
+            <Encoding value="UTF-8"/>
+        </appender>
+
+        <!-- エラーログ出力設定 -->
+        <appender name="ErrorLog" type="log4net.Appender.RollingFileAppender" >
+            <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+            <File value=".\Log\Error.log" />
+            <appendToFile value="true" />
+            <staticLogFileName value="true" />
+            <rollingStyle value="Composite" />
+            <datePattern value='"_"yyyyMMdd".log"' />
+            <maxSizeRollBackups value="5" />
+            <maximumFileSize value="1MB" />
+            <layout type="log4net.Layout.PatternLayout">
+                <ConversionPattern value="%message%n" />
+            </layout>
+            <Encoding value="UTF-8"/>
+        </appender>
+
+        <!-- 通信ログ出力設定 -->
+        <appender name="TransportLog" type="log4net.Appender.RollingFileAppender" >
+            <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+            <File value=".\Log\Trans.log" />
+            <appendToFile value="true" />
+            <staticLogFileName value="false" />
+            <rollingStyle value="Composite" />
+            <datePattern value='"_"yyyyMMdd".log"' />
+            <maxSizeRollBackups value="5" />
+            <maximumFileSize value="20MB" />
+            <layout type="log4net.Layout.PatternLayout">
+                <ConversionPattern value="%message%n" />
+            </layout>
+            <Encoding value="UTF-8"/>
+        </appender>
+
+        <!-- タイムアウトログ出力設定 -->
+        <appender name="TimeoutLog" type="log4net.Appender.RollingFileAppender" >
+            <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+            <File value=".\Log\Timeout.log" />
+            <appendToFile value="true" />
+            <staticLogFileName value="false" />
+            <rollingStyle value="Composite" />
+            <datePattern value='"_"yyyyMMdd".log"' />
+            <maxSizeRollBackups value="5" />
+            <maximumFileSize value="20MB" />
+            <layout type="log4net.Layout.PatternLayout">
+                <ConversionPattern value="%message%n" />
+            </layout>
+            <Encoding value="UTF-8"/>
+        </appender>
+
+        <root>
+            <level value="DEBUG" />
+        </root>
+        <logger name="ApplicationLog" additivity="false">
+            <!-- 出力レベル（指定レベル以上のものが出力） -->
+            <!-- ALL < DEBUG < INFO < WARN < ERROR < FATAL -->
+            <level value="DEBUG" />
+            <appender-ref ref="ApplicationLog" />
+        </logger>
+        <logger name="ErrorLog" additivity="false">
+            <!-- 出力レベル（指定レベル以上のものが出力） -->
+            <!-- ALL < DEBUG < INFO < WARN < ERROR < FATAL -->
+            <level value="ERROR" />
+            <appender-ref ref="ErrorLog" />
+        </logger>
+        <logger name="TransportLog" additivity="false">
+            <!-- 出力レベル（指定レベル以上のものが出力） -->
+            <!-- ALL < DEBUG < INFO < WARN < ERROR < FATAL -->
+            <level value="INFO" />
+            <appender-ref ref="TransportLog" />
+        </logger>
+        <logger name="TimeoutLog" additivity="false">
+            <!-- 出力レベル（指定レベル以上のものが出力） -->
+            <!-- ALL < DEBUG < INFO < WARN < ERROR < FATAL -->
+            <level value="INFO" />
+            <appender-ref ref="TimeoutLog" />
+        </logger>
+    </log4net>
+</configuration>
