@@ -41,4 +41,30 @@
         /// </summary>
         Cancel
     }
+
+    /// <summary>
+    /// 画面種別
+    /// </summary>
+    public enum ViewKind
+    {
+        /// <summary>
+        /// メイン画面
+        /// </summary>
+        MainView,
+
+        /// <summary>
+        /// 設定編集画面
+        /// </summary>
+        ConfigEditView,
+
+        /// <summary>
+        /// タスク編集(追加)画面
+        /// </summary>
+        TaskEditView,
+
+        /// <summary>
+        /// グループ編集(追加)画面
+        /// </summary>
+        TaskGroupEditView,
+    }
 }

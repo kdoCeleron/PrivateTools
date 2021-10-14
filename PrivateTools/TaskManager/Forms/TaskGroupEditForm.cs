@@ -1,4 +1,6 @@
-﻿namespace TaskManager.Forms
+﻿using TaskManager.Interfaces;
+
+namespace TaskManager.Forms
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +19,7 @@
     /// <summary>
     /// グループ編集画面
     /// </summary>
-    public partial class TaskGroupEditForm : SubWindowBase
+    public partial class TaskGroupEditForm : SubWindowBase, ICanShowFromTaskTray
     {
         /// <summary>
         /// 編集対象
@@ -41,6 +43,22 @@
             this.CmbParentGroup.ValueMember = "Name";
 
             this.TxtGroupName.ImeMode = ImeMode.Hiragana;
+        }
+        
+        /// <summary>
+        /// タスクトレイから表示中かどうか
+        /// </summary>
+        public bool IsShowFromTaskTray { get; set; }
+
+        /// <summary>
+        /// 画面種別
+        /// </summary>
+        public ViewKind ViewType
+        {
+            get
+            {
+                return ViewKind.TaskGroupEditView;
+            }
         }
 
         /// <summary>

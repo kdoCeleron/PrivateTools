@@ -1,4 +1,6 @@
-﻿namespace TaskManager.Forms
+﻿using TaskManager.Interfaces;
+
+namespace TaskManager.Forms
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +19,7 @@
     /// <summary>
     /// タスク編集画面
     /// </summary>
-    public partial class TaskEditForm : SubWindowBase
+    public partial class TaskEditForm : SubWindowBase, ICanShowFromTaskTray
     {
         /// <summary>
         /// 編集対象
@@ -46,6 +48,22 @@
         /// 更新時イベント
         /// </summary>
         public event EventHandler<TaskItem> UpdateEvent;
+
+        /// <summary>
+        /// タスクトレイから表示中かどうか
+        /// </summary>
+        public bool IsShowFromTaskTray { get; set; }
+
+        /// <summary>
+        /// 画面種別
+        /// </summary>
+        public ViewKind ViewType
+        {
+            get
+            {
+                return ViewKind.TaskEditView;
+            }
+        }
 
         /// <summary>
         /// 初期化処理

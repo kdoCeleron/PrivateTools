@@ -10,13 +10,14 @@ using System.Windows.Forms;
 using TaskManager.Configration;
 using TaskManager.ConfigrationData;
 using TaskManager.Controls;
+using TaskManager.Interfaces;
 
 namespace TaskManager.Forms
 {
     /// <summary>
     /// 設定変更画面
     /// </summary>
-    public partial class ConfigEditForm : SubWindowBase
+    public partial class ConfigEditForm : SubWindowBase, ICanShowFromTaskTray
     {
         /// <summary>
         /// コンストラクタ
@@ -24,6 +25,22 @@ namespace TaskManager.Forms
         public ConfigEditForm()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// タスクトレイから表示中かどうか
+        /// </summary>
+        public bool IsShowFromTaskTray { get; set; }
+
+        /// <summary>
+        /// 画面種別
+        /// </summary>
+        public ViewKind ViewType
+        {
+            get
+            {
+                return ViewKind.ConfigEditView;
+            }
         }
 
         /// <summary>

@@ -57,6 +57,11 @@ namespace TaskManager.Configration
         #region プロパティ
 
         /// <summary>
+        /// バックアップ用のディレクトリ
+        /// </summary>
+        public string BackupRootDir { get; set; }
+
+        /// <summary>
         /// 変更可能設定
         /// </summary>
         public EditableConfigData EditableItems { get; set; }

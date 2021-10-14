@@ -107,5 +107,14 @@ namespace TaskManager
 
             return false;
         }
+
+        /// <summary>
+        /// 設定情報を保存します。
+        /// </summary>
+        public static void SaveConfigs()
+        {
+            Config.Instance.WriteConfig();
+            ResourceManager.Instance.SaveTaskList();
+        }
     }
 }

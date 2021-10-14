@@ -173,7 +173,7 @@ namespace MyTools.Common.Utils
             return Path.Combine(folder, fileName);
         }
 
-        public static string CreateDateTimeFolder(string baseFolder, string prefix = null, string suffix = null)
+        public static string CreateDateTimeFolder(string baseFolder, string prefix = null, string suffix = null, bool isFullPath = false)
         {
             if (!Directory.Exists(baseFolder))
             {
@@ -199,9 +199,14 @@ namespace MyTools.Common.Utils
             {
                 foldername = foldername + "_" + suffix;
             }
-
+            
             var path = Path.Combine(baseFolder, foldername);
             Directory.CreateDirectory(path);
+
+            if (isFullPath)
+            {
+                return Path.GetFullPath(path);
+            }
 
             return path;
         }

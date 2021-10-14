@@ -15,8 +15,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Toolkit.Uwp.Notifications;
+using MyTools.Common.Extensions;
+using MyTools.Common.Utils;
 using TaskManager.Configration;
 using TaskManager.Data;
+using TaskManager.Interfaces;
 using Timer = System.Threading.Timer;
 
 namespace TaskManager.Forms
@@ -24,7 +27,7 @@ namespace TaskManager.Forms
     /// <summary>
     /// メインフォーム
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MainForm : Form, ICanShowFromTaskTray
     {
         /// <summary>
         /// 現在時刻表示タイマ
@@ -49,8 +52,42 @@ namespace TaskManager.Forms
             this.InitializeComponent();
 
             this.Load += this.OnLoad;
+            this.Closing += this.OnClosing;
         }
-        
+
+        /// <summary>
+        /// タスクトレイから表示中かどうか
+        /// </summary>
+        public bool IsShowFromTaskTray { get; set; }
+
+        /// <summary>
+        /// 画面種別
+        /// </summary>
+        public ViewKind ViewType
+        {
+            get
+            {
+                return ViewKind.MainView;
+            }
+        }
+
+        /// <summary>
+        /// 画面クローズ時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            if (this.IsShowFromTaskTray)
+            {
+                // タスクトレイからの表示中の場合は、アプリ終了ではないため
+                // このタイミングでの保存は不要
+                return;
+            }
+
+            Utils.SaveConfigs();
+        }
+
         /// <summary>
         /// 画面ロード時のイベントです
         /// </summary>
@@ -460,10 +497,24 @@ namespace TaskManager.Forms
             var msg = MessageBox.Show("現在の設定および管理情報のバックアップを行います。", "確認", MessageBoxButtons.YesNo);
             if (msg == DialogResult.Yes)
             {
-                // var configFile = Config.ConfigFilePath;
-                // var taskFile = ResourceManager.TaskListSavePath;
-                // TODO:バックアップ処理
-                // 解析ツールを作った時の共通処理を移植する。
+                if (!Directory.Exists(Config.Instance.BackupRootDir))
+                {
+                    Directory.CreateDirectory(Config.Instance.BackupRootDir);
+                }
+
+                var configFile = Config.ConfigFilePath;
+                var taskFile = ResourceManager.TaskListSavePath;
+
+                var dateDir = PathUtils.CreateDateTimeFolder(Config.Instance.BackupRootDir, isFullPath: true);
+                if (Directory.Exists(dateDir))
+                {
+                    var configFileName = Path.GetFileName(configFile);
+                    var taskFileName = Path.GetFileName(taskFile);
+                    File.Copy(configFile, Path.Combine(dateDir, configFileName));
+                    File.Copy(taskFileName, Path.Combine(dateDir, taskFileName));
+
+                    MessageBox.Show("バックアップ完了しました。以下に生成されています。\n[{0}]".Fmt(dateDir));
+                }
             }
         }
     }

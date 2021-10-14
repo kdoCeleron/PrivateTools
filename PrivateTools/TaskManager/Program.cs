@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using log4net.Repository.Hierarchy;
 using TaskManager.Configration;
 using TaskManager.Forms;
 
@@ -12,6 +13,8 @@ namespace TaskManager
     using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+
+    using MyTools.Common;
 
     /// <summary>
     /// エントリポイント
@@ -57,6 +60,7 @@ namespace TaskManager
             var log4netConfigPath = @".\Log4net.xml";
             Logger.LoadConfig(log4netConfigPath);
 
+            // 各種設定ファイル読み込み
             Config.Instance.ReadConfig();
             ResourceManager.Instance.Initialize();
 
@@ -65,6 +69,7 @@ namespace TaskManager
 
             SetExceptionHandlers();
 
+            // 2重起動チェック
             if (IsDuplicate())
             {
                 Environment.Exit(0);
@@ -72,13 +77,19 @@ namespace TaskManager
 
             if (Config.Instance.EditableItems.IsStayInTaskTray)
             {
+                // タスクトレイ常駐
                 InitializeTaskTray();
+                if (Config.Instance.EditableItems.IsInitShowMainForm)
+                {
+                    // メイン画面を初期表示
+                    TaskTrayMenuEvents.ShowMainForm(null, null);
+                }
+
                 Application.Run();
             }
             else
             {
                 var mainform = new MainForm();
-                mainform.Closing += OnApplicationExit;
                 Application.Run(mainform);
             }
         }
@@ -145,7 +156,7 @@ namespace TaskManager
         {
             // 例外情報をエラーログに出力する
             var unKnownMessage = string.Format("予期せぬエラーが発生しました。\nツール管理者へ連絡してください。\n例外情報：{0}", e.ToString());
-            Logger.WriteErrorLog(unKnownMessage, e);
+            Logger.Error(unKnownMessage, e);
             MessageBox.Show(unKnownMessage, "エラー");
         }
 
@@ -209,34 +220,25 @@ namespace TaskManager
             {
                 var menuItem = new ToolStripMenuItem();
                 menuItem.Text = "メイン画面表示";
-                menuItem.Click += (sender, args) =>
-                {
-                    var win = new MainForm();
-                    win.Show();
-                };
-
+                menuItem.Click += TaskTrayMenuEvents.ShowMainForm;
                 menu.Items.Add(menuItem);
             }
 
             {
                 var menuItem = new ToolStripMenuItem();
+                menuItem.Text = "設定変更";
+                menuItem.Click += TaskTrayMenuEvents.ShowConfigEditForm;
+                menu.Items.Add(menuItem);
+            }
+            
+            {
+                var menuItem = new ToolStripMenuItem();
                 menuItem.Text = "終了";
-                menuItem.Click += OnApplicationExit;
+                menuItem.Click += TaskTrayMenuEvents.ApplicationExit;
                 menu.Items.Add(menuItem);
             }
 
             icon.ContextMenuStrip = menu;
-        }
-
-        /// <summary>
-        /// アプリケーション終了時イベント
-        /// </summary>
-        /// <param name="sender">イベント送信オブジェクト</param>
-        /// <param name="e">イベント引数</param>
-        private static void OnApplicationExit(object sender, EventArgs e)
-        {
-            Config.Instance.WriteConfig();
-            ResourceManager.Instance.SaveTaskList();
         }
 
         #endregion
