@@ -40,6 +40,8 @@
             this.CmbAttachFiles = new System.Windows.Forms.ComboBox();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnCancel = new System.Windows.Forms.Button();
+            this.btnTenpuAdd = new System.Windows.Forms.Button();
+            this.btnTenpuDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -81,7 +83,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 244);
+            this.label5.Location = new System.Drawing.Point(12, 315);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 12);
             this.label5.TabIndex = 4;
@@ -115,20 +117,20 @@
             this.TxtMemo.Multiline = true;
             this.TxtMemo.Name = "TxtMemo";
             this.TxtMemo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TxtMemo.Size = new System.Drawing.Size(266, 97);
+            this.TxtMemo.Size = new System.Drawing.Size(428, 174);
             this.TxtMemo.TabIndex = 8;
             // 
             // CmbAttachFiles
             // 
             this.CmbAttachFiles.FormattingEnabled = true;
-            this.CmbAttachFiles.Location = new System.Drawing.Point(87, 241);
+            this.CmbAttachFiles.Location = new System.Drawing.Point(87, 312);
             this.CmbAttachFiles.Name = "CmbAttachFiles";
             this.CmbAttachFiles.Size = new System.Drawing.Size(266, 20);
             this.CmbAttachFiles.TabIndex = 9;
             // 
             // BtnUpdate
             // 
-            this.BtnUpdate.Location = new System.Drawing.Point(197, 283);
+            this.BtnUpdate.Location = new System.Drawing.Point(359, 355);
             this.BtnUpdate.Name = "BtnUpdate";
             this.BtnUpdate.Size = new System.Drawing.Size(75, 23);
             this.BtnUpdate.TabIndex = 10;
@@ -138,7 +140,7 @@
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(278, 283);
+            this.BtnCancel.Location = new System.Drawing.Point(440, 355);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 11;
@@ -146,11 +148,33 @@
             this.BtnCancel.UseVisualStyleBackColor = true;
             this.BtnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
+            // btnTenpuAdd
+            // 
+            this.btnTenpuAdd.Location = new System.Drawing.Point(359, 310);
+            this.btnTenpuAdd.Name = "btnTenpuAdd";
+            this.btnTenpuAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnTenpuAdd.TabIndex = 12;
+            this.btnTenpuAdd.Text = "追加";
+            this.btnTenpuAdd.UseVisualStyleBackColor = true;
+            this.btnTenpuAdd.Click += new System.EventHandler(this.BtnTenpuAdd_Click);
+            // 
+            // btnTenpuDelete
+            // 
+            this.btnTenpuDelete.Location = new System.Drawing.Point(440, 310);
+            this.btnTenpuDelete.Name = "btnTenpuDelete";
+            this.btnTenpuDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnTenpuDelete.TabIndex = 13;
+            this.btnTenpuDelete.Text = "削除";
+            this.btnTenpuDelete.UseVisualStyleBackColor = true;
+            this.btnTenpuDelete.Click += new System.EventHandler(this.BtnTenpuDelete_Click);
+            // 
             // TaskEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(372, 319);
+            this.ClientSize = new System.Drawing.Size(526, 390);
+            this.Controls.Add(this.btnTenpuDelete);
+            this.Controls.Add(this.btnTenpuAdd);
             this.Controls.Add(this.BtnCancel);
             this.Controls.Add(this.BtnUpdate);
             this.Controls.Add(this.CmbAttachFiles);
@@ -186,5 +210,7 @@
         private System.Windows.Forms.ComboBox CmbAttachFiles;
         private System.Windows.Forms.Button BtnUpdate;
         private System.Windows.Forms.Button BtnCancel;
+        private System.Windows.Forms.Button btnTenpuAdd;
+        private System.Windows.Forms.Button btnTenpuDelete;
     }
 }

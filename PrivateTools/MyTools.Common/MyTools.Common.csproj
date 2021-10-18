@@ -47,6 +47,7 @@
     <Compile Include="Extensions\StringExternsions.cs" />
     <Compile Include="Interfaces\IPropertyAccessor.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="MessageBuilder.cs" />
     <Compile Include="PropertyAccessor.cs" />
     <Compile Include="StringTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
