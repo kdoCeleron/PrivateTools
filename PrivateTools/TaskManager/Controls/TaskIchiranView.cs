@@ -542,7 +542,10 @@ namespace TaskManager.Controls
                         setValue = item.Memo;
                     }
 
-                    row.Cells[columnIndex].Value = setValue;
+                    if (row.Cells.Count > columnIndex)
+                    {
+                        row.Cells[columnIndex].Value = setValue;
+                    }
                 }
             }
         }

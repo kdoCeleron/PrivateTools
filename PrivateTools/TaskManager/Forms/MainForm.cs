@@ -85,6 +85,12 @@ namespace TaskManager.Forms
                 return;
             }
 
+            if (this._nowTimer != null)
+            {
+                this._nowTimer.Dispose();
+                this._nowTimer = null;
+            }
+
             Utils.SaveConfigs();
         }
 

@@ -406,6 +406,7 @@ namespace TaskManager.Forms
         /// ドラッグアンドドロップされたファイルのパスを取得する
         /// </summary>
         /// <param name="eventArgs">イベント引数</param>
+        /// <returns>取得結果</returns>
         private List<string> GetDragAndGropFileList(DragEventArgs eventArgs)
         {
             var files = (string[])eventArgs.Data.GetData(DataFormats.FileDrop, false);
