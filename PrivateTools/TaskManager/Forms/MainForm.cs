@@ -78,17 +78,17 @@ namespace TaskManager.Forms
         /// <param name="e">イベント引数</param>
         private void OnClosing(object sender, CancelEventArgs e)
         {
+            if (this._nowTimer != null)
+            {
+                this._nowTimer.Dispose();
+                this._nowTimer = null;
+            }
+
             if (this.IsShowFromTaskTray)
             {
                 // タスクトレイからの表示中の場合は、アプリ終了ではないため
                 // このタイミングでの保存は不要
                 return;
-            }
-
-            if (this._nowTimer != null)
-            {
-                this._nowTimer.Dispose();
-                this._nowTimer = null;
             }
 
             Utils.SaveConfigs();
