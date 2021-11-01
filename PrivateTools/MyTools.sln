@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTools.Common", "MyTools.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{4C1BEAB0-5763-4BAF-952F-154BD988B9B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipBoardToPng", "ClipBoadToPng\ClipBoardToPng.csproj", "{E135BDA7-E296-46EB-A9E8-CEB252A98462}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{4C1BEAB0-5763-4BAF-952F-154BD988B9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C1BEAB0-5763-4BAF-952F-154BD988B9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C1BEAB0-5763-4BAF-952F-154BD988B9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E135BDA7-E296-46EB-A9E8-CEB252A98462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E135BDA7-E296-46EB-A9E8-CEB252A98462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E135BDA7-E296-46EB-A9E8-CEB252A98462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E135BDA7-E296-46EB-A9E8-CEB252A98462}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
