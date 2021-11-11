@@ -9,5 +9,6 @@
     <IsNotifyWindowsToast>false</IsNotifyWindowsToast>
     <ThresDaysRed>1</ThresDaysRed>
     <ThresDaysYellow>3</ThresDaysYellow>
+    <NotifyTermOutSpanDay>7</NotifyTermOutSpanDay>
   </EditableItems>
 </Config>

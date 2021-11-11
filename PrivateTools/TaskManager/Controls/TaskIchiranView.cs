@@ -61,7 +61,7 @@ namespace TaskManager.Controls
             this.columnInfoMap.Add(index, item4);
 
             index++;
-            var item5 = new DataGridColumnInfo(index, DataGridColumnType.Label, DataGridViewContentAlignment.MiddleLeft, 250, "メモ", string.Empty);
+            var item5 = new DataGridColumnInfo(index, DataGridColumnType.Label, DataGridViewContentAlignment.MiddleLeft, 400, "メモ", string.Empty);
             this.columnInfoMap.Add(index, item5);
 
             index++;

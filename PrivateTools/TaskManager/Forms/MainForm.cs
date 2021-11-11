@@ -30,11 +30,6 @@ namespace TaskManager.Forms
     public partial class MainForm : Form, ICanShowFromTaskTray
     {
         /// <summary>
-        /// 現在時刻表示タイマ
-        /// </summary>
-        private Timer _nowTimer;
-
-        /// <summary>
         /// グループ一覧の更新を抑止するフラグ
         /// </summary>
         private bool isSuspentGroupListView = false;
@@ -78,11 +73,7 @@ namespace TaskManager.Forms
         /// <param name="e">イベント引数</param>
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            if (this._nowTimer != null)
-            {
-                this._nowTimer.Dispose();
-                this._nowTimer = null;
-            }
+            Program.ActionTermOutTimerEventOnCompleted -= this.ActionTermOutTimerEventOnCompleted;
 
             if (this.IsShowFromTaskTray)
             {
@@ -105,11 +96,8 @@ namespace TaskManager.Forms
 
             ResourceManager.Instance.MainForm = this;
 
-            this.MaximumSize = this.Size;
-            this.MinimumSize = this.Size;
-
-            this._nowTimer = new Timer(this.NowTimerCallBack);
-            this._nowTimer.Change(new TimeSpan(), TimeSpan.FromMinutes(1));
+            Program.ActionTermOutTimerEventOnCompleted -= this.ActionTermOutTimerEventOnCompleted;
+            Program.ActionTermOutTimerEventOnCompleted += this.ActionTermOutTimerEventOnCompleted;
 
             this.DgvAllTasks.Initialize(true);
             this.DgvRecentTasks.Initialize(false);
@@ -123,6 +111,30 @@ namespace TaskManager.Forms
             this.InitializeGroupList();
 
             this.TxtFilter.TextChanged += this.TxtFilter_OnTextChanged;
+
+            this.UpdateCurrentDateTime();
+        }
+
+        /// <summary>
+        /// 期限切れ判定タイマのタイムアウト処理完了時処理
+        /// </summary>
+        private void ActionTermOutTimerEventOnCompleted()
+        {
+            UiContext.Post(() =>
+            {
+                this.UpdateCurrentDateTime();
+
+                this.DgvAllTasksOnUpdateEvent(null, null);
+            });
+        }
+
+        /// <summary>
+        /// 現在時刻を更新します。
+        /// </summary>
+        private void UpdateCurrentDateTime()
+        {
+            var now = DateTime.Now;
+            this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm");
         }
 
         /// <summary>
@@ -353,16 +365,6 @@ namespace TaskManager.Forms
                 this.LabelDateTime.Text = "現在日時：" + now.ToString("yyyy/MM/dd HH:mm");
 
                 this.DgvAllTasksOnUpdateEvent(null, null);
-
-                // TODO:windows通知の仮実装。
-                var tasks = ResourceManager.Instance.GetAllTaskItems().Any(x => Utils.IsOverRedZone(x.DateTimeLimit));
-                if (tasks)
-                {
-                    var toast = new ToastContentBuilder()
-                        .AddText("タスクの期限切れ通知")
-                        .AddText("期限切れのタスクがあります。確認してください");
-                    toast.Show();
-                }
             });
         }
 

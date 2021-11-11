@@ -1,6 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
 using log4net.Repository.Hierarchy;
+using Microsoft.Toolkit.Uwp.Notifications;
+using MyTools.Common.Utils;
 using TaskManager.Configration;
+using TaskManager.Data;
 using TaskManager.Forms;
 
 namespace TaskManager
@@ -24,6 +27,11 @@ namespace TaskManager
         #region フィールド
 
         /// <summary>
+        /// 期限切れ検知用タイマのキー
+        /// </summary>
+        public static int TermOutTimerKey;
+
+        /// <summary>
         /// ウインドウ表示パラメータ
         /// </summary>
         private const int SwNormal = 1;
@@ -37,6 +45,25 @@ namespace TaskManager
         /// 二重起動防止用Mutexオブジェクト
         /// </summary>
         private static Mutex duplicateMutex;
+
+        /// <summary>
+        /// 前回期限切れ判定時の期限切れタスクのリスト
+        /// </summary>
+        private static List<TaskItem> prevTermOutTaskList = new List<TaskItem>();
+
+        /// <summary>
+        /// 前回期限切れ判定時の日時
+        /// </summary>
+        private static DateTime prevNotifedDateTime;
+
+        #endregion
+
+        #region イベント
+
+        /// <summary>
+        /// 期限切れ検知用タイマのタイムアウト完了時処理
+        /// </summary>
+        public static event Action ActionTermOutTimerEventOnCompleted = delegate { };
 
         #endregion
 
@@ -75,6 +102,8 @@ namespace TaskManager
                 Environment.Exit(0);
             }
 
+            TermOutTimerKey = TimerManager.CreateTimer(TermOutTimerCallBack);
+            TimerManager.Change(TermOutTimerKey, new TimeSpan(), TimeSpan.FromMinutes(1));
             if (Config.Instance.EditableItems.IsStayInTaskTray)
             {
                 // タスクトレイ常駐
@@ -92,6 +121,42 @@ namespace TaskManager
                 var mainform = new MainForm();
                 Application.Run(mainform);
             }
+        }
+
+        /// <summary>
+        /// 期限切れ判定タイマのタイムアウト時コールバック
+        /// </summary>
+        /// <param name="state">状態</param>
+        private static void TermOutTimerCallBack(object state)
+        {
+            var tasks = ResourceManager.Instance.GetAllTaskItems().Where(x => Utils.IsOverRedZone(x.DateTimeLimit));
+            var tmpTasks = tasks.ToList();
+            var today = DateTime.Today;
+            var isNotifyToast = true;
+            if (prevTermOutTaskList.SequenceEqual(tmpTasks))
+            {
+                var diff = (today - prevNotifedDateTime).Days;
+                if (Config.Instance.EditableItems.NotifyTermOutSpanDay > diff)
+                {
+                    // 同一リストかつ再通知期限内の場合は通知しない。
+                    isNotifyToast = false;
+                }
+            }
+
+            if (isNotifyToast)
+            {
+                prevNotifedDateTime = today;
+                prevTermOutTaskList = tmpTasks;
+                if (prevTermOutTaskList.Any())
+                {
+                    var toast = new ToastContentBuilder()
+                        .AddText("タスクの期限切れ通知")
+                        .AddText("期限切れのタスクがあります。確認してください");
+                    toast.Show();
+                }
+            }
+
+            ActionTermOutTimerEventOnCompleted();
         }
 
         /// <summary>
@@ -264,6 +329,8 @@ namespace TaskManager
                     TaskTrayMenuEvents.Icon.Dispose();
                     TaskTrayMenuEvents.Icon = null;
                 }
+
+                TimerManager.DisposeTimer(TermOutTimerKey);
             };
         }
 

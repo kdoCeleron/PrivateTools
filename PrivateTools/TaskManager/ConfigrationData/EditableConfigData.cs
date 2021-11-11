@@ -37,5 +37,10 @@ namespace TaskManager.ConfigrationData
         /// 黄色表示のしきい値
         /// </summary>
         public int ThresDaysYellow { get; set; }
+
+        /// <summary>
+        /// 期限切れ通知の間隔(日)
+        /// </summary>
+        public int NotifyTermOutSpanDay { get; set; }
     }
 }
