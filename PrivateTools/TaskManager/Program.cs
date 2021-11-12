@@ -129,30 +129,33 @@ namespace TaskManager
         /// <param name="state">状態</param>
         private static void TermOutTimerCallBack(object state)
         {
-            var tasks = ResourceManager.Instance.GetAllTaskItems().Where(x => Utils.IsOverRedZone(x.DateTimeLimit));
-            var tmpTasks = tasks.ToList();
-            var today = DateTime.Today;
-            var isNotifyToast = true;
-            if (prevTermOutTaskList.SequenceEqual(tmpTasks))
+            if (Config.Instance.EditableItems.IsNotifyWindowsToast)
             {
-                var diff = (today - prevNotifedDateTime).Days;
-                if (Config.Instance.EditableItems.NotifyTermOutSpanDay > diff)
+                var tasks = ResourceManager.Instance.GetAllTaskItems().Where(x => Utils.IsOverRedZone(x.DateTimeLimit));
+                var tmpTasks = tasks.ToList();
+                var today = DateTime.Today;
+                var isNotifyToast = true;
+                if (prevTermOutTaskList.SequenceEqual(tmpTasks))
                 {
-                    // 同一リストかつ再通知期限内の場合は通知しない。
-                    isNotifyToast = false;
+                    var diff = (today - prevNotifedDateTime).Days;
+                    if (Config.Instance.EditableItems.NotifyTermOutSpanDay > diff)
+                    {
+                        // 同一リストかつ再通知期限内の場合は通知しない。
+                        isNotifyToast = false;
+                    }
                 }
-            }
 
-            if (isNotifyToast)
-            {
-                prevNotifedDateTime = today;
-                prevTermOutTaskList = tmpTasks;
-                if (prevTermOutTaskList.Any())
+                if (isNotifyToast)
                 {
-                    var toast = new ToastContentBuilder()
-                        .AddText("タスクの期限切れ通知")
-                        .AddText("期限切れのタスクがあります。確認してください");
-                    toast.Show();
+                    prevNotifedDateTime = today;
+                    prevTermOutTaskList = tmpTasks;
+                    if (prevTermOutTaskList.Any())
+                    {
+                        var toast = new ToastContentBuilder()
+                            .AddText("タスクの期限切れ通知")
+                            .AddText("期限切れのタスクがあります。確認してください");
+                        toast.Show();
+                    }
                 }
             }
 
