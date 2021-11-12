@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows.ApplicationModel.Chat;
+using Windows.ApplicationModel.Contacts;
 using TaskManager.Configration;
 using TaskManager.ConfigrationData;
 using TaskManager.Controls;
@@ -55,7 +57,10 @@ namespace TaskManager.Forms
                 return false;
             }
 
+            this.chkIsStayInTaskTray.Checked = config.IsStayInTaskTray;
             this.chkIsInitShowMainForm.Checked = config.IsInitShowMainForm;
+            this.chkIsNotifyWindowsToast.Checked = config.IsNotifyWindowsToast;
+            this.spnNotifyTermOutSpanDay.Value = config.NotifyTermOutSpanDay;
             this.spnWarnRed.Value = config.ThresDaysRed;
             this.spnWarnYellow.Value = config.ThresDaysYellow;
 
@@ -69,7 +74,10 @@ namespace TaskManager.Forms
         /// <param name="e">イベント引数</param>
         private void BtnKakutei_Click(object sender, EventArgs e)
         {
+            Config.Instance.EditableItems.IsStayInTaskTray = this.chkIsStayInTaskTray.Checked;
             Config.Instance.EditableItems.IsInitShowMainForm = this.chkIsInitShowMainForm.Checked;
+            Config.Instance.EditableItems.IsNotifyWindowsToast = this.chkIsNotifyWindowsToast.Checked;
+            Config.Instance.EditableItems.NotifyTermOutSpanDay = (int)this.spnNotifyTermOutSpanDay.Value;
             Config.Instance.EditableItems.ThresDaysRed = (int)this.spnWarnRed.Value;
             Config.Instance.EditableItems.ThresDaysYellow = (int)this.spnWarnYellow.Value;
 

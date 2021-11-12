@@ -131,7 +131,7 @@ namespace TaskManager
         {
             if (Config.Instance.EditableItems.IsNotifyWindowsToast)
             {
-                var tasks = ResourceManager.Instance.GetAllTaskItems().Where(x => Utils.IsOverRedZone(x.DateTimeLimit));
+                var tasks = ResourceManager.Instance.GetAllTaskItems().Where(x => Utils.IsOverLimit(x.DateTimeLimit));
                 var tmpTasks = tasks.ToList();
                 var today = DateTime.Today;
                 var isNotifyToast = true;

@@ -94,6 +94,13 @@ namespace TaskManager.Forms
                 this.CmbAttachFiles.Items.Add(info);
             }
 
+
+            this.btnOpenDirAttachedFiles.Enabled = false;
+            if (taskItem.AttachFile.Any())
+            {
+                this.btnOpenDirAttachedFiles.Enabled = true;
+            }
+
             this.target = taskItem;
 
             return true;
@@ -427,6 +434,23 @@ namespace TaskManager.Forms
             {
                 eventArgs.Effect = DragDropEffects.None;
             }
+        }
+
+        /// <summary>
+        /// 添付ファイルのフォルダを開くボタン押下時イベント
+        /// </summary>
+        /// <param name="sender">イベント送信オブジェクト</param>
+        /// <param name="e">イベント引数</param>
+        private void btnOpenDirAttachedFiles_Click(object sender, EventArgs e)
+        {
+            var taskKey = this.target.Key.Key;
+            var taskDir = Path.Combine(Config.Instance.AttachedFileRootDir, taskKey);
+            if (!Directory.Exists(taskDir))
+            {
+                return;
+            }
+
+            System.Diagnostics.Process.Start(taskDir);
         }
     }
 }

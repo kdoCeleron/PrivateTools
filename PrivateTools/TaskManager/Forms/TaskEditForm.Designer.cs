@@ -42,6 +42,7 @@
             this.BtnCancel = new System.Windows.Forms.Button();
             this.btnTenpuAdd = new System.Windows.Forms.Button();
             this.btnTenpuDelete = new System.Windows.Forms.Button();
+            this.btnOpenDirAttachedFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -117,7 +118,7 @@
             this.TxtMemo.Multiline = true;
             this.TxtMemo.Name = "TxtMemo";
             this.TxtMemo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TxtMemo.Size = new System.Drawing.Size(428, 174);
+            this.TxtMemo.Size = new System.Drawing.Size(506, 174);
             this.TxtMemo.TabIndex = 8;
             // 
             // CmbAttachFiles
@@ -130,7 +131,7 @@
             // 
             // BtnUpdate
             // 
-            this.BtnUpdate.Location = new System.Drawing.Point(359, 355);
+            this.BtnUpdate.Location = new System.Drawing.Point(437, 355);
             this.BtnUpdate.Name = "BtnUpdate";
             this.BtnUpdate.Size = new System.Drawing.Size(75, 23);
             this.BtnUpdate.TabIndex = 10;
@@ -140,7 +141,7 @@
             // 
             // BtnCancel
             // 
-            this.BtnCancel.Location = new System.Drawing.Point(440, 355);
+            this.BtnCancel.Location = new System.Drawing.Point(518, 355);
             this.BtnCancel.Name = "BtnCancel";
             this.BtnCancel.Size = new System.Drawing.Size(75, 23);
             this.BtnCancel.TabIndex = 11;
@@ -150,7 +151,7 @@
             // 
             // btnTenpuAdd
             // 
-            this.btnTenpuAdd.Location = new System.Drawing.Point(359, 310);
+            this.btnTenpuAdd.Location = new System.Drawing.Point(437, 311);
             this.btnTenpuAdd.Name = "btnTenpuAdd";
             this.btnTenpuAdd.Size = new System.Drawing.Size(75, 23);
             this.btnTenpuAdd.TabIndex = 12;
@@ -160,7 +161,7 @@
             // 
             // btnTenpuDelete
             // 
-            this.btnTenpuDelete.Location = new System.Drawing.Point(440, 310);
+            this.btnTenpuDelete.Location = new System.Drawing.Point(518, 311);
             this.btnTenpuDelete.Name = "btnTenpuDelete";
             this.btnTenpuDelete.Size = new System.Drawing.Size(75, 23);
             this.btnTenpuDelete.TabIndex = 13;
@@ -168,11 +169,22 @@
             this.btnTenpuDelete.UseVisualStyleBackColor = true;
             this.btnTenpuDelete.Click += new System.EventHandler(this.BtnTenpuDelete_Click);
             // 
+            // btnOpenDirAttachedFiles
+            // 
+            this.btnOpenDirAttachedFiles.Location = new System.Drawing.Point(359, 311);
+            this.btnOpenDirAttachedFiles.Name = "btnOpenDirAttachedFiles";
+            this.btnOpenDirAttachedFiles.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenDirAttachedFiles.TabIndex = 14;
+            this.btnOpenDirAttachedFiles.Text = "フォルダを開く";
+            this.btnOpenDirAttachedFiles.UseVisualStyleBackColor = true;
+            this.btnOpenDirAttachedFiles.Click += new System.EventHandler(this.btnOpenDirAttachedFiles_Click);
+            // 
             // TaskEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 390);
+            this.ClientSize = new System.Drawing.Size(603, 390);
+            this.Controls.Add(this.btnOpenDirAttachedFiles);
             this.Controls.Add(this.btnTenpuDelete);
             this.Controls.Add(this.btnTenpuAdd);
             this.Controls.Add(this.BtnCancel);
@@ -212,5 +224,6 @@
         private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Button btnTenpuAdd;
         private System.Windows.Forms.Button btnTenpuDelete;
+        private System.Windows.Forms.Button btnOpenDirAttachedFiles;
     }
 }

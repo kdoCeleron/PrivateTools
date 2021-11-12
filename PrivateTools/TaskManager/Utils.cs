@@ -55,6 +55,21 @@ namespace TaskManager
         }
 
         /// <summary>
+        /// 期限切れかどうかを判定します
+        /// </summary>
+        /// <param name="value">日時</param>
+        /// <returns>true：正/false：それ以外</returns>
+        public static bool IsOverLimit(DateTime value)
+        {
+            var tmp = DateTime.Now;
+            var now = new DateTime(tmp.Year, tmp.Month, tmp.Day);
+            var date = new DateTime(value.Year, value.Month, value.Day);
+
+            return date < now;
+        }
+
+
+        /// <summary>
         /// 赤表示圏内かどうかを判定します
         /// </summary>
         /// <param name="value">日時</param>

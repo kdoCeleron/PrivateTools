@@ -33,14 +33,15 @@ namespace TaskManager.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PanelHeader = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.LabelDateTime = new System.Windows.Forms.Label();
             this.PanelTop = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.btnBackup = new System.Windows.Forms.Button();
-            this.btnEditConfig = new System.Windows.Forms.Button();
-            this.BtnOutputCsv = new System.Windows.Forms.Button();
             this.BtnOpenExecFolder = new System.Windows.Forms.Button();
-            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
+            this.BtnOutputCsv = new System.Windows.Forms.Button();
+            this.btnEditConfig = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelRecentTasks = new System.Windows.Forms.Label();
             this.PanelRight = new System.Windows.Forms.Panel();
@@ -52,26 +53,25 @@ namespace TaskManager.Forms
             this.ColumnGroups = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ColumnTaskNum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.PanelLeft = new System.Windows.Forms.Panel();
+            this.TxtFilter = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.LblDisplayGroup = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.LabelTaskView = new System.Windows.Forms.Label();
-            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelButtom = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.TxtFilter = new System.Windows.Forms.TextBox();
+            this.DgvAllTasks = new TaskManager.Controls.TaskIchiranView();
+            this.DgvRecentTasks = new TaskManager.Controls.TaskIchiranView();
             this.PanelHeader.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.PanelTop.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
+            this.panel4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.PanelRight.SuspendLayout();
             this.PanelLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).BeginInit();
             this.PanelButtom.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).BeginInit();
             this.SuspendLayout();
             // 
             // PanelHeader
@@ -80,8 +80,17 @@ namespace TaskManager.Forms
             this.PanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.PanelHeader.Location = new System.Drawing.Point(0, 0);
             this.PanelHeader.Name = "PanelHeader";
-            this.PanelHeader.Size = new System.Drawing.Size(1184, 22);
+            this.PanelHeader.Size = new System.Drawing.Size(1185, 22);
             this.PanelHeader.TabIndex = 0;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.LabelDateTime);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel5.Location = new System.Drawing.Point(985, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(200, 22);
+            this.panel5.TabIndex = 1;
             // 
             // LabelDateTime
             // 
@@ -99,7 +108,7 @@ namespace TaskManager.Forms
             this.PanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.PanelTop.Location = new System.Drawing.Point(0, 22);
             this.PanelTop.Name = "PanelTop";
-            this.PanelTop.Size = new System.Drawing.Size(1184, 211);
+            this.PanelTop.Size = new System.Drawing.Size(1185, 211);
             this.PanelTop.TabIndex = 1;
             // 
             // panel2
@@ -109,8 +118,20 @@ namespace TaskManager.Forms
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 25);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1184, 180);
+            this.panel2.Size = new System.Drawing.Size(1185, 180);
             this.panel2.TabIndex = 3;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.btnBackup);
+            this.panel4.Controls.Add(this.BtnOpenExecFolder);
+            this.panel4.Controls.Add(this.BtnOutputCsv);
+            this.panel4.Controls.Add(this.btnEditConfig);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel4.Location = new System.Drawing.Point(958, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(227, 180);
+            this.panel4.TabIndex = 7;
             // 
             // btnBackup
             // 
@@ -122,15 +143,15 @@ namespace TaskManager.Forms
             this.btnBackup.UseVisualStyleBackColor = true;
             this.btnBackup.Click += new System.EventHandler(this.BtnBackup_Click);
             // 
-            // btnEditConfig
+            // BtnOpenExecFolder
             // 
-            this.btnEditConfig.Location = new System.Drawing.Point(144, 6);
-            this.btnEditConfig.Name = "btnEditConfig";
-            this.btnEditConfig.Size = new System.Drawing.Size(75, 23);
-            this.btnEditConfig.TabIndex = 4;
-            this.btnEditConfig.Text = "設定変更";
-            this.btnEditConfig.UseVisualStyleBackColor = true;
-            this.btnEditConfig.Click += new System.EventHandler(this.BtnEditConfig_Click);
+            this.BtnOpenExecFolder.Location = new System.Drawing.Point(63, 6);
+            this.BtnOpenExecFolder.Name = "BtnOpenExecFolder";
+            this.BtnOpenExecFolder.Size = new System.Drawing.Size(75, 23);
+            this.BtnOpenExecFolder.TabIndex = 2;
+            this.BtnOpenExecFolder.Text = "フォルダを開く";
+            this.BtnOpenExecFolder.UseVisualStyleBackColor = true;
+            this.BtnOpenExecFolder.Click += new System.EventHandler(this.BtnOpenExecFolder_Click);
             // 
             // BtnOutputCsv
             // 
@@ -142,27 +163,15 @@ namespace TaskManager.Forms
             this.BtnOutputCsv.UseVisualStyleBackColor = true;
             this.BtnOutputCsv.Click += new System.EventHandler(this.BtnOutputCsv_Click);
             // 
-            // BtnOpenExecFolder
+            // btnEditConfig
             // 
-            this.BtnOpenExecFolder.Location = new System.Drawing.Point(63, 6);
-            this.BtnOpenExecFolder.Name = "BtnOpenExecFolder";
-            this.BtnOpenExecFolder.Size = new System.Drawing.Size(75, 23);
-            this.BtnOpenExecFolder.TabIndex = 2;
-            this.BtnOpenExecFolder.Text = "フォルダを開く";
-            this.BtnOpenExecFolder.UseVisualStyleBackColor = true;
-            this.BtnOpenExecFolder.Click += new System.EventHandler(this.BtnOpenExecFolder_Click);
-            // 
-            // DgvRecentTasks
-            // 
-            this.DgvRecentTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgvRecentTasks.Location = new System.Drawing.Point(11, 6);
-            this.DgvRecentTasks.Name = "DgvRecentTasks";
-            this.DgvRecentTasks.RowTemplate.Height = 21;
-            this.DgvRecentTasks.Size = new System.Drawing.Size(940, 171);
-            this.DgvRecentTasks.TabIndex = 0;
+            this.btnEditConfig.Location = new System.Drawing.Point(144, 6);
+            this.btnEditConfig.Name = "btnEditConfig";
+            this.btnEditConfig.Size = new System.Drawing.Size(75, 23);
+            this.btnEditConfig.TabIndex = 4;
+            this.btnEditConfig.Text = "設定変更";
+            this.btnEditConfig.UseVisualStyleBackColor = true;
+            this.btnEditConfig.Click += new System.EventHandler(this.BtnEditConfig_Click);
             // 
             // panel1
             // 
@@ -170,7 +179,7 @@ namespace TaskManager.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1184, 25);
+            this.panel1.Size = new System.Drawing.Size(1185, 25);
             this.panel1.TabIndex = 2;
             // 
             // LabelRecentTasks
@@ -192,7 +201,7 @@ namespace TaskManager.Forms
             this.PanelRight.Dock = System.Windows.Forms.DockStyle.Left;
             this.PanelRight.Location = new System.Drawing.Point(0, 0);
             this.PanelRight.Name = "PanelRight";
-            this.PanelRight.Size = new System.Drawing.Size(265, 388);
+            this.PanelRight.Size = new System.Drawing.Size(265, 398);
             this.PanelRight.TabIndex = 2;
             // 
             // BtnReNameGroup
@@ -247,7 +256,7 @@ namespace TaskManager.Forms
             this.LsvGroup.Location = new System.Drawing.Point(11, 44);
             this.LsvGroup.MultiSelect = false;
             this.LsvGroup.Name = "LsvGroup";
-            this.LsvGroup.Size = new System.Drawing.Size(240, 337);
+            this.LsvGroup.Size = new System.Drawing.Size(240, 342);
             this.LsvGroup.TabIndex = 0;
             this.LsvGroup.UseCompatibleStateImageBehavior = false;
             // 
@@ -275,8 +284,18 @@ namespace TaskManager.Forms
             this.PanelLeft.Controls.Add(this.DgvAllTasks);
             this.PanelLeft.Location = new System.Drawing.Point(271, 0);
             this.PanelLeft.Name = "PanelLeft";
-            this.PanelLeft.Size = new System.Drawing.Size(916, 384);
+            this.PanelLeft.Size = new System.Drawing.Size(917, 395);
             this.PanelLeft.TabIndex = 3;
+            // 
+            // TxtFilter
+            // 
+            this.TxtFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtFilter.Location = new System.Drawing.Point(654, 14);
+            this.TxtFilter.Name = "TxtFilter";
+            this.TxtFilter.Size = new System.Drawing.Size(245, 19);
+            this.TxtFilter.TabIndex = 5;
             // 
             // label2
             // 
@@ -317,6 +336,16 @@ namespace TaskManager.Forms
             this.LabelTaskView.TabIndex = 2;
             this.LabelTaskView.Text = "タスク一覧";
             // 
+            // PanelButtom
+            // 
+            this.PanelButtom.Controls.Add(this.PanelRight);
+            this.PanelButtom.Controls.Add(this.PanelLeft);
+            this.PanelButtom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelButtom.Location = new System.Drawing.Point(0, 233);
+            this.PanelButtom.Name = "PanelButtom";
+            this.PanelButtom.Size = new System.Drawing.Size(1185, 398);
+            this.PanelButtom.TabIndex = 4;
+            // 
             // DgvAllTasks
             // 
             this.DgvAllTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -326,77 +355,48 @@ namespace TaskManager.Forms
             this.DgvAllTasks.Location = new System.Drawing.Point(3, 44);
             this.DgvAllTasks.Name = "DgvAllTasks";
             this.DgvAllTasks.RowTemplate.Height = 21;
-            this.DgvAllTasks.Size = new System.Drawing.Size(895, 337);
+            this.DgvAllTasks.Size = new System.Drawing.Size(903, 342);
             this.DgvAllTasks.TabIndex = 1;
             // 
-            // PanelButtom
+            // DgvRecentTasks
             // 
-            this.PanelButtom.Controls.Add(this.PanelRight);
-            this.PanelButtom.Controls.Add(this.PanelLeft);
-            this.PanelButtom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelButtom.Location = new System.Drawing.Point(0, 233);
-            this.PanelButtom.Name = "PanelButtom";
-            this.PanelButtom.Size = new System.Drawing.Size(1184, 388);
-            this.PanelButtom.TabIndex = 4;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.btnBackup);
-            this.panel4.Controls.Add(this.BtnOpenExecFolder);
-            this.panel4.Controls.Add(this.BtnOutputCsv);
-            this.panel4.Controls.Add(this.btnEditConfig);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel4.Location = new System.Drawing.Point(957, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(227, 180);
-            this.panel4.TabIndex = 7;
-            // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.LabelDateTime);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(984, 0);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(200, 22);
-            this.panel5.TabIndex = 1;
-            // 
-            // TxtFilter
-            // 
-            this.TxtFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.DgvRecentTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtFilter.Location = new System.Drawing.Point(654, 14);
-            this.TxtFilter.Name = "TxtFilter";
-            this.TxtFilter.Size = new System.Drawing.Size(244, 19);
-            this.TxtFilter.TabIndex = 5;
+            this.DgvRecentTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DgvRecentTasks.Location = new System.Drawing.Point(11, 12);
+            this.DgvRecentTasks.Name = "DgvRecentTasks";
+            this.DgvRecentTasks.RowTemplate.Height = 21;
+            this.DgvRecentTasks.Size = new System.Drawing.Size(941, 151);
+            this.DgvRecentTasks.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 621);
+            this.ClientSize = new System.Drawing.Size(1185, 631);
             this.Controls.Add(this.PanelButtom);
             this.Controls.Add(this.PanelTop);
             this.Controls.Add(this.PanelHeader);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1200, 660);
+            this.MinimumSize = new System.Drawing.Size(1200, 670);
             this.Name = "MainForm";
             this.Text = "タスク管理ツール";
             this.PanelHeader.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.PanelTop.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
+            this.panel4.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.PanelRight.ResumeLayout(false);
             this.PanelRight.PerformLayout();
             this.PanelLeft.ResumeLayout(false);
             this.PanelLeft.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).EndInit();
             this.PanelButtom.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvAllTasks)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DgvRecentTasks)).EndInit();
             this.ResumeLayout(false);
 
         }

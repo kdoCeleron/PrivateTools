@@ -73,11 +73,16 @@ namespace TaskManager.Forms
             
             foreach (var item in ResourceManager.Instance.GetGroupList())
             {
-                this.CmbParentGroup.Items.Add(item);
+                
+                if (item.ParentGroup == null || item.ParentGroup.Equals(TaskGroupInfo.GetRootGroup().Key))
+                {
+                    // ルートグループのみ対象
+                    this.CmbParentGroup.Items.Add(item);
+                }
             }
 
-            this.CmbParentGroup.Enabled = false;
-            this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
+            // this.CmbParentGroup.Enabled = false;
+            // this.CmbParentGroup.SelectedItem = TaskGroupInfo.GetRootGroup();
 
             if (group != null)
             {

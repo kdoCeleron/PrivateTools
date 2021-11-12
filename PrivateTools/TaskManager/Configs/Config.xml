@@ -6,7 +6,7 @@
   <EditableItems>
     <IsStayInTaskTray>true</IsStayInTaskTray>
     <IsInitShowMainForm>true</IsInitShowMainForm>
-    <IsNotifyWindowsToast>false</IsNotifyWindowsToast>
+    <IsNotifyWindowsToast>true</IsNotifyWindowsToast>
     <ThresDaysRed>1</ThresDaysRed>
     <ThresDaysYellow>3</ThresDaysYellow>
     <NotifyTermOutSpanDay>7</NotifyTermOutSpanDay>
