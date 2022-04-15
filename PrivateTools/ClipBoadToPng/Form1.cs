@@ -12,10 +12,10 @@ namespace ClipBoardToPng
 {
     using System.IO;
 
+    using MyTools.Common.Utils;
+
     public partial class Form1 : Form
     {
-        private string FilNameTemplate = "{0}_{1:D3}.png";
-
         public Form1()
         {
             InitializeComponent();
@@ -43,12 +43,13 @@ namespace ClipBoardToPng
                 var tmpFileNo = 0;
 
                 var split = fileName.Split(new[] { "_" }, StringSplitOptions.RemoveEmptyEntries);
-                if (split.Length != 2)
+                if (split.Length < 2)
                 {
                     continue;
                 }
 
-                var parse = int.TryParse(split[1], out tmpFileNo);
+                var last = split.Last();
+                var parse = int.TryParse(last, out tmpFileNo);
                 if (!parse)
                 {
                     continue;
@@ -71,8 +72,7 @@ namespace ClipBoardToPng
                     if (img != null)
                     {
                         var bmp = new Bitmap(img);
-
-                        var outputPath = Path.Combine(combined, string.Format(this.FilNameTemplate, subDir, fileNo));
+                        var outputPath = PathUtils.CreateFilePath(combined, $"{subDir}", ".png");
                         if (File.Exists(outputPath))
                         {
                             outputPath = outputPath + "_NEW";
